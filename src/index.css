@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .nav-link {
+    @apply bp:border-r-4 bp:border-t-0 bp:h-auto flex h-full cursor-pointer items-center justify-center border-t-4 border-transparent text-2xl text-gray-400 [&.active]:border-[var(--color-main)] [&.active_path]:text-[var(--color-main)];
+  }
+}
+
+:root {
+  --color-main: #4eac6d;
+  --color-main-dark: #48a367;
+  --bs-sidebar-bg: #2e2e2e;
+  --bs-sidebar-menu-item-active-color: #4eac6d;
+}
+
+*,
+*::after,
+*::before {
+  transition:
+    color 0.3s,
+    background-color 0.3s,
+    border-color 0.3s;
+}
