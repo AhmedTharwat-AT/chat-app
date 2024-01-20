@@ -7,13 +7,14 @@ import { AiOutlineMessage } from "react-icons/ai";
 import Spinner from "../ui/Spinner";
 
 function Profile() {
-  const { data, isLoading, error }: any = useUser();
+  const { data, isLoading }: any = useUser();
+
   const cover = data?.cover || "https://placehold.co/200";
   const photo = data?.photo || "https://placehold.co/100";
   const about = data?.about || `there is nothing about ${data?.name}`;
 
   function addusers() {
-    // initUsers();
+    initUsers();
   }
 
   if (isLoading) return <Spinner />;

@@ -2,7 +2,7 @@ import { auth, db } from "../services/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import users from "../data/users.json";
 
-export async function getUser() {
+export async function getUser(): Promise<any> {
   const currUser = auth.currentUser;
 
   if (!currUser) throw new Error("User is logged out!");
@@ -12,7 +12,9 @@ export async function getUser() {
 
   if (!userData.exists()) throw new Error("no user data in data base!");
 
-  return { ...userData.data(), uid: currUser.uid };
+  const data = userData.data();
+
+  return { ...data, uid: currUser.uid };
 }
 
 export async function signUp(data: any) {
