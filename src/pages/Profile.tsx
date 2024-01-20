@@ -34,7 +34,7 @@ function Profile() {
       <div className="flex flex-col items-center px-3 pb-4">
         <img
           src={photo}
-          className="-mt-12 h-24 w-24 rounded-full border-4 border-white"
+          className="-mt-10 h-20 w-20 rounded-full border-4 border-white"
         />
         <div className="py-2 text-center">
           <h1 className="mb-1 break-all font-semibold capitalize text-gray-800">
@@ -46,7 +46,7 @@ function Profile() {
         </div>
       </div>
       {/* <button onClick={addusers}>add users</button> */}
-      <div className="px-5 py-4">
+      <div className="overflow-y-auto px-5 py-4">
         <p className="break-all text-gray-600">{about}</p>
         <div className="mt-8 space-y-3">
           <div className="flex items-center gap-5">
