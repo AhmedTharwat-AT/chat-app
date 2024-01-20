@@ -7,7 +7,7 @@ function AppLayout() {
   return (
     <main className="flex min-h-screen w-screen">
       <Navbar />
-      <section className="bp:w-80 h-full w-full">
+      <section className="w-full max-bp:mb-[56px] bp:w-80">
         <Outlet />
       </section>
       <Window />

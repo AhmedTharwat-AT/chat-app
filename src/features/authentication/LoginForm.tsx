@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useForm } from "react-hook-form";
+import { auth } from "../../services/firebase";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { useForm } from "react-hook-form";
+import SmallSpinner from "../../ui/SmallSpinner";
 
 interface Data {
   email?: string;
@@ -18,8 +21,12 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+
   function onSubmit(data: Data | null) {
-    console.log(data);
+    if (!data?.email || !data?.password) return;
+    signInWithEmailAndPassword(data.email, data.password);
   }
 
   function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {
@@ -33,6 +40,11 @@ function LoginForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full max-w-96 space-y-4 sm:w-2/3 "
       >
+        {error?.message && (
+          <p className="py-2 text-sm capitalize text-red-600">
+            wrong email or password
+          </p>
+        )}
         <div className="mt-8 flex w-full flex-col">
           <label htmlFor="email" className="mb-2 capitalize text-gray-800">
             email
@@ -40,10 +52,6 @@ function LoginForm() {
           <input
             {...register("email", {
               required: "This field is required",
-              maxLength: {
-                value: 14,
-                message: "max length is 14 chars !",
-              },
               pattern: {
                 value: /\S+@\S+\.\S+/,
                 message: "Please provide valid email address",
@@ -102,8 +110,11 @@ function LoginForm() {
         </div>
 
         <div>
-          <button className="w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]">
-            log in
+          <button
+            disabled={loading}
+            className="w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]"
+          >
+            {loading ? <SmallSpinner /> : "log in"}
           </button>
         </div>
 

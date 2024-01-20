@@ -4,10 +4,14 @@ import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "../../services/firebase";
+import { signUp } from "../../services/firebaseApi";
 
 interface Data {
   email?: string;
   password?: string;
+  username?: string;
 }
 
 function SignupForm() {
@@ -18,8 +22,17 @@ function SignupForm() {
     formState: { errors },
   } = useForm();
 
-  function onSubmit(data: Data | null) {
-    console.log(data);
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  async function onSubmit(data: Data | null) {
+    if (!data?.email || !data.password || !data.username) return;
+    const userCredential = await createUserWithEmailAndPassword(
+      data.email,
+      data.password,
+    );
+    // add user to users documents in firestore
+    signUp(data);
   }
 
   function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {
