@@ -1,7 +1,6 @@
 import Spinner from "../../ui/Spinner";
 import useUser from "../authentication/useUser";
 import Groups from "./Groups";
-// import Friends from "./Friends";
 
 function ChatsList() {
   const { data: user, isLoading } = useUser();

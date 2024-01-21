@@ -19,14 +19,14 @@ function Message({ msg, currUser }: { msg: Msg; currUser: string }) {
       />
       <div className="space-y-2">
         <p
-          className={`${you ? "bg-[var(--color-chat)]" : "bg-white"} rounded-sm p-3 text-base text-gray-800`}
+          className={`${you ? "bg-[var(--color-chat)]" : "bg-white"} break-all rounded-sm p-3 text-base text-gray-800`}
         >
           {msg.content}
         </p>
         <div
           className={`${you ? "flex-row-reverse" : ""} flex items-end gap-2`}
         >
-          <h2 className="text-xs font-semibold uppercase text-gray-900">
+          <h2 className="max-w-[200px] truncate text-xs font-semibold uppercase text-gray-900">
             {you ? "you" : msg.sender}
           </h2>
           <p className="text-xs text-gray-700">{time}</p>

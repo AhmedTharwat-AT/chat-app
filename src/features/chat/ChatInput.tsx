@@ -5,11 +5,17 @@ import { sendMessage } from "../../services/firebaseApi";
 
 import EmojiWrapper from "../../ui/EmojiWrapper";
 
-function ChatInput({ roomId }: { roomId: string }) {
+interface Porps {
+  innerRef: React.RefObject<HTMLDivElement>;
+  roomId: string;
+}
+
+function ChatInput({ roomId, innerRef }: Porps) {
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
   const user: any = queryClient.getQueryData(["user"]);
   const { mutate, isPending } = useMutation({ mutationFn: sendMessage });
+
   const sender = {
     id: user.uid,
     photo: user.photo,
@@ -20,6 +26,7 @@ function ChatInput({ roomId }: { roomId: string }) {
     if (content.length > 100 || !content) return;
     mutate({ roomId, data: { ...sender, content, sentAt: +new Date() } });
     setContent("");
+    innerRef.current?.scrollIntoView();
   }
 
   return (

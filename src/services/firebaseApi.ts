@@ -12,6 +12,7 @@ import users from "../data/users.json";
 import rooms from "../data/rooms.json";
 
 export async function getUser(): Promise<any> {
+  console.log("ran");
   const currUser = auth.currentUser;
 
   if (!currUser) throw new Error("User is logged out!");

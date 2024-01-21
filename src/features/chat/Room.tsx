@@ -1,12 +1,13 @@
-import { MdKeyboardArrowLeft } from "react-icons/md";
-import { RiInformationFill } from "react-icons/ri";
-import ChatInput from "./ChatInput";
-
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getRoom } from "../../services/firebaseApi";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../services/firebase";
+
+import { MdKeyboardArrowLeft } from "react-icons/md";
+import { RiInformationFill } from "react-icons/ri";
+
+import ChatInput from "./ChatInput";
 import Spinner from "../../ui/Spinner";
 import Messages from "./Messages";
 
@@ -18,6 +19,7 @@ interface Props {
 function Room({ info, setRoom }: Props) {
   const photo = info?.photo || "https://placehold.co/100";
   const name = info.name;
+  const msgsBot = useRef<HTMLDivElement>(null);
 
   const { data: room, isLoading } = useQuery({
     queryKey: ["room", info.room],
@@ -28,6 +30,8 @@ function Room({ info, setRoom }: Props) {
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "rooms", info.room), (doc) => {
       queryClient.setQueryData(["room", info.room], doc.data());
+      if (!msgsBot?.current) return;
+      msgsBot.current?.scrollIntoView();
     });
 
     return () => unsub();
@@ -49,8 +53,12 @@ function Room({ info, setRoom }: Props) {
           <RiInformationFill className="text-gray-500" />
         </button>
       </div>
-      {isLoading ? <Spinner /> : <Messages messages={room?.messages} />}
-      <ChatInput roomId={info.room} />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Messages innerRef={msgsBot} messages={room?.messages} />
+      )}
+      <ChatInput innerRef={msgsBot} roomId={info.room} />
     </div>
   );
 }

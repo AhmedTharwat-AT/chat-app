@@ -1,5 +1,6 @@
 import { IoMdPersonAdd } from "react-icons/io";
 import GroupItem from "./GroupItem";
+import { useSearchParams } from "react-router-dom";
 
 export interface GroupsType {
   [key: string]: {
@@ -24,7 +25,14 @@ interface Props {
 }
 
 function Groups({ type, groups }: Props) {
+  const [searchParams] = useSearchParams();
   const items = Object.entries(groups);
+  const filter = searchParams.get("filter") || "";
+  let filterItems = [...items];
+
+  if (filter) {
+    filterItems = filterItems.filter((item) => item[1].name.includes(filter));
+  }
 
   return (
     <div className="pt-3">
@@ -42,7 +50,7 @@ function Groups({ type, groups }: Props) {
         </h1>
       ) : (
         <div className="space-y-1">
-          {items.map((item) => (
+          {filterItems.map((item) => (
             <GroupItem key={item[0]} item={item} />
           ))}
         </div>

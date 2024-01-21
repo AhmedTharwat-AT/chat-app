@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useOutsideClicks from "../hooks/useOutsideClicks";
 
 import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
@@ -9,6 +10,7 @@ interface Props {
 
 function EmojiWrapper({ setContent }: Props) {
   const [showEmoji, setShowEmoji] = useState(false);
+  const ref = useOutsideClicks(() => setShowEmoji(false));
 
   function handleEmojiClick(data: EmojiClickData) {
     setContent((c) => c + data.emoji);
@@ -17,7 +19,7 @@ function EmojiWrapper({ setContent }: Props) {
   return (
     <div className="relative">
       {showEmoji && (
-        <div className="absolute bottom-10 left-0 max-w-[90vw]">
+        <div ref={ref} className="absolute bottom-10 left-0 max-w-[90vw]">
           <EmojiPicker
             onEmojiClick={handleEmojiClick}
             style={{ width: "100% !important" }}
