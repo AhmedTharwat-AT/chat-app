@@ -1,4 +1,4 @@
-interface Msg {
+export interface Msg {
   content: string;
   id: string;
   photo: string;
@@ -10,6 +10,7 @@ interface Msg {
 function Message({ msg, currUser }: { msg: Msg; currUser: string }) {
   const time = new Date(+msg.sentAt).toDateString();
   const you = msg.id == currUser;
+
   return (
     <div className={`flex items-end gap-2 ${you ? "flex-row-reverse" : ""}`}>
       <img

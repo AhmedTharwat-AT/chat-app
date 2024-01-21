@@ -1,12 +1,12 @@
 import { auth, db } from "../services/firebase";
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
-  getDocs,
-  serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import users from "../data/users.json";
 import rooms from "../data/rooms.json";
@@ -51,7 +51,7 @@ export async function addMember({
   member: { name: string; id: string };
 }) {
   const ref = collection(db, "rooms", room, "members");
-  const docRef = await addDoc(ref, member);
+  await addDoc(ref, member);
 }
 
 interface RoomType {
@@ -72,6 +72,17 @@ export async function getRoom(roomId: string) {
   return room;
 }
 
+export async function sendMessage({ roomId, data }: any) {
+  const docRef = doc(db, "rooms", roomId);
+
+  await updateDoc(docRef, {
+    messages: arrayUnion(data),
+  });
+
+  return null;
+}
+
+// test
 export async function initUsers() {
   const data = Object.entries(users);
   console.log(data);

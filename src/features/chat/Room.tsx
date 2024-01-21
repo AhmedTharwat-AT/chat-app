@@ -18,7 +18,8 @@ interface Props {
 function Room({ info, setRoom }: Props) {
   const photo = info?.photo || "https://placehold.co/100";
   const name = info.name;
-  const { data, isLoading } = useQuery({
+
+  const { data: room, isLoading } = useQuery({
     queryKey: ["room", info.room],
     queryFn: () => getRoom(info.room),
   });
@@ -31,8 +32,6 @@ function Room({ info, setRoom }: Props) {
 
     return () => unsub();
   }, [info.room, queryClient]);
-
-  console.log(data, isLoading);
 
   return (
     <div className="relative h-full">
@@ -50,8 +49,8 @@ function Room({ info, setRoom }: Props) {
           <RiInformationFill className="text-gray-500" />
         </button>
       </div>
-      {isLoading ? <Spinner /> : <Messages messages={data?.messages} />}
-      <ChatInput />
+      {isLoading ? <Spinner /> : <Messages messages={room?.messages} />}
+      <ChatInput roomId={info.room} />
     </div>
   );
 }
