@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoMdSend } from "react-icons/io";
-import { MdOutlineEmojiEmotions } from "react-icons/md";
 import { sendMessage } from "../../services/firebaseApi";
+
+import EmojiWrapper from "../../ui/EmojiWrapper";
 
 function ChatInput({ roomId }: { roomId: string }) {
   const [content, setContent] = useState("");
@@ -18,13 +19,12 @@ function ChatInput({ roomId }: { roomId: string }) {
   async function handleMessageSend() {
     if (content.length > 100 || !content) return;
     mutate({ roomId, data: { ...sender, content, sentAt: +new Date() } });
+    setContent("");
   }
 
   return (
     <div className="absolute bottom-0 left-0 flex w-full items-center justify-between gap-8 border-t border-gray-200 bg-[var(--color-bg)]  px-5 py-5">
-      <button>
-        <MdOutlineEmojiEmotions className="text-2xl text-gray-500" />
-      </button>
+      <EmojiWrapper setContent={setContent} />
       <div className="grow">
         <input
           value={content}
