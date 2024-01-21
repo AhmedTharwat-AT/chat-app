@@ -7,6 +7,7 @@ import { auth } from "../../services/firebase";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Data {
   email?: string;
@@ -15,6 +16,7 @@ interface Data {
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -26,7 +28,9 @@ function LoginForm() {
 
   function onSubmit(data: Data | null) {
     if (!data?.email || !data?.password) return;
-    signInWithEmailAndPassword(data.email, data.password);
+    signInWithEmailAndPassword(data.email, data.password).then(() => {
+      queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
+    });
   }
 
   function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {

@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../../services/firebase";
 import { signUp } from "../../services/firebaseApi";
+import { useQueryClient } from "@tanstack/react-query";
+
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 interface Data {
   email?: string;
@@ -16,6 +17,7 @@ interface Data {
 
 function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -31,6 +33,7 @@ function SignupForm() {
       data.email,
       data.password,
     );
+    queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
     // add user to users documents in firestore
     signUp(data);
   }

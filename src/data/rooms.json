@@ -1,1 +1,118 @@
-{}
+{
+  "RR1": {
+    "name": "ali hossam",
+    "photo": "https://placehold.co/200",
+    "type": "private",
+    "createdAt": "1705792632190",
+    "messages": [
+      {
+        "sender": "ali hossam",
+        "id": "O753cSl40YS7M4aAzZNQYjWjgK52",
+        "photo": "https://placehold.co/200",
+        "content": "hello ahmed",
+        "sentAt": "1705793029351"
+      },
+      {
+        "sender": "ahmed tharwat",
+        "id": "H05aRtxovqcMrFXZnSB4tfPFpaD3",
+        "photo": "https://avatarfiles.alphacoders.com/125/125435.png",
+        "content": "hello ali , how are you",
+        "sentAt": "1705793082961"
+      },
+      {
+        "sender": "ali hossam",
+        "id": "O753cSl40YS7M4aAzZNQYjWjgK52",
+        "photo": "https://placehold.co/200",
+        "content": "all good , what about you",
+        "sentAt": "1705793134231"
+      }
+    ]
+  },
+  "RR2": {
+    "name": "eman ali",
+    "photo": "https://placehold.co/200",
+    "type": "private",
+    "createdAt": "1705793210830",
+    "messages": [
+      {
+        "sender": "eman ali",
+        "id": "DcojNSFpEzTqcj9Rdvlt3dUQxbL2",
+        "photo": "https://placehold.co/200",
+        "content": "hello ahmed",
+        "sentAt": "1705793273626"
+      },
+      {
+        "sender": "ahmed tharwat",
+        "id": "H05aRtxovqcMrFXZnSB4tfPFpaD3",
+        "photo": "https://avatarfiles.alphacoders.com/125/125435.png",
+        "content": "hello eman , yes i did",
+        "sentAt": "1705793279876"
+      },
+      {
+        "sender": "eman ali",
+        "id": "DcojNSFpEzTqcj9Rdvlt3dUQxbL2",
+        "photo": "https://placehold.co/200",
+        "content": "ok nice",
+        "sentAt": "1705793293213"
+      }
+    ]
+  },
+  "RR3": {
+    "name": "developers",
+    "photo": "https://placehold.co/200",
+    "type": "group",
+    "createdAt": "1705793342071",
+    "messages": [
+      {
+        "sender": "ali hossam",
+        "id": "O753cSl40YS7M4aAzZNQYjWjgK52",
+        "photo": "https://placehold.co/200",
+        "content": "hello ahmed",
+        "sentAt": "1705793029351"
+      },
+      {
+        "sender": "ahmed tharwat",
+        "id": "H05aRtxovqcMrFXZnSB4tfPFpaD3",
+        "photo": "https://avatarfiles.alphacoders.com/125/125435.png",
+        "content": "hello ali , how are you",
+        "sentAt": "1705793357383"
+      },
+      {
+        "sender": "ali hossam",
+        "id": "O753cSl40YS7M4aAzZNQYjWjgK52",
+        "photo": "https://placehold.co/200",
+        "content": "all good , what about you",
+        "sentAt": "1705793357383"
+      }
+    ]
+  },
+  "RR4": {
+    "name": "art",
+    "photo": "https://placehold.co/200",
+    "type": "group",
+    "createdAt": "1705793449977",
+    "messages": [
+      {
+        "sender": "ali hossam",
+        "id": "O753cSl40YS7M4aAzZNQYjWjgK52",
+        "photo": "https://placehold.co/200",
+        "content": "hello ahmed",
+        "sentAt": "1705793449977"
+      },
+      {
+        "sender": "ahmed tharwat",
+        "id": "H05aRtxovqcMrFXZnSB4tfPFpaD3",
+        "photo": "https://avatarfiles.alphacoders.com/125/125435.png",
+        "content": "hello ali , how are you",
+        "sentAt": "1705793449977"
+      },
+      {
+        "sender": "ali hossam",
+        "id": "O753cSl40YS7M4aAzZNQYjWjgK52",
+        "photo": "https://placehold.co/200",
+        "content": "all good , what about you",
+        "sentAt": "1705793449977"
+      }
+    ]
+  }
+}

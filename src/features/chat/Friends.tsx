@@ -1,5 +1,5 @@
 import { IoMdPersonAdd } from "react-icons/io";
-import MsgItem from "./MsgItem";
+import MsgItem from "./GroupItem";
 
 export interface FriendsType {
   [key: string]: {

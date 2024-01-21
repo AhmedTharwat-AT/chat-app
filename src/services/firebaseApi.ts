@@ -1,6 +1,15 @@
 import { auth, db } from "../services/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import users from "../data/users.json";
+import rooms from "../data/rooms.json";
 
 export async function getUser(): Promise<any> {
   const currUser = auth.currentUser;
@@ -34,11 +43,49 @@ export async function signUp(data: any) {
   });
 }
 
+export async function addMember({
+  room,
+  member,
+}: {
+  room: string;
+  member: { name: string; id: string };
+}) {
+  const ref = collection(db, "rooms", room, "members");
+  const docRef = await addDoc(ref, member);
+}
+
+interface RoomType {
+  [key: string]: string;
+}
+
+export async function getRoom(roomId: string) {
+  const docRef = doc(db, "rooms", roomId);
+  const docSnap = await getDoc(docRef);
+  let room: RoomType | undefined;
+
+  if (docSnap.exists()) {
+    room = docSnap.data();
+  } else {
+    console.log("No such document!");
+  }
+
+  return room;
+}
+
 export async function initUsers() {
   const data = Object.entries(users);
   console.log(data);
 
   for (let i = 0; i < data.length; i++) {
     await setDoc(doc(db, "users", data[i][0]), data[i][1]);
+  }
+}
+
+export async function initRooms() {
+  const data = Object.entries(rooms);
+  console.log(data);
+
+  for (let i = 0; i < data.length; i++) {
+    await setDoc(doc(db, "rooms", data[i][0]), data[i][1]);
   }
 }

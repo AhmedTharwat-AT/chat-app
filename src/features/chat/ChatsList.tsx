@@ -5,7 +5,6 @@ import Groups from "./Groups";
 
 function ChatsList() {
   const { data: user, isLoading } = useUser();
-  console.log(user);
 
   if (isLoading) return <Spinner />;
 

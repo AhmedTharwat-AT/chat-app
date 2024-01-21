@@ -1,5 +1,5 @@
 import { IoMdPersonAdd } from "react-icons/io";
-import MsgItem from "./MsgItem";
+import GroupItem from "./GroupItem";
 
 export interface GroupsType {
   [key: string]: {
@@ -43,7 +43,7 @@ function Groups({ type, groups }: Props) {
       ) : (
         <div className="space-y-1">
           {items.map((item) => (
-            <MsgItem key={item[0]} item={item} />
+            <GroupItem key={item[0]} item={item} />
           ))}
         </div>
       )}

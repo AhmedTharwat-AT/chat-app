@@ -1,0 +1,38 @@
+interface Msg {
+  content: string;
+  id: string;
+  photo: string;
+  sender: string;
+  sentAt: string;
+}
+// "https://placehold.co/200"
+
+function Message({ msg, currUser }: { msg: Msg; currUser: string }) {
+  const time = new Date(+msg.sentAt).toDateString();
+  const you = msg.id == currUser;
+  return (
+    <div className={`flex items-end gap-2 ${you ? "flex-row-reverse" : ""}`}>
+      <img
+        className="h-10 w-10 rounded-full"
+        src={msg.photo || "https://placehold.co/200"}
+      />
+      <div className="space-y-2">
+        <p
+          className={`${you ? "bg-[var(--color-chat)]" : "bg-white"} rounded-sm p-3 text-base text-gray-800`}
+        >
+          {msg.content}
+        </p>
+        <div
+          className={`${you ? "flex-row-reverse" : ""} flex items-end gap-2`}
+        >
+          <h2 className="text-xs font-semibold uppercase text-gray-900">
+            {you ? "you" : msg.sender}
+          </h2>
+          <p className="text-xs text-gray-700">{time}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Message;
