@@ -5,6 +5,7 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -70,6 +71,18 @@ export async function addMember({
   const ref = collection(db, "rooms", room, "members");
   await addDoc(ref, member);
 }
+
+export async function getMembers(room: string = "RR1") {
+  const ref = collection(db, "rooms", room, "members");
+  const querySnapshot = await getDocs(ref);
+  let data: any[] = [];
+  querySnapshot.forEach((doc) => {
+    data.push(doc.data());
+  });
+  console.log(data);
+  return data;
+}
+getMembers("RR1");
 
 interface RoomType {
   [key: string]: string;

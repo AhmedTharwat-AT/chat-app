@@ -9,8 +9,8 @@ import Spinner from "../ui/Spinner";
 function Profile() {
   const { data, isLoading }: any = useUser();
 
-  const cover = data?.cover || "https://placehold.co/200";
-  const photo = data?.photo || "https://placehold.co/100";
+  const cover = data?.cover || "/assets/person-placeholder.png";
+  const photo = data?.photo || "/assets/person-placeholder.png";
   const about = data?.about || `there is nothing about ${data?.name}`;
 
   function addusers() {
@@ -23,11 +23,11 @@ function Profile() {
   return (
     <div className="divide-y">
       <div
-        className={`h-40 bg-[url(${cover})] bg-cover bg-no-repeat px-5 pt-4`}
+        className={`h-40 bg-[url(${cover})] shadow-y-1 bg-cover bg-no-repeat px-5 pt-4`}
       >
         <div className="flex items-center justify-between">
-          <h1 className="text-xl">My Profile</h1>
-          <p className="text-xl">
+          <h1 className="text-xl text-white drop-shadow-xl ">My Profile</h1>
+          <p className="cursor-pointer text-xl text-white drop-shadow-xl">
             <HiOutlineDotsVertical />
           </p>
         </div>
@@ -47,9 +47,15 @@ function Profile() {
         </div>
       </div>
       {/* <button onClick={addusers}>add users</button> */}
-      <div className="overflow-y-auto px-5 py-4">
-        <p className="break-all text-gray-600">{about}</p>
-        <div className="mt-8 space-y-3">
+      <div className="divide-y-2 divide-gray-100 overflow-y-auto px-5 py-4">
+        <div>
+          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+            about :
+          </h2>
+          <p className="break-all text-gray-800">{about}</p>
+        </div>
+
+        <div className="mt-4 space-y-3 pt-4">
           <div className="flex items-center gap-5">
             <CiUser className="min-w-[16px] text-gray-600" />
             <h2 className="break-all text-sm capitalize text-gray-600">

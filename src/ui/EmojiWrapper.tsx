@@ -17,9 +17,9 @@ function EmojiWrapper({ setContent }: Props) {
   }
 
   return (
-    <div className="relative">
+    <div ref={ref} className="relative">
       {showEmoji && (
-        <div ref={ref} className="absolute bottom-10 left-0 max-w-[90vw]">
+        <div className="absolute bottom-10 left-0 max-w-[90vw]">
           <EmojiPicker
             onEmojiClick={handleEmojiClick}
             style={{ width: "100% !important" }}

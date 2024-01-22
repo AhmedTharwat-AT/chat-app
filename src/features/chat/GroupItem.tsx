@@ -3,10 +3,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRoom } from "../../context/RoomContext";
 import { onValue, ref } from "firebase/database";
 import { rtdb } from "../../services/firebase";
+import Status from "../../ui/Status";
 
 function MsgItem({ item }: { item: [string, any] }) {
   const { room, setRoom } = useRoom();
-  const [isOnline, setIsOnline] = useState(false);
+  const [isOnline, setIsOnline] = useState("offline");
   const queryClient = useQueryClient();
   const info = item[1];
   const isFriend = info.friend_id ? true : false;
@@ -20,10 +21,10 @@ function MsgItem({ item }: { item: [string, any] }) {
     const unsub = onValue(statusRef, (snapshot) => {
       const data = snapshot.val();
       if (!data || data.status == "offline") {
-        setIsOnline(false);
+        setIsOnline("offline");
         queryClient.setQueryData(["status", item[0]], "offline");
       } else {
-        setIsOnline(true);
+        setIsOnline("online");
         queryClient.setQueryData(["status", item[0]], "online");
       }
     });
@@ -38,7 +39,7 @@ function MsgItem({ item }: { item: [string, any] }) {
     >
       <img
         className="aspect-square h-10 w-10 rounded-full"
-        src={info.photo || "https://placehold.co/200"}
+        src={info.photo || "/assets/person-placeholder.png"}
       />
       <div>
         <h2
@@ -46,13 +47,7 @@ function MsgItem({ item }: { item: [string, any] }) {
         >
           {info.name}
         </h2>
-        {isFriend ? (
-          isOnline ? (
-            <h4 className="text-xs text-green-600"> online</h4>
-          ) : (
-            <h4 className="text-xs text-red-600"> offline</h4>
-          )
-        ) : null}
+        {isFriend ? <Status status={isOnline} className="text-xs" /> : null}
       </div>
     </div>
   );

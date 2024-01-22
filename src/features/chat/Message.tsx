@@ -21,7 +21,7 @@ function Message({ msg, currUser }: { msg: Msg; currUser: string }) {
       />
       <div className="space-y-2">
         <p
-          className={`${you ? "bg-[var(--color-chat)]" : "bg-white"} break-all rounded-sm p-3 text-base text-gray-800`}
+          className={`${you ? "bg-[var(--color-chat)]" : "bg-white"} break-all rounded-sm p-3 text-base text-gray-800 shadow-md`}
         >
           {msg.content}
         </p>

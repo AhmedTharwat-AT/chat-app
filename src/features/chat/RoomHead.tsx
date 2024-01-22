@@ -5,17 +5,18 @@ import { useQueryClient } from "@tanstack/react-query";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { RiInformationFill } from "react-icons/ri";
 import RoomDetails from "./RoomDetails";
+import Status from "../../ui/Status";
 
 function RoomHead() {
   const { room, setRoom } = useRoom();
   const [showInfo, setShowInfo] = useState(false);
   const queryClient = useQueryClient();
-  const photo = room?.photo || "https://placehold.co/100";
+  const photo = room?.photo || "/assets/person-placeholder.png";
   const name = room?.name;
   const isFriend = room?.friend_id ? true : false;
-  let status;
+  let status = "";
   if (isFriend) {
-    status = queryClient.getQueryData(["status", room.friend_id]);
+    status = queryClient.getQueryData(["status", room.friend_id]) || "";
   }
 
   return (
@@ -29,13 +30,7 @@ function RoomHead() {
           <h2 className="max-w-[200px] truncate text-lg font-semibold capitalize text-gray-800">
             {name}
           </h2>
-          {isFriend ? (
-            status == "online" ? (
-              <h4 className="text-xs text-green-600"> online</h4>
-            ) : (
-              <h4 className="text-xs text-red-600"> offline</h4>
-            )
-          ) : null}
+          {isFriend ? <Status status={status} className="text-xs" /> : null}
         </div>
       </div>
       <button
@@ -44,7 +39,7 @@ function RoomHead() {
       >
         <RiInformationFill className="text-gray-500" />
       </button>
-      {showInfo && <RoomDetails room={room} />}
+      {showInfo && <RoomDetails room={room} setShowInfo={setShowInfo} />}
     </div>
   );
 }
