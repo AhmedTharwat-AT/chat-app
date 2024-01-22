@@ -46,19 +46,19 @@ function Profile() {
           </p>
         </div>
       </div>
-      <button onClick={addusers}>add users</button>
+      {/* <button onClick={addusers}>add users</button> */}
       <div className="overflow-y-auto px-5 py-4">
         <p className="break-all text-gray-600">{about}</p>
         <div className="mt-8 space-y-3">
           <div className="flex items-center gap-5">
             <CiUser className="min-w-[16px] text-gray-600" />
             <h2 className="break-all text-sm capitalize text-gray-600">
-              {data.name}
+              {data?.name}
             </h2>
           </div>
           <div className="flex items-center gap-5">
             <AiOutlineMessage className="min-w-[16px] text-gray-600" />
-            <h2 className="break-all text-sm  text-gray-600">{data.email}</h2>
+            <h2 className="break-all text-sm  text-gray-600">{data?.email}</h2>
           </div>
         </div>
       </div>

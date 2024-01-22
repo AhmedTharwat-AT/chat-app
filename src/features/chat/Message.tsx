@@ -1,3 +1,5 @@
+import { formatTime } from "../../utils/helpers";
+
 export interface Msg {
   content: string;
   id: string;
@@ -8,7 +10,7 @@ export interface Msg {
 // "https://placehold.co/200"
 
 function Message({ msg, currUser }: { msg: Msg; currUser: string }) {
-  const time = new Date(+msg.sentAt).toDateString();
+  const time = formatTime(msg.sentAt);
   const you = msg.id == currUser;
 
   return (

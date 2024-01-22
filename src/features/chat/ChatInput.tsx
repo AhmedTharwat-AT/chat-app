@@ -30,7 +30,7 @@ function ChatInput({ roomId, innerRef }: Porps) {
   }
 
   return (
-    <div className="absolute bottom-0 left-0 flex w-full items-center justify-between gap-8 border-t border-gray-200 bg-[var(--color-bg)]  px-5 py-5">
+    <div className="absolute bottom-0 left-0 flex w-full items-center justify-between gap-8 border-t border-gray-200 bg-[var(--color-bg)] px-5  py-5 shadow-md">
       <EmojiWrapper setContent={setContent} />
       <div className="grow">
         <input
@@ -42,7 +42,7 @@ function ChatInput({ roomId, innerRef }: Porps) {
           type="text"
           placeholder="Type your message..."
           maxLength={100}
-          className="w-full rounded-md px-4 py-2 text-sm text-gray-800 shadow-sm focus:ring focus:ring-[var(--color-main)]"
+          className="w-full rounded-md px-4 py-2 text-sm text-gray-800 shadow-md focus:ring focus:ring-[var(--color-main)]"
         />
       </div>
       <button

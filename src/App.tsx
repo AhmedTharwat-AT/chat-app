@@ -34,7 +34,7 @@ function App() {
                 </RoomProvider>
               }
             >
-              <Route index element={<Navigate to="/profile" replace />} />
+              <Route index element={<Navigate to="/chats" replace />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/chats" element={<Chats />} />
               <Route path="/contacts" element={<Contacts />} />

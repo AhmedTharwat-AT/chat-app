@@ -1,6 +1,8 @@
-import { IoMdPersonAdd } from "react-icons/io";
-import GroupItem from "./GroupItem";
 import { useSearchParams } from "react-router-dom";
+
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import GroupItem from "./GroupItem";
+import { useState } from "react";
 
 export interface GroupsType {
   [key: string]: {
@@ -26,6 +28,7 @@ interface Props {
 
 function Groups({ type, groups }: Props) {
   const [searchParams] = useSearchParams();
+  const [showList, setShowList] = useState(true);
   const items = Object.entries(groups);
   const filter = searchParams.get("filter") || "";
   let filterItems = [...items];
@@ -37,24 +40,28 @@ function Groups({ type, groups }: Props) {
   return (
     <div className="pt-3">
       <div className="mb-2 flex justify-between">
-        <h3 className="text-xs font-semibold uppercase text-gray-400">
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
           {type}
         </h3>
-        <button>
-          <IoMdPersonAdd className=" text-xl text-[var(--color-main)]" />
+        <button onClick={() => setShowList((s) => !s)}>
+          {showList ? (
+            <IoIosArrowUp className=" text-xl text-gray-700" />
+          ) : (
+            <IoIosArrowDown className=" text-xl text-gray-700" />
+          )}
         </button>
       </div>
-      {items.length <= 0 ? (
+      {items?.length <= 0 ? (
         <h1 className="text-center text-xs uppercase text-gray-500">
           {type} list is empty
         </h1>
-      ) : (
+      ) : showList ? (
         <div className="space-y-1">
           {filterItems.map((item) => (
             <GroupItem key={item[0]} item={item} />
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

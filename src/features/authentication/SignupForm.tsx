@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import SmallSpinner from "../../ui/SmallSpinner";
 
 interface Data {
   email?: string;
@@ -24,15 +25,13 @@ function SignupForm() {
     formState: { errors },
   } = useForm();
 
-  const [createUserWithEmailAndPassword, user, loading, error] =
+  const [createUserWithEmailAndPassword, user, loading] =
     useCreateUserWithEmailAndPassword(auth);
 
   async function onSubmit(data: Data | null) {
     if (!data?.email || !data.password || !data.username) return;
-    const userCredential = await createUserWithEmailAndPassword(
-      data.email,
-      data.password,
-    );
+    await createUserWithEmailAndPassword(data.email, data.password);
+
     queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
     // add user to users documents in firestore
     signUp(data);
@@ -163,8 +162,11 @@ function SignupForm() {
         </div>
 
         <div>
-          <button className="mt-5 w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]">
-            register
+          <button
+            disabled={loading}
+            className="mt-5 w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]"
+          >
+            {loading ? <SmallSpinner /> : "register"}
           </button>
         </div>
 

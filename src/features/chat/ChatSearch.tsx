@@ -21,7 +21,7 @@ function ChatSearch() {
     <div className="bg-white">
       <div className="mb-5 flex items-center justify-between">
         <h1 className="text-xl">Chats</h1>
-        <MdOutlineAddBox className="aspect-square h-6 w-6 text-[var(--color-main)]" />
+        <MdOutlineAddBox className="aspect-square h-6 w-6 cursor-pointer text-[var(--color-main)]" />
       </div>
       <div className="relative flex justify-center">
         <input
