@@ -20,7 +20,7 @@ function ProtectedRoute({ children }: Props) {
     if (!user && !pathname.includes("login") && !pathname.includes("signup"))
       navigate("/login");
     if (user && (pathname.includes("/login") || pathname.includes("signup")))
-      navigate("/profile");
+      navigate("/chats");
   }, [loading, user, navigate, pathname]);
 
   if (loading)

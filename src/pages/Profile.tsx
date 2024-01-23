@@ -14,8 +14,8 @@ function Profile() {
   const about = data?.about || `there is nothing about ${data?.name}`;
 
   function addusers() {
-    // initUsers();
-    initRooms();
+    initUsers();
+    // initRooms();
   }
 
   if (isLoading) return <Spinner />;
@@ -35,7 +35,7 @@ function Profile() {
       <div className="flex flex-col items-center px-3 pb-4">
         <img
           src={photo}
-          className="-mt-10 h-20 w-20 rounded-full border-4 border-white"
+          className="-mt-10 h-20 w-20 rounded-full border-4 border-white object-cover"
         />
         <div className="py-2 text-center">
           <h1 className="mb-1 break-all font-semibold capitalize text-gray-800">
@@ -46,7 +46,7 @@ function Profile() {
           </p>
         </div>
       </div>
-      {/* <button onClick={addusers}>add users</button> */}
+      <button onClick={addusers}>add users</button>
       <div className="divide-y-2 divide-gray-100 overflow-y-auto px-5 py-4">
         <div>
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">

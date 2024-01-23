@@ -1,12 +1,12 @@
 {
   "H05aRtxovqcMrFXZnSB4tfPFpaD3": {
+    "uid": "H05aRtxovqcMrFXZnSB4tfPFpaD3",
     "name": "ahmed tharwat",
     "email": "ahmedsarwat3000@gmail.com",
     "bio": "frontend developer",
     "about": "i lover hunting",
     "photo": "https://avatarfiles.alphacoders.com/125/125435.png",
     "cover": "https://avatarfiles.alphacoders.com/123/thumb-123882.png",
-    "status": "active",
     "friends": {
       "O753cSl40YS7M4aAzZNQYjWjgK52": {
         "friend_id": "O753cSl40YS7M4aAzZNQYjWjgK52",
@@ -35,13 +35,13 @@
     }
   },
   "O753cSl40YS7M4aAzZNQYjWjgK52": {
+    "uid": "O753cSl40YS7M4aAzZNQYjWjgK52",
     "photo": "https://placehold.co/200",
     "name": "ali hossam",
     "email": "ahmedsarwat3000@gmail.com",
     "bio": "frontend developer",
     "about": "i lover football",
     "cover": "https://avatarfiles.alphacoders.com/123/thumb-123882.png",
-    "status": "active",
     "friends": {
       "H05aRtxovqcMrFXZnSB4tfPFpaD3": {
         "friend_id": "H05aRtxovqcMrFXZnSB4tfPFpaD3",
@@ -64,13 +64,13 @@
     }
   },
   "DcojNSFpEzTqcj9Rdvlt3dUQxbL2": {
+    "uid": "DcojNSFpEzTqcj9Rdvlt3dUQxbL2",
     "photo": "https://placehold.co/200",
     "name": "eman ali",
-    "email": "ahmedsarwat3000@gmail.com",
+    "email": "eman ali@gmail.com",
     "bio": "frontend developer",
     "about": "i lover hunting",
     "cover": "https://avatarfiles.alphacoders.com/123/thumb-123882.png",
-    "status": "active",
     "friends": {
       "H05aRtxovqcMrFXZnSB4tfPFpaD3": {
         "friend_id": "H05aRtxovqcMrFXZnSB4tfPFpaD3",

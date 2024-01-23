@@ -25,7 +25,7 @@ function RoomHead() {
         <MdKeyboardArrowLeft className="text-[var(--color-main)]" />
       </button>
       <div className="flex cursor-pointer items-center gap-3">
-        <img className="h-12 w-12 rounded-full" src={photo} />
+        <img className="h-12 w-12 rounded-full object-cover" src={photo} />
         <div>
           <h2 className="max-w-[200px] truncate text-lg font-semibold capitalize text-gray-800">
             {name}

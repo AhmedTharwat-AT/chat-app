@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getRoom } from "../../services/firebaseApi";
+import { getMessages } from "../../services/firebaseApi";
 import { useEffect, useRef } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../services/firebase";
 
 import ChatInput from "./ChatInput";
@@ -16,20 +16,28 @@ interface Props {
 function Room({ info }: Props) {
   const msgsBot = useRef<HTMLDivElement>(null);
 
-  const { data: room, isLoading } = useQuery({
-    queryKey: ["room", info.room],
-    queryFn: () => getRoom(info.room),
+  const { data: messages, isLoading } = useQuery({
+    queryKey: ["messages", info.room],
+    queryFn: () => getMessages(info.room),
+    retry: 0,
   });
   const queryClient = useQueryClient();
 
   //listens for database changes
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "rooms", info.room), (doc) => {
-      queryClient.setQueryData(["room", info.room], doc.data());
-      //scroll to the end of messages
-      if (!msgsBot?.current) return;
-      msgsBot.current?.scrollIntoView();
-    });
+    const unsub = onSnapshot(
+      collection(db, "rooms", info.room, "messages"),
+      (querySnapshot) => {
+        const messages: any[] = [];
+        querySnapshot.forEach((doc) => {
+          messages.push(doc.data());
+        });
+        queryClient.setQueryData(["messages", info.room], messages);
+        //scroll to the end of messages
+        if (!msgsBot?.current) return;
+        msgsBot.current?.scrollIntoView();
+      },
+    );
 
     return () => unsub();
   }, [info.room, queryClient]);
@@ -40,7 +48,7 @@ function Room({ info }: Props) {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Messages innerRef={msgsBot} messages={room?.messages} />
+        <Messages innerRef={msgsBot} messages={messages} />
       )}
       <ChatInput innerRef={msgsBot} roomId={info.room} />
     </div>

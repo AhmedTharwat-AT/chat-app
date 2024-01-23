@@ -12,8 +12,6 @@ function UserInfo({ id }: Props) {
 
   if (isLoading) return null;
 
-  console.log(data, id);
-
   return (
     <div className="mt-5 space-y-4 divide-y-2">
       <div>
