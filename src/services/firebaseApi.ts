@@ -1,26 +1,25 @@
-import { auth, db, rtdb } from "../services/firebase";
+import { auth, db, provider, rtdb } from "../services/firebase";
 import {
   addDoc,
-  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   query,
   setDoc,
-  updateDoc,
   where,
   writeBatch,
 } from "firebase/firestore";
 import users from "../data/users.json";
 import rooms from "../data/rooms.json";
 import { onDisconnect, ref, set } from "firebase/database";
+import { signInWithPopup } from "firebase/auth";
 
 export async function getUser(): Promise<any> {
-  const currUser = auth.currentUser;
-  if (!currUser) throw new Error("User is logged out!");
-
   try {
+    const currUser = auth.currentUser;
+    if (!currUser) throw new Error("User is logged out!");
+
     const docRef = doc(db, "users", currUser.uid);
     const userData = await getDoc(docRef);
     if (!userData.exists()) throw new Error("no user data in database!");
@@ -28,21 +27,34 @@ export async function getUser(): Promise<any> {
 
     setUserStatus(currUser.uid, "online");
 
-    const statusRef = ref(rtdb, "users/" + currUser.uid + "/status");
-    onDisconnect(statusRef).set("offline");
-
-    return { ...data, uid: currUser.uid };
+    return { ...data };
   } catch (err) {
     console.log(err);
-    throw new Error(err + "");
   }
+}
+
+export async function googleSignIn() {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      //to add the user to firestore if its first time
+      signUp({ username: user.displayName, email: user.email });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 export async function signUp(data: any) {
   const currUser = auth.currentUser;
   if (!currUser) throw new Error("User is logged out!");
 
-  await setDoc(doc(db, "users", currUser.uid), {
+  //check if user data already exists in firestore
+  const docRef = doc(db, "users", currUser.uid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) return;
+
+  await setDoc(docRef, {
     uid: currUser.uid,
     name: data.username,
     email: data.email,
@@ -56,12 +68,11 @@ export async function signUp(data: any) {
 }
 
 // realtime db
-
 export async function setUserStatus(id: string, status: string) {
   const statusRef = ref(rtdb, "users/" + id);
   set(statusRef, { status });
+  onDisconnect(statusRef).set({ status: "offline" });
 }
-
 //
 
 export async function addMember({
@@ -146,6 +157,8 @@ export async function getMessages(roomId: any) {
 
 export async function searchUsers(value: string) {
   if (!value) return;
+  const currUser = auth.currentUser;
+
   const q = query(
     collection(db, "users"),
     where("name", ">=", value),
@@ -157,7 +170,8 @@ export async function searchUsers(value: string) {
 
   let data: any[] = [];
   querySnapshot.forEach((doc) => {
-    data.push(doc.data());
+    const user = doc.data();
+    if (currUser?.uid != user.uid) data.push(user);
   });
 
   return data;

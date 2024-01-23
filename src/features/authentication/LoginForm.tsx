@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
 import { useQueryClient } from "@tanstack/react-query";
+import { googleSignIn } from "../../services/firebaseApi";
 
 interface Data {
   email?: string;
@@ -118,7 +119,7 @@ function LoginForm() {
             disabled={loading}
             className="w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]"
           >
-            {loading ? <SmallSpinner /> : "log in"}
+            {loading ? <SmallSpinner color="text-white" /> : "log in"}
           </button>
         </div>
 
@@ -129,7 +130,10 @@ function LoginForm() {
             </h3>
             <span className="absolute top-1/2 z-10 h-[1px] w-full bg-gray-300"></span>
           </div>
-          <div className="my-5 flex cursor-pointer items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-2xl hover:bg-gray-200">
+          <div
+            onClick={googleSignIn}
+            className="my-5 flex cursor-pointer items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-2xl hover:bg-gray-200"
+          >
             <FcGoogle />
           </div>
         </div>

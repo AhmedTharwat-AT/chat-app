@@ -24,7 +24,7 @@ function FormControls({ onClick, selected, data }: any) {
   }
 
   return (
-    <div className="flex gap-3 ">
+    <div className="flex gap-6">
       <button
         onClick={onClick}
         className="ml-auto capitalize text-[var(--color-main-dark)] hover:underline"
@@ -34,7 +34,7 @@ function FormControls({ onClick, selected, data }: any) {
       <button
         onClick={handleAddFriends}
         disabled={!Boolean(selected) || isPending}
-        className="rounded-sm bg-[var(--color-main)] px-3 py-1 capitalize text-white hover:bg-[var(--color-main-dark)] disabled:bg-gray-400"
+        className="rounded-sm bg-[var(--color-main)] px-4 py-1 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)] disabled:bg-gray-400"
       >
         Add
       </button>

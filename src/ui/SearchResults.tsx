@@ -1,3 +1,5 @@
+import { IoMdClose } from "react-icons/io";
+
 interface Props {
   data: any[] | undefined;
   selected: string;
@@ -6,7 +8,7 @@ interface Props {
 
 function SearchResults({ data, selected, setSelected }: Props) {
   if (!data || data?.length == 0)
-    return <p className="text-sm text-gray-500">No results were found</p>;
+    return <p className="text-sm text-gray-500">no results were found !</p>;
 
   return (
     <>
@@ -24,14 +26,13 @@ function SearchResults({ data, selected, setSelected }: Props) {
               {el.name}
             </h1>
             {isSelected && (
-              <span
+              <IoMdClose
                 onClick={(e) => {
                   setSelected("");
                   e.stopPropagation();
                 }}
-              >
-                &times;
-              </span>
+                className="text-lg text-white"
+              />
             )}
           </div>
         );

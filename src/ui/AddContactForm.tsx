@@ -34,7 +34,7 @@ function AddContactForm({ onClick, innerRef }: Props) {
   return (
     <div
       ref={innerRef}
-      className="animate-slideDown w-full  max-w-[450px] overflow-hidden overscroll-y-contain rounded-sm bg-white"
+      className="animate-slideDown w-full  max-w-[450px] overflow-hidden overscroll-y-contain rounded bg-white shadow-md"
     >
       <div className="flex items-center justify-between bg-[var(--color-main)] p-3">
         <h2 className="font-semibold capitalize text-white">Add Contact</h2>
@@ -45,25 +45,25 @@ function AddContactForm({ onClick, innerRef }: Props) {
 
       <div className="space-y-4 px-3 py-4">
         <div>
-          <h2 className="capitalize text-gray-700">Enter name</h2>
-          <div className="relative flex justify-center">
+          <h2 className="mb-2 text-sm capitalize text-gray-700">Enter name</h2>
+          <div className="relative flex justify-center shadow">
             <input
               value={query}
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-md bg-gray-100 px-2 py-1 pr-8 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
+              className="w-full rounded-md bg-gray-100 px-3 py-1 pr-8 text-gray-700 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
             />
             <FiSearch
               onClick={handleSearch}
-              className="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 cursor-pointer text-gray-600"
+              className="absolute right-3 top-1/2 h-7 w-7 -translate-y-1/2 cursor-pointer p-1 text-gray-600"
             />
           </div>
           {/* results */}
-          <div className="mt-3 rounded-md bg-gray-100 p-2">
+          <div className="mt-3  max-h-44 overflow-y-auto rounded-md bg-gray-100 p-2 shadow">
             {isLoading ? (
-              <SmallSpinner />
+              <SmallSpinner color="text-green-600" />
             ) : (
               <SearchResults
                 data={data}

@@ -1,6 +1,8 @@
 import { useSignOut } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { auth } from "../../services/firebase";
+import { auth, rtdb } from "../../services/firebase";
+import { ref as reff, set } from "firebase/database";
+
 import useOutsideClicks from "../../hooks/useOutsideClicks";
 
 interface Props {
@@ -10,6 +12,15 @@ interface Props {
 function NavDropMenu({ setShowMenu }: Props) {
   const [signOut] = useSignOut(auth);
   const ref = useOutsideClicks(() => setShowMenu(false));
+
+  async function handleSignout() {
+    const currUser = auth.currentUser;
+    const statusRef = reff(rtdb, "users/" + currUser?.uid);
+    set(statusRef, {
+      status: "offline",
+    });
+    signOut();
+  }
 
   return (
     <ul
@@ -21,7 +32,7 @@ function NavDropMenu({ setShowMenu }: Props) {
       </li>
       <li
         className="px-3 py-1 text-gray-700 hover:bg-gray-200"
-        onClick={signOut}
+        onClick={handleSignout}
       >
         log out
       </li>
