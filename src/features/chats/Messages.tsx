@@ -4,13 +4,11 @@ import Message, { Msg } from "./Message";
 
 interface Props {
   messages: any;
-  innerRef: React.RefObject<HTMLDivElement>;
 }
 
-function Messages({ messages, innerRef }: Props) {
+function Messages({ messages }: Props) {
   const queryClient = useQueryClient();
   const user: any = queryClient.getQueryData(["user"]);
-
   if (!messages) return null;
 
   return (
@@ -18,7 +16,12 @@ function Messages({ messages, innerRef }: Props) {
       {messages.map((msg: Msg, i: number) => (
         <Message key={i} msg={msg} currUser={user.uid} />
       ))}
-      <div ref={innerRef}></div>
+      <div
+        ref={(el) => {
+          //this callback get called every time this component rerenders/mounts with the el , and before rerendering/unmount with null
+          el?.scrollIntoView();
+        }}
+      ></div>
     </div>
   );
 }

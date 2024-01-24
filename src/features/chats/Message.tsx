@@ -7,7 +7,6 @@ export interface Msg {
   sender: string;
   sentAt: string;
 }
-// "https://placehold.co/200"
 
 function Message({ msg, currUser }: { msg: Msg; currUser: string }) {
   const time = formatTime(msg.sentAt);

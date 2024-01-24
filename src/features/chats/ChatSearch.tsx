@@ -6,15 +6,15 @@ import { useSearchParams } from "react-router-dom";
 import Model from "../../ui/Model";
 import AddContactForm from "../../ui/AddContactForm";
 
-function ChatSearch() {
+function ChatSearch({ title }: { title: string }) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get("filter") || "");
+  const [query, setQuery] = useState(searchParams.get(title) || "");
 
   function handleFilter() {
-    if (!query && searchParams.get("filter")) {
-      searchParams.delete("filter");
+    if (!query && searchParams.get(title)) {
+      searchParams.delete(title);
     } else {
-      searchParams.set("filter", query);
+      searchParams.set(title, query);
     }
     setSearchParams(searchParams);
   }
@@ -23,7 +23,7 @@ function ChatSearch() {
     <div className="bg-white">
       <Model>
         <div className="mb-5 flex items-center justify-between">
-          <h1 className="text-xl">Chats</h1>
+          <h1 className="text-xl capitalize">{title}</h1>
           <Model.Toggle name="chats">
             <MdOutlineAddBox className="aspect-square h-7 w-7 cursor-pointer rounded-md bg-[var(--color-chat)] p-1 text-[var(--color-main)] hover:bg-[var(--color-main)] [&_path]:hover:text-white" />
           </Model.Toggle>

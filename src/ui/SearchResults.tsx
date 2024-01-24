@@ -4,16 +4,20 @@ interface Props {
   data: any[] | undefined;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
+  error: Error | null;
 }
 
-function SearchResults({ data, selected, setSelected }: Props) {
+function SearchResults({ data, selected, setSelected, error }: Props) {
+  if (error) return <p className="text-sm text-gray-500">{error.message}</p>;
+
   if (!data || data?.length == 0)
-    return <p className="text-sm text-gray-500">no results were found !</p>;
+    return <p className="text-sm text-gray-500">no results !</p>;
 
   return (
     <>
       {data?.map((el) => {
         const isSelected = selected == el.uid;
+
         return (
           <div
             key={el.uid}

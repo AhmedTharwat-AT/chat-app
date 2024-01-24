@@ -43,11 +43,14 @@ function LoginForm() {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={(e) => {
+          if (e.key == "Enter") handleSubmit(onSubmit)();
+        }}
         className="w-full max-w-96 space-y-4 sm:w-2/3 "
       >
         {error?.message && (
           <p className="py-2 text-sm capitalize text-red-600">
-            wrong email or password
+            incorrect email or password !
           </p>
         )}
         <div className="mt-8 flex w-full flex-col">
@@ -109,7 +112,7 @@ function LoginForm() {
           )}
         </div>
         <div className="text-end">
-          <button className="text-sm capitalize text-gray-700">
+          <button className="text-sm capitalize text-gray-700 hover:text-green-800 hover:underline">
             forgot password ?
           </button>
         </div>

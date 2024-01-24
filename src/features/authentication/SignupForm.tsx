@@ -10,10 +10,11 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
 
-interface Data {
-  email?: string;
+export interface SignData {
+  email?: string | null;
+  username?: string | null;
   password?: string;
-  username?: string;
+  confirm?: string;
 }
 
 function SignupForm() {
@@ -23,18 +24,20 @@ function SignupForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<SignData>();
 
-  const [createUserWithEmailAndPassword, user, loading] =
+  const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
-  async function onSubmit(data: Data | null) {
-    if (!data?.email || !data.password || !data.username) return;
+  async function onSubmit(data: SignData) {
+    if (!data.email || !data.password || !data.username) return;
     await createUserWithEmailAndPassword(data.email, data.password);
 
-    queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
+    if (error) return;
+
     // add user to users documents in firestore
-    signUp(data);
+    await signUp(data);
+    queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
   }
 
   function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {
@@ -46,6 +49,9 @@ function SignupForm() {
     <>
       <form
         onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={(e) => {
+          if (e.key == "Enter") handleSubmit(onSubmit)();
+        }}
         className="w-full max-w-96 space-y-4 sm:w-2/3 "
       >
         <div className="mt-8 flex w-full flex-col">
@@ -64,6 +70,7 @@ function SignupForm() {
                 message: "Please provide valid email address",
               },
             })}
+            disabled={loading}
             id="email"
             className="rounded-md border border-gray-200 px-3 py-2 text-gray-800 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
             placeholder="example@example.com"
@@ -92,6 +99,7 @@ function SignupForm() {
                 message: "min length is 3 chars !",
               },
             })}
+            disabled={loading}
             id="username"
             className="w-full rounded-md border border-gray-200 px-3 py-2 pr-12 text-gray-800 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
             placeholder="enter your name"
@@ -120,6 +128,7 @@ function SignupForm() {
                   message: "min length is 5 chars !",
                 },
               })}
+              disabled={loading}
               id="password"
               className="w-full rounded-md border border-gray-200 px-3 py-2 pr-12 text-gray-800 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
               type={showPassword ? "text" : "password"}
@@ -149,6 +158,7 @@ function SignupForm() {
               validate: (val, vals) =>
                 val == vals.password || "Passwords dont match !",
             })}
+            disabled={loading}
             id="confirm"
             className="w-full rounded-md border border-gray-200 px-3 py-2 pr-12 text-gray-800 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
             placeholder="******"
@@ -166,7 +176,7 @@ function SignupForm() {
             disabled={loading}
             className="mt-5 w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]"
           >
-            {loading ? <SmallSpinner /> : "register"}
+            {loading ? <SmallSpinner color="text-white" /> : "register"}
           </button>
         </div>
 

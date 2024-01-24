@@ -5,6 +5,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   where,
@@ -14,6 +15,7 @@ import users from "../data/users.json";
 import rooms from "../data/rooms.json";
 import { onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
+import { SignData } from "../features/authentication/SignupForm";
 
 export async function getUser(): Promise<any> {
   try {
@@ -37,15 +39,15 @@ export async function googleSignIn() {
   signInWithPopup(auth, provider)
     .then((result) => {
       const user = result.user;
-      //to add the user to firestore if its first time
+      //add the user to firestore if its first time signing in
       signUp({ username: user.displayName, email: user.email });
     })
     .catch((error) => {
-      console.log(error);
+      console.log("Error signing in :", error);
     });
 }
 
-export async function signUp(data: any) {
+export async function signUp(data: SignData) {
   const currUser = auth.currentUser;
   if (!currUser) throw new Error("User is logged out!");
 
@@ -125,7 +127,6 @@ export async function getUserDetails(id: string) {
     details = docSnap.data();
   } else {
     console.log("No such document!");
-    throw new Error("Failed to fetch info!");
   }
 
   return details;
@@ -140,22 +141,25 @@ export async function sendMessage({ roomId, data }: any) {
   return null;
 }
 
-export async function getMessages(roomId: any) {
-  const messagesRef = collection(db, "rooms", roomId, "messages");
+// export async function getMessages(roomId: any) {
+//   const messagesRef = collection(db, "rooms", roomId, "messages");
+//   const q = query(messagesRef, orderBy("sentAt"));
 
-  const querySnapshot = await getDocs(messagesRef);
+//   const querySnapshot = await getDocs(q);
 
-  let messages: any[] = [];
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    messages.push(doc.data());
-  });
+//   let messages: any[] = [];
+//   querySnapshot.forEach((doc) => {
+//     // doc.data() is never undefined for query doc snapshots
+//     messages.push(doc.data());
+//   });
 
-  return messages;
-}
+//   console.log(messages);
+
+//   return messages;
+// }
 //
 
-export async function searchUsers(value: string) {
+export async function searchUsers(value: string, friends: string[]) {
   if (!value) return;
   const currUser = auth.currentUser;
 
@@ -166,12 +170,13 @@ export async function searchUsers(value: string) {
   );
 
   const querySnapshot = await getDocs(q);
-  if (querySnapshot.empty) throw new Error("No matching doc.");
+  if (querySnapshot.empty) throw new Error("no matching users with this name.");
 
   let data: any[] = [];
   querySnapshot.forEach((doc) => {
     const user = doc.data();
-    if (currUser?.uid != user.uid) data.push(user);
+    const isFriend = friends.includes(user.uid);
+    if (currUser?.uid != user.uid && !isFriend) data.push(user);
   });
 
   return data;

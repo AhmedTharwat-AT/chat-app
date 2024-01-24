@@ -1,10 +1,10 @@
-import ChatsList from "../features/chat/ChatsList";
-import ChatSearch from "../features/chat/ChatSearch";
+import ChatsList from "../features/chats/ChatsList";
+import ChatSearch from "../features/chats/ChatSearch";
 
 function Chats() {
   return (
     <div className="flex h-full flex-col p-5">
-      <ChatSearch />
+      <ChatSearch title="chats" />
       <ChatsList />
     </div>
   );

@@ -6,11 +6,10 @@ import { sendMessage } from "../../services/firebaseApi";
 import EmojiWrapper from "../../ui/EmojiWrapper";
 
 interface Porps {
-  innerRef: React.RefObject<HTMLDivElement>;
   roomId: string;
 }
 
-function ChatInput({ roomId, innerRef }: Porps) {
+function ChatInput({ roomId }: Porps) {
   const [content, setContent] = useState("");
   const queryClient = useQueryClient();
   const user: any = queryClient.getQueryData(["user"]);
@@ -26,7 +25,6 @@ function ChatInput({ roomId, innerRef }: Porps) {
     if (content.length > 100 || !content) return;
     mutate({ roomId, data: { ...sender, content, sentAt: +new Date() } });
     setContent("");
-    innerRef.current?.scrollIntoView();
   }
 
   return (

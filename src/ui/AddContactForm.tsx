@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { searchUsers } from "../services/firebaseApi";
 
@@ -15,9 +15,12 @@ interface Props {
 function AddContactForm({ onClick, innerRef }: Props) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState("");
+  const queryClient = useQueryClient();
+  const user: any = queryClient.getQueryData(["user"]);
+  const friends = Object.keys(user?.friends);
   const { data, isLoading, refetch, error } = useQuery({
     queryKey: ["search", query],
-    queryFn: () => searchUsers(query),
+    queryFn: () => searchUsers(query, friends),
     enabled: false,
     retry: 0,
   });
@@ -27,14 +30,10 @@ function AddContactForm({ onClick, innerRef }: Props) {
     refetch();
   }
 
-  if (error) {
-    console.log(error);
-  }
-
   return (
     <div
       ref={innerRef}
-      className="animate-slideDown w-full  max-w-[450px] overflow-hidden overscroll-y-contain rounded bg-white shadow-md"
+      className="w-full max-w-[450px]  animate-slideDown overflow-hidden overscroll-y-contain rounded bg-white shadow-md"
     >
       <div className="flex items-center justify-between bg-[var(--color-main)] p-3">
         <h2 className="font-semibold capitalize text-white">Add Contact</h2>
@@ -66,6 +65,7 @@ function AddContactForm({ onClick, innerRef }: Props) {
               <SmallSpinner color="text-green-600" />
             ) : (
               <SearchResults
+                error={error}
                 data={data}
                 selected={selected}
                 setSelected={setSelected}

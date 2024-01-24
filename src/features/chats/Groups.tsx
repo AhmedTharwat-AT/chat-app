@@ -30,7 +30,7 @@ function Groups({ type, groups }: Props) {
   const [searchParams] = useSearchParams();
   const [showList, setShowList] = useState(true);
   const items = Object.entries(groups);
-  const filter = searchParams.get("filter") || "";
+  const filter = searchParams.get("chats") || "";
   let filterItems = [...items];
 
   if (filter) {

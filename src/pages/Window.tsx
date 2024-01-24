@@ -1,7 +1,7 @@
 import { useRoom } from "../context/RoomContext";
 
 import DefaultWindow from "../ui/DefaultWindow";
-import Room from "../features/chat/Room";
+import Room from "../features/chats/Room";
 
 function Window() {
   const { room, setRoom } = useRoom();
