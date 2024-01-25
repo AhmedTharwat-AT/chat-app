@@ -7,7 +7,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import Spinner from "../ui/Spinner";
 
 function Profile() {
-  const { data, isLoading }: any = useUser();
+  const { data, isLoading } = useUser();
 
   const cover = data?.cover || "/assets/person-placeholder.png";
   const photo = data?.photo || "/assets/person-placeholder.png";

@@ -1,14 +1,21 @@
 import { createContext, useState, useContext } from "react";
 
+export interface RoomType {
+  friend_id?: string;
+  name: string;
+  photo: string;
+  room: string;
+}
+
 interface Context {
-  room: any | null;
-  setRoom: React.Dispatch<React.SetStateAction<null>>;
+  room: RoomType | null;
+  setRoom: React.Dispatch<React.SetStateAction<RoomType | null>>;
 }
 
 const WindowContext = createContext<Context | null>(null);
 
 function RoomProvider({ children }: { children: React.ReactNode }) {
-  const [room, setRoom] = useState(null);
+  const [room, setRoom] = useState<RoomType | null>(null);
 
   return (
     <WindowContext.Provider value={{ room, setRoom }}>

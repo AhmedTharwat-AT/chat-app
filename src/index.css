@@ -4,7 +4,7 @@
 
 @layer components {
   .nav-link {
-    @apply flex h-full cursor-pointer items-center justify-center border-t-4 border-transparent text-2xl text-gray-400 bp:h-auto bp:border-r-4 bp:border-t-0 [&.active]:border-[var(--color-main)] [&.active_path]:text-[var(--color-main)];
+    @apply flex h-full cursor-pointer items-center justify-center border-t-4 border-transparent px-2 text-2xl text-gray-400 max-[400px]:text-xl bp:h-auto bp:border-r-4 bp:border-t-0 bp:px-0 [&.active]:border-[var(--color-main)] [&.active_path]:text-[var(--color-main)];
   }
 }
 

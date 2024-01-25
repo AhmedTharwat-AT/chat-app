@@ -4,7 +4,7 @@ import DefaultWindow from "../ui/DefaultWindow";
 import Room from "../features/chats/Room";
 
 function Window() {
-  const { room, setRoom } = useRoom();
+  const { room } = useRoom();
 
   return (
     <section

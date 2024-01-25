@@ -17,7 +17,7 @@ import { onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
 import { SignData } from "../features/authentication/SignupForm";
 
-export async function getUser(): Promise<any> {
+export async function getUser() {
   try {
     const currUser = auth.currentUser;
     if (!currUser) throw new Error("User is logged out!");
