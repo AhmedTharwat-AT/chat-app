@@ -216,20 +216,7 @@ async function deleteImage(name: string) {
 }
 
 export async function updatePhoto(file: File, user: any) {
-  const fileName = `${user.uid}-${crypto.randomUUID()}`;
-  const reference = storageRef(storage, "images/" + fileName);
-  const metadata = {
-    contentType: "image/jpeg",
-  };
-  // 1) delete old photo from storage
-  await deleteImage(user.photo);
-  // 2) Upload the file and metadata and get photo url
-  await uploadBytes(reference, file, metadata);
-  const url = await getDownloadURL(reference);
-  // 3) update photo in user doc
-  await updateDoc(doc(db, "users", user.uid), {
-    photo: url,
-  });
+  const url = await updateImage(file, user, "photo");
   // 4) update photo in each friend's friends list
   const friends = Object.keys(user.friends);
   if (friends.length > 0) {
@@ -250,6 +237,29 @@ export async function updatePhoto(file: File, user: any) {
       });
     }
   }
+}
+
+//update profile and cover image
+export async function updateImage(
+  file: File,
+  user: any,
+  type: "photo" | "cover",
+) {
+  const fileName = `${user.uid}-${crypto.randomUUID()}`;
+  const reference = storageRef(storage, "images/" + fileName);
+  const metadata = {
+    contentType: "image/jpeg",
+  };
+  // 1) delete old photo from storage
+  await deleteImage(user[type]);
+  // 2) Upload the file and metadata and get cover url
+  await uploadBytes(reference, file, metadata);
+  const url = await getDownloadURL(reference);
+  // 3) update cover in user doc
+  await updateDoc(doc(db, "users", user.uid), {
+    [type]: url,
+  });
+  return url;
 }
 
 // seeding

@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-import { HiOutlineDotsVertical } from "react-icons/hi";
 import { FaCamera } from "react-icons/fa";
 import { updatePhoto } from "../../services/firebaseApi";
 import { useQueryClient } from "@tanstack/react-query";
+import ProfileMenu from "./ProfileMenu";
 
 function UserMainInfo({ user }: any) {
   const [photoError, setPhotoError] = useState(false);
   const queryClient = useQueryClient();
-  const cover = user?.cover || "/assets/person-placeholder.png";
+  const cover = `${user?.cover}` || "/assets/person-placeholder.png";
   const photo = user?.photo || "/assets/person-placeholder.png";
 
   async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
@@ -27,15 +27,12 @@ function UserMainInfo({ user }: any) {
   return (
     <div>
       <div
-        className={`h-40 bg-[url(${cover})] shadow-y-1 bg-cover bg-no-repeat px-5 pt-4`}
+        style={{ backgroundImage: `url(${cover})`, color: "green" }}
+        className={`shadow-y-1 h-40 bg-cover bg-center bg-no-repeat px-5 pt-4`}
       >
         <div className="flex items-center justify-between">
           <h1 className="text-xl text-white drop-shadow-xl ">My Profile</h1>
-          <div>
-            <p className="cursor-pointer text-xl text-white drop-shadow-xl">
-              <HiOutlineDotsVertical />
-            </p>
-          </div>
+          <ProfileMenu user={user} />
         </div>
       </div>
       <div className="flex flex-col items-center px-3 pb-4">

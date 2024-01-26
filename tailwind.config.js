@@ -8,10 +8,15 @@ export default {
       },
       animation: {
         slideDown: "slideDown 0.3s 0.1s ease-in-out both",
+        slideTop: "slideTop 0.3s 0.1s ease-in-out both",
       },
       keyframes: {
         slideDown: {
           "0%": { transform: "translateY(-25px)", opacity: "0%" },
+          "100%": { transform: "translateY(0px)", opacity: "100%" },
+        },
+        slideTop: {
+          "0%": { transform: "translateY(10px)", opacity: "0%" },
           "100%": { transform: "translateY(0px)", opacity: "100%" },
         },
       },

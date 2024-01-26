@@ -9,6 +9,7 @@ function ContactsList() {
   const [searchParams] = useSearchParams();
   const filter = searchParams.get("contacts") || "";
   let friends: any[] = [];
+
   if (user && user.friends) {
     friends = Object.values(user?.friends);
   }

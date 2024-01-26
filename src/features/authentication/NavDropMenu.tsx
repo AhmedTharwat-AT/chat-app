@@ -25,7 +25,7 @@ function NavDropMenu({ setShowMenu }: Props) {
   return (
     <ul
       ref={ref}
-      className="absolute -left-32 bottom-full w-32 divide-y-2 divide-gray-300 rounded-md border border-gray-300 bg-gray-100 py-2  text-sm capitalize bp:left-8"
+      className="animate-slideTop absolute -left-32 bottom-full w-32 divide-y-2 divide-gray-300 rounded-md border border-gray-300 bg-gray-100 py-2  text-sm capitalize bp:left-8"
     >
       <li className="px-3 py-1 text-gray-700 hover:bg-gray-200">
         <Link className="block w-full" to="/profile">
