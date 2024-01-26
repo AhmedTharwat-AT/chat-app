@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
 } from "firebase/firestore";
@@ -16,6 +17,13 @@ import rooms from "../data/rooms.json";
 import { onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
 import { SignData } from "../features/authentication/SignupForm";
+import {
+  getStorage,
+  uploadBytes,
+  ref as storageRef,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 
 export async function getUser() {
   try {
@@ -84,8 +92,8 @@ export async function addMember({
   room: string;
   member: { name: string; id: string; photo: string };
 }) {
-  const ref = collection(db, "rooms", room, "members");
-  await addDoc(ref, member);
+  const ref = doc(db, "rooms", room, "members", member.id);
+  await setDoc(ref, member);
 }
 
 export async function getMembers(room: string = "RR1") {
@@ -141,22 +149,6 @@ export async function sendMessage({ roomId, data }: any) {
   return null;
 }
 
-// export async function getMessages(roomId: any) {
-//   const messagesRef = collection(db, "rooms", roomId, "messages");
-//   const q = query(messagesRef, orderBy("sentAt"));
-
-//   const querySnapshot = await getDocs(q);
-
-//   let messages: any[] = [];
-//   querySnapshot.forEach((doc) => {
-//     // doc.data() is never undefined for query doc snapshots
-//     messages.push(doc.data());
-//   });
-
-//   console.log(messages);
-
-//   return messages;
-// }
 //
 
 export async function searchUsers(value: string, friends: string[]) {
@@ -186,7 +178,6 @@ export async function addFriend({ friend, user }: any) {
   const batch = writeBatch(db);
 
   let data = [friend, user];
-
   //create new room
   const roomRef = await addDoc(collection(db, "rooms"), {
     createdAt: +new Date() + "",
@@ -212,6 +203,53 @@ export async function addFriend({ friend, user }: any) {
     });
   });
   await batch.commit();
+}
+
+//edit user data
+const storage = getStorage();
+
+async function deleteImage(name: string) {
+  if (name.includes("firebasestorage.googleapis.com")) {
+    const deleteRef = storageRef(storage, `${name}`);
+    await deleteObject(deleteRef);
+  }
+}
+
+export async function updatePhoto(file: File, user: any) {
+  const fileName = `${user.uid}-${crypto.randomUUID()}`;
+  const reference = storageRef(storage, "images/" + fileName);
+  const metadata = {
+    contentType: "image/jpeg",
+  };
+  // 1) delete old photo from storage
+  await deleteImage(user.photo);
+  // 2) Upload the file and metadata and get photo url
+  await uploadBytes(reference, file, metadata);
+  const url = await getDownloadURL(reference);
+  // 3) update photo in user doc
+  await updateDoc(doc(db, "users", user.uid), {
+    photo: url,
+  });
+  // 4) update photo in each friend's friends list
+  const friends = Object.keys(user.friends);
+  if (friends.length > 0) {
+    for (let i = 0; i < friends.length; i++) {
+      await updateDoc(doc(db, "users", friends[i]), {
+        [`friends.${user.uid}.photo`]: url,
+      });
+    }
+  }
+  // 5) update in each room members sub collection
+  const friendsRooms = Object.values(user.friends).map((el: any) => el.room);
+  const groups = Object.keys(user.groups);
+  const rooms = [...groups, ...friendsRooms];
+  if (rooms.length > 0) {
+    for (let i = 0; i < rooms.length; i++) {
+      await updateDoc(doc(db, "rooms", rooms[i], "members", user.uid), {
+        photo: url,
+      });
+    }
+  }
 }
 
 // seeding

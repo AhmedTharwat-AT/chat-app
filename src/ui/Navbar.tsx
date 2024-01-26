@@ -42,7 +42,10 @@ function Navbar() {
           <IoMoonOutline />
         </li>
         <li
-          onClick={() => setShowMenu((s) => !s)}
+          onClick={(e) => {
+            setShowMenu((s) => !s);
+            e.stopPropagation();
+          }}
           className="relative cursor-pointer"
         >
           <img

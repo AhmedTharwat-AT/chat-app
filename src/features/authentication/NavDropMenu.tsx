@@ -11,7 +11,7 @@ interface Props {
 
 function NavDropMenu({ setShowMenu }: Props) {
   const [signOut] = useSignOut(auth);
-  const ref = useOutsideClicks(() => setShowMenu(false));
+  const ref = useOutsideClicks(() => setShowMenu(false), false);
 
   async function handleSignout() {
     const currUser = auth.currentUser;
@@ -25,10 +25,12 @@ function NavDropMenu({ setShowMenu }: Props) {
   return (
     <ul
       ref={ref}
-      className="absolute -left-24 bottom-full w-24 divide-y-2 divide-gray-300 rounded-md border border-gray-300 bg-gray-100 py-2  text-sm capitalize bp:left-8"
+      className="absolute -left-32 bottom-full w-32 divide-y-2 divide-gray-300 rounded-md border border-gray-300 bg-gray-100 py-2  text-sm capitalize bp:left-8"
     >
       <li className="px-3 py-1 text-gray-700 hover:bg-gray-200">
-        <Link to="/profile">profile</Link>
+        <Link className="block w-full" to="/profile">
+          profile
+        </Link>
       </li>
       <li
         className="px-3 py-1 text-gray-700 hover:bg-gray-200"

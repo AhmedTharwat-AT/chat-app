@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export default function useOutsideClicks(handle: () => void) {
+export default function useOutsideClicks(handle: () => void, propagate = true) {
   const ref = useRef<HTMLElement>();
 
   useEffect(() => {
@@ -9,8 +9,8 @@ export default function useOutsideClicks(handle: () => void) {
         handle();
       }
     }
-    document.addEventListener("click", handleClose, true);
-    return () => document.removeEventListener("click", handleClose, true);
+    document.addEventListener("click", handleClose, propagate);
+    return () => document.removeEventListener("click", handleClose, propagate);
   }, [handle]);
 
   return ref as React.LegacyRef<any> | undefined;
