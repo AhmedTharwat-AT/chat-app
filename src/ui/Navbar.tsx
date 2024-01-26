@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useState } from "react";
 
 import { BsChatSquareTextFill } from "react-icons/bs";
@@ -20,8 +20,10 @@ function Navbar() {
   return (
     <nav className=" bottom-0 left-0 w-full bg-[var(--bs-sidebar-bg)] max-bp:fixed max-bp:z-40 max-bp:h-14 bp:w-20">
       <ul className="flex h-full grow items-center justify-around gap-5 px-5 bp:flex-col bp:gap-10 bp:px-0 bp:py-6">
-        <li className="hidden cursor-pointer text-2xl text-green-600 bp:block">
-          <BsChatSquareTextFill />
+        <li className="hidden text-2xl text-green-600 bp:block">
+          <Link to="/profile">
+            <BsChatSquareTextFill />
+          </Link>
         </li>
         <li className="h-full bp:h-auto bp:w-full ">
           <NavLink className="nav-link" to="/profile">

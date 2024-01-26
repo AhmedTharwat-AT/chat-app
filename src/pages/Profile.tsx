@@ -27,7 +27,7 @@ function Profile() {
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
             about :
           </h2>
-          <p className="break-all text-gray-800">{about}</p>
+          <p className="break-all text-sm text-gray-800">{about}</p>
         </div>
 
         <div className="mt-4 space-y-4 pt-5">

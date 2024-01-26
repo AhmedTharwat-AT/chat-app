@@ -12,11 +12,11 @@ function MsgItem({ item }: { item: [string, any] }) {
   return (
     <div
       onClick={() => setRoom(info)}
-      className={`${isSelected && "bg-[var(--color-main)] hover:!bg-[var(--color-main)] "} flex cursor-pointer items-center gap-2 rounded-md p-1 hover:bg-gray-100`}
+      className={`${isSelected && "bg-[var(--color-main)] hover:!bg-[var(--color-main)] "} flex cursor-pointer items-center gap-2 rounded-md p-2 py-1 hover:bg-gray-100`}
     >
       <div className="relative">
         <img
-          className="aspect-square h-10 w-10 rounded-full object-cover"
+          className="aspect-square h-9 w-9 rounded-full object-cover"
           src={info.photo || "/assets/person-placeholder.png"}
         />
         {isFriend ? (

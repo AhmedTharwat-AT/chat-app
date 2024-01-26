@@ -44,7 +44,7 @@ function ProfileMenu({ user }: any) {
         {showMenu && (
           <ul
             ref={ref}
-            className="animate-slideTop absolute right-3 top-full w-32  divide-y rounded-md bg-white py-2 text-xs text-gray-700"
+            className="animate-slideTop absolute right-3 top-full z-10 w-32 select-none divide-y rounded-md bg-white py-2 text-xs text-gray-700"
           >
             <li className="relative cursor-pointer px-3 py-1 hover:bg-gray-200">
               <input

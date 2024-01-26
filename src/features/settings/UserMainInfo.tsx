@@ -44,7 +44,7 @@ function UserMainInfo({ user }: any) {
           <div className="relative">
             <img
               src={photo}
-              className="-mt-10 h-20 w-20 rounded-full border-4 border-white object-cover"
+              className="-mt-10 h-20 w-20 select-none rounded-full border-4 border-white object-cover"
             />
             <div className="absolute bottom-1 right-0 flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white text-xl">
               <input
