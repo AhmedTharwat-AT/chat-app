@@ -32,14 +32,17 @@ function Window({ children, name }: Props) {
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex h-full min-h-screen w-full items-center justify-center bg-gray-900 bg-opacity-40 p-2 backdrop-blur-sm">
-      {cloneElement(children, { onClick: () => setOpen(""), innerRef: ref })}
+      {cloneElement(children, {
+        onCloseModel: () => setOpen(""),
+        innerRef: ref,
+      })}
     </div>,
     document.querySelector("body") as HTMLBodyElement,
   );
 }
 
 function Toggle({ children, name }: Props) {
-  const { open, setOpen } = useContext(ModelContext) as Type;
+  const { setOpen } = useContext(ModelContext) as Type;
 
   return cloneElement(children, { onClick: () => setOpen(name) });
 }

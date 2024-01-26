@@ -215,15 +215,23 @@ async function deleteImage(name: string) {
   }
 }
 
+export async function updateUserProperty(
+  id: string,
+  property: string,
+  value: string,
+) {
+  await updateDoc(doc(db, "users", id), {
+    [property]: value,
+  });
+}
+
 export async function updatePhoto(file: File, user: any) {
   const url = await updateImage(file, user, "photo");
   // 4) update photo in each friend's friends list
   const friends = Object.keys(user.friends);
   if (friends.length > 0) {
     for (let i = 0; i < friends.length; i++) {
-      await updateDoc(doc(db, "users", friends[i]), {
-        [`friends.${user.uid}.photo`]: url,
-      });
+      await updateUserProperty(friends[i], `friends.${user.uid}.photo`, url);
     }
   }
   // 5) update in each room members sub collection

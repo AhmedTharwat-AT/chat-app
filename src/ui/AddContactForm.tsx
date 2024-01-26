@@ -8,11 +8,11 @@ import SearchResults from "./SearchResults";
 import FormControls from "./FormControls";
 
 interface Props {
-  onClick?: () => void;
+  onCloseModel?: () => void;
   innerRef?: React.LegacyRef<any> | undefined;
 }
 
-function AddContactForm({ onClick, innerRef }: Props) {
+function AddContactForm({ onCloseModel, innerRef }: Props) {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState("");
   const queryClient = useQueryClient();
@@ -37,7 +37,7 @@ function AddContactForm({ onClick, innerRef }: Props) {
     >
       <div className="flex items-center justify-between bg-[var(--color-main)] p-3">
         <h2 className="font-semibold capitalize text-white">Add Contact</h2>
-        <button onClick={onClick} className="text-xl text-gray-800">
+        <button onClick={onCloseModel} className="text-xl text-gray-800">
           &times;
         </button>
       </div>
@@ -74,7 +74,11 @@ function AddContactForm({ onClick, innerRef }: Props) {
           </div>
         </div>
 
-        <FormControls selected={selected} onClick={onClick} data={data} />
+        <FormControls
+          selected={selected}
+          onCloseModel={onCloseModel}
+          data={data}
+        />
       </div>
     </div>
   );

@@ -13,15 +13,19 @@ function UserMainInfo({ user }: any) {
 
   async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     setPhotoError(false);
-    const selectedFile = e.target.files?.[0] as File;
-    const fileSizeInBytes = selectedFile.size; //in bytes;
-    const maxSizeInBytes = 300 * 1024;
-    if (fileSizeInBytes > maxSizeInBytes) {
-      setPhotoError(true);
-      return;
+    try {
+      const selectedFile = e.target.files?.[0] as File;
+      const fileSizeInBytes = selectedFile.size; //in bytes;
+      const maxSizeInBytes = 300 * 1024;
+      if (fileSizeInBytes > maxSizeInBytes) {
+        setPhotoError(true);
+        return;
+      }
+      await updatePhoto(selectedFile, user);
+      queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
+    } catch (err: any) {
+      console.log("error changing profile picture :", err?.message);
     }
-    await updatePhoto(selectedFile, user);
-    queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
   }
 
   return (
@@ -46,7 +50,7 @@ function UserMainInfo({ user }: any) {
               <input
                 type="file"
                 onChange={handlePhoto}
-                className="relative z-10 h-full w-full cursor-pointer bg-none opacity-0"
+                className="relative z-10 h-full w-full bg-none opacity-0"
                 accept="image/*"
               />
               <FaCamera className="absolute text-sm text-gray-500 " />

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addFriend } from "../services/firebaseApi";
 
-function FormControls({ onClick, selected, data }: any) {
+function FormControls({ onCloseModel, selected, data }: any) {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({ mutationFn: addFriend });
 
@@ -17,7 +17,7 @@ function FormControls({ onClick, selected, data }: any) {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
-          onClick();
+          onCloseModel();
         },
       },
     );
@@ -26,7 +26,7 @@ function FormControls({ onClick, selected, data }: any) {
   return (
     <div className="flex gap-6">
       <button
-        onClick={onClick}
+        onClick={onCloseModel}
         className="ml-auto capitalize text-[var(--color-main-dark)] hover:underline"
       >
         close

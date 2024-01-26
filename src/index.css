@@ -47,8 +47,15 @@
   border-radius: 20px;
 }
 
+textarea:focus,
 input:focus {
   outline: none;
+}
+
+input[type=file], /* FF, IE7+, chrome (except button) */
+input[type=file]::-webkit-file-upload-button {
+  /* chromes and blink button */
+  cursor: pointer;
 }
 
 button:disabled {
