@@ -8,7 +8,7 @@ function Window() {
 
   return (
     <section
-      className={`${room ? "max-bp:translate-x-0 max-bp:opacity-100  " : "max-bp:translate-x-full max-bp:opacity-0 "} z-50 grow bg-gray-100 bg-[url('https://doot-light.react.themesbrand.com/static/media/pattern-05.ffd181cdf9a08b200998.png')] transition-all duration-300 max-bp:fixed max-bp:inset-0 `}
+      className={`${room ? "max-bp:translate-x-0 max-bp:opacity-100  " : "max-bp:translate-x-full max-bp:opacity-0 "} z-50 grow bg-gray-100 bg-[url('/assets/bg-pattern.png')] transition-all duration-300 max-bp:fixed max-bp:inset-0 dark:bg-[var(--dark-bg)] `}
     >
       {!room ? <DefaultWindow /> : <Room info={room} />}
     </section>

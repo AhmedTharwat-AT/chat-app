@@ -11,23 +11,24 @@ function RoomHead() {
   const { room, setRoom } = useRoom();
   const [showInfo, setShowInfo] = useState(false);
   const queryClient = useQueryClient();
+
   const photo = room?.photo || "/assets/person-placeholder.png";
   const name = room?.name;
   const isFriend = room?.friend_id ? true : false;
   let status = "";
   if (isFriend) {
-    status = queryClient.getQueryData(["status", room.friend_id]) || "";
+    status = queryClient.getQueryData(["status", room?.friend_id]) || "offline";
   }
 
   return (
-    <div className="flex items-center gap-3 border-b border-gray-200 bg-white bg-opacity-90 px-4 py-4 backdrop-blur-sm">
+    <div className="flex items-center gap-3 bg-white bg-opacity-50 px-4 py-4 shadow backdrop-blur-sm dark:bg-[var(--dark-head-bg)]">
       <button onClick={() => setRoom(null)} className="py-2 text-3xl">
         <MdKeyboardArrowLeft className="text-[var(--color-main)]" />
       </button>
       <div className="flex cursor-pointer items-center gap-3">
         <img className="h-12 w-12 rounded-full object-cover" src={photo} />
         <div>
-          <h2 className="max-w-[200px] truncate text-lg font-semibold capitalize text-gray-800">
+          <h2 className="max-w-[200px] truncate text-lg font-semibold capitalize text-gray-800 dark:text-gray-300">
             {name}
           </h2>
           {isFriend ? <Status status={status} className="text-xs" /> : null}

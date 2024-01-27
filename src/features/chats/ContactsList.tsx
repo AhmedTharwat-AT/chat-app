@@ -25,17 +25,12 @@ function ContactsList() {
 
   if (isLoading) return <Spinner />;
 
-  if (sections.length == 0 && filter)
+  if (sections.length == 0)
     return (
-      <p className="mt-5 text-sm text-gray-700">
-        no contacts were found with this name!
-      </p>
-    );
-
-  if (sections.length == 0 && !filter)
-    return (
-      <p className="mt-5 text-sm text-gray-700">
-        Add contacts and start chatting now !
+      <p className="mt-5 text-sm text-gray-700 dark:text-gray-300">
+        {filter
+          ? "No contacts were found with this name!"
+          : "Add contacts and start chatting now !"}
       </p>
     );
 
@@ -45,10 +40,10 @@ function ContactsList() {
         return (
           <div key={section}>
             <div className="relative">
-              <h1 className="mb-4 w-fit bg-white pr-5 text-sm font-semibold uppercase text-[var(--color-main)]">
+              <h1 className="relative z-10 mb-4 w-fit bg-white pr-5 text-sm font-semibold uppercase text-[var(--color-main)] dark:bg-[var(--darker-bg)]">
                 {section}
               </h1>
-              <span className="absolute top-1/2 -z-10 block h-[1px] w-full bg-gray-200"></span>
+              <span className="absolute top-1/2 z-0 block h-[1px] w-full bg-gray-200 dark:bg-opacity-5"></span>
             </div>
             <ul className="space-y-4">
               {values.map((el, i) => (

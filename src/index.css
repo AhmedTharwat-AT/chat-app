@@ -25,13 +25,16 @@
 
 :root {
   --color-main: #4eac6d;
+  --color-main-op: #4eac6d7d;
   --color-main-dark: #48a367;
 
   --color-chat: #4eac6d3b;
 
   --color-bg: #ffffff;
 
-  --bs-sidebar-bg: #2e2e2e;
+  --dark-bg: #2e2e2e;
+  --dark-head-bg: #2e2e2e2e;
+  --darker-bg: #262626;
   --bs-sidebar-menu-item-active-color: #4eac6d;
 }
 

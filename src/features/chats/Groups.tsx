@@ -45,9 +45,9 @@ function Groups({ type, groups }: Props) {
         </h3>
         <button onClick={() => setShowList((s) => !s)}>
           {showList ? (
-            <IoIosArrowUp className=" text-xl text-gray-700" />
+            <IoIosArrowUp className=" text-xl text-gray-700 dark:text-gray-200" />
           ) : (
-            <IoIosArrowDown className=" text-xl text-gray-700" />
+            <IoIosArrowDown className=" text-xl text-gray-700 dark:text-gray-200" />
           )}
         </button>
       </div>

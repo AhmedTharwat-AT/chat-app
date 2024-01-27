@@ -44,7 +44,7 @@ function UserMainInfo({ user }: any) {
           <div className="relative">
             <img
               src={photo}
-              className="-mt-10 h-20 w-20 select-none rounded-full border-4 border-white object-cover"
+              className="-mt-10 h-20 w-20 select-none rounded-full border-[5px] border-white object-cover dark:border-[var(--dark-bg)]"
             />
             <div className="absolute bottom-1 right-0 flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white text-xl">
               <input
@@ -63,10 +63,10 @@ function UserMainInfo({ user }: any) {
           )}
         </div>
         <div className="py-2 text-center">
-          <h1 className="mb-1 break-all font-semibold capitalize text-gray-800">
+          <h1 className="mb-1 break-all font-semibold capitalize text-gray-800 dark:text-gray-300">
             {user?.name}
           </h1>
-          <p className="break-all text-sm capitalize text-gray-600">
+          <p className="break-all text-xs capitalize tracking-wide text-gray-600 dark:text-gray-400">
             {user?.bio}
           </p>
         </div>

@@ -17,7 +17,9 @@ function ContactItem({ friend }: Props) {
         className="aspect-square h-8 w-8 rounded-full object-cover object-center"
         src={photoDef}
       />
-      <h3 className="text-sm capitalize text-gray-800">{friend.name}</h3>
+      <h3 className="text-sm capitalize text-gray-800 dark:text-gray-300">
+        {friend.name}
+      </h3>
     </li>
   );
 }

@@ -33,7 +33,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
   return (
     <div
       ref={innerRef}
-      className="w-full max-w-[450px]  animate-slideDown overflow-hidden overscroll-y-contain rounded bg-white shadow-md"
+      className="w-full max-w-[450px]  animate-slideDown overflow-hidden overscroll-y-contain rounded bg-white shadow-md dark:bg-[var(--darker-bg)]"
     >
       <div className="flex items-center justify-between bg-[var(--color-main)] p-3">
         <h2 className="font-semibold capitalize text-white">Add Contact</h2>
@@ -44,7 +44,9 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
 
       <div className="space-y-4 px-3 py-4">
         <div>
-          <h2 className="mb-2 text-sm capitalize text-gray-700">Enter name</h2>
+          <h2 className="mb-2 text-sm capitalize text-gray-700 dark:text-gray-300">
+            Enter name
+          </h2>
           <div className="relative flex justify-center shadow">
             <input
               value={query}
@@ -52,7 +54,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
                 if (e.key === "Enter") handleSearch();
               }}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full rounded-md bg-gray-100 px-3 py-1 pr-8 text-gray-700 focus:outline-none focus:ring focus:ring-[var(--color-main)]"
+              className="w-full rounded-md bg-gray-100 px-3 py-1 pr-8 text-gray-700 focus:outline-none focus:ring focus:ring-[var(--color-main)] dark:bg-[var(--dark-bg)] dark:text-gray-400"
             />
             <FiSearch
               onClick={handleSearch}
@@ -60,7 +62,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
             />
           </div>
           {/* results */}
-          <div className="mt-3  max-h-44 overflow-y-auto rounded-md bg-gray-100 p-2 shadow">
+          <div className="mt-3  max-h-44 overflow-y-auto rounded-md bg-gray-100 p-2 shadow dark:bg-[var(--dark-bg)] dark:text-gray-400">
             {isLoading ? (
               <SmallSpinner color="text-green-600" />
             ) : (

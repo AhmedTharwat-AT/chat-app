@@ -10,6 +10,8 @@ export default function useOutsideClicks(handle: () => void, propagate = true) {
       }
     }
     document.addEventListener("click", handleClose, propagate);
+    if (!ref.current)
+      document.removeEventListener("click", handleClose, propagate);
     return () => document.removeEventListener("click", handleClose, propagate);
   }, [handle]);
 

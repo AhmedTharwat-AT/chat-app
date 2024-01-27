@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getMembers, getRoom } from "../../services/firebaseApi";
+import { getRoom } from "../../services/firebaseApi";
+import useMembers from "./useMembers";
 
 interface Props {
   id: string;
@@ -9,27 +10,22 @@ function GroupInfo({ id }: Props) {
     queryKey: ["room", id],
     queryFn: () => getRoom(id),
   });
-  const { data: memebers, isLoading: isLoadingMembers } = useQuery({
-    queryKey: ["memebers", id],
-    queryFn: () => getMembers(id),
-  });
+  const { members, isLoadingMembers } = useMembers(id);
 
   if (isLoading || isLoadingMembers) return null;
 
-  console.log(data, id);
-
   return (
-    <div className="mt-5 space-y-4 divide-y-2">
+    <div className="mt-5 space-y-4 divide-y dark:divide-gray-300/10">
       <div>
-        <h2 className="mb-3 text-xs font-semibold uppercase text-gray-700">
+        <h2 className="mb-3 text-xs font-semibold uppercase text-gray-700 dark:text-gray-300">
           description :
         </h2>
-        <p className="break-all text-sm">
+        <p className="break-all text-sm dark:text-gray-400">
           {data?.description || "This group have no info"}
         </p>
       </div>
       <div className="pt-5">
-        <h2 className="mb-4 text-xs font-semibold uppercase text-gray-700">
+        <h2 className="mb-4 text-xs font-semibold uppercase text-gray-700 dark:text-gray-300">
           Info :
         </h2>
         <div className="space-y-4">
@@ -37,18 +33,18 @@ function GroupInfo({ id }: Props) {
             <h2 className="mb-1  text-xs capitalize tracking-wider text-gray-500">
               name
             </h2>
-            <p className="break-all text-sm capitalize tracking-wider text-gray-900">
+            <p className="break-all text-sm capitalize tracking-wider text-gray-900 dark:text-gray-400">
               {data?.name}
             </p>
           </div>
           <div>
-            <h2 className="mb-1  text-xs capitalize tracking-wider text-gray-500">
+            <h2 className="mb-1  text-xs capitalize tracking-wider text-gray-500 dark:text-gray-500">
               members
             </h2>
-            {memebers?.map((el) => (
+            {members?.map((el) => (
               <p
                 key={el.id}
-                className="break-all text-sm capitalize tracking-wider text-gray-900"
+                className="break-all text-sm capitalize tracking-wider text-gray-900 dark:text-gray-400"
               >
                 {el.name}
               </p>

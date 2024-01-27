@@ -3,7 +3,7 @@ import ChatSearch from "../features/chats/ChatSearch";
 
 function Chats() {
   return (
-    <div className="flex h-full flex-col p-5">
+    <div className="flex h-full flex-col  p-5">
       <ChatSearch title="chats" />
       <ChatsList />
     </div>

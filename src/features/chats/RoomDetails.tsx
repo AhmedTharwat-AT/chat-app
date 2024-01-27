@@ -17,7 +17,7 @@ function RoomDetails({ room, setShowInfo }: any) {
   }
 
   return createPortal(
-    <div className="fixed right-0 top-0 z-50 h-full min-h-screen w-full overflow-y-auto bg-white p-5 shadow-lg sm:w-96">
+    <div className="fixed right-0 top-0 z-50 h-full min-h-screen w-full overflow-y-auto bg-white p-5 shadow-lg sm:w-96 dark:bg-[var(--darker-bg)]">
       <div className="shadow-y-1 relative flex h-44 flex-col items-start overflow-hidden rounded-md p-4">
         <img
           src={photo}

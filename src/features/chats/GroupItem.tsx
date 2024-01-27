@@ -12,7 +12,7 @@ function MsgItem({ item }: { item: [string, any] }) {
   return (
     <div
       onClick={() => setRoom(info)}
-      className={`${isSelected && "bg-[var(--color-main)] hover:!bg-[var(--color-main)] "} flex cursor-pointer items-center gap-2 rounded-md p-2 py-1 hover:bg-gray-100`}
+      className={`${isSelected && "bg-[var(--color-main)] hover:!bg-[var(--color-main-dark)] dark:bg-[var(--color-main-op)] "} flex cursor-pointer items-center gap-2 rounded-md p-2 py-1 hover:bg-gray-100 dark:hover:bg-gray-400/10`}
     >
       <div className="relative">
         <img
@@ -25,7 +25,7 @@ function MsgItem({ item }: { item: [string, any] }) {
       </div>
       <div>
         <h2
-          className={`${isSelected && "!text-gray-100"} text-sm capitalize tracking-wide text-gray-800`}
+          className={`${isSelected && "!text-gray-100"} text-sm capitalize tracking-wide text-gray-800 dark:text-gray-300`}
         >
           {info.name}
         </h2>

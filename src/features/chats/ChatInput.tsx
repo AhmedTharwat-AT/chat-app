@@ -20,7 +20,6 @@ function ChatInput({ roomId }: Porps) {
 
   const sender = {
     id: user.uid,
-    photo: user.photo,
     sender: user.name,
   };
 
@@ -37,6 +36,7 @@ function ChatInput({ roomId }: Porps) {
     );
   }
 
+  //slowdown timer
   useEffect(() => {
     if (slowDown == 0) return;
 
@@ -48,13 +48,13 @@ function ChatInput({ roomId }: Porps) {
   }, [slowDown]);
 
   return (
-    <div className="absolute bottom-0 left-0 w-full  border-t border-gray-200 bg-gray-100 px-5 shadow-md">
+    <div className="absolute bottom-0 left-0 w-full bg-gray-100 px-5 shadow-2xl backdrop-blur-md dark:bg-[var(--dark-bg)]">
       {slowDown > 0 && (
-        <div className="ml-auto flex w-fit items-center gap-2 px-1 pt-2">
-          <p className="text-sm capitalize tracking-wider text-gray-700">
+        <div className="ml-auto flex w-fit items-center gap-2 px-1 pt-1">
+          <p className="text-xs capitalize tracking-wider text-gray-700 dark:text-gray-400">
             slowdown : {slowDown}s
           </p>
-          <CiTimer />
+          <CiTimer className="dark:[&_path]:text-gray-400" />
         </div>
       )}
 
@@ -70,7 +70,7 @@ function ChatInput({ roomId }: Porps) {
             type="text"
             placeholder="Type your message..."
             maxLength={150}
-            className="w-full rounded-md px-4 py-2 text-sm text-gray-800 shadow-md focus:ring focus:ring-[var(--color-main)]"
+            className="w-full rounded-md px-4 py-2 text-sm text-gray-800 shadow-md focus:ring focus:ring-[var(--color-main)] dark:bg-[#333] dark:text-gray-300"
           />
         </div>
         <button
