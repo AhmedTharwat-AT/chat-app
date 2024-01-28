@@ -47,11 +47,11 @@ function Groups({ type, groups }: Props) {
           {type}
         </h3>
 
-        <div className="gap- flex items-center gap-3">
+        <div className="flex items-center gap-3">
           {type == "groups" && (
             <Model>
               <Model.Toggle name="group">
-                <MdAdd className="w-5 cursor-pointer text-lg dark:text-gray-300" />
+                <MdAdd className="w-5 cursor-pointer text-lg text-gray-700 dark:text-gray-300" />
               </Model.Toggle>
               <Model.Window name="group">
                 <GroupFrom />

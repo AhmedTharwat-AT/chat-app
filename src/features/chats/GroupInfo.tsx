@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRoom } from "../../services/firebaseApi";
 import useMembers from "./useMembers";
+import AddGroupMember from "./AddGroupMember";
 
 interface Props {
   id: string;
@@ -24,10 +25,12 @@ function GroupInfo({ id }: Props) {
           {data?.description || "This group have no info"}
         </p>
       </div>
+
       <div className="pt-5">
         <h2 className="mb-4 text-xs font-semibold uppercase text-gray-700 dark:text-gray-300">
           Info :
         </h2>
+
         <div className="space-y-4">
           <div>
             <h2 className="mb-1  text-xs capitalize tracking-wider text-gray-500">
@@ -37,17 +40,24 @@ function GroupInfo({ id }: Props) {
               {data?.name}
             </p>
           </div>
+
           <div>
-            <h2 className="mb-1  text-xs capitalize tracking-wider text-gray-500 dark:text-gray-500">
+            <h2 className="mb-2  text-xs capitalize tracking-wider text-gray-500 dark:text-gray-500">
               members
             </h2>
+
+            <AddGroupMember id={id} />
+
             {members?.map((el) => (
-              <p
-                key={el.id}
-                className="break-all text-sm capitalize tracking-wider text-gray-900 dark:text-gray-400"
-              >
-                {el.name}
-              </p>
+              <div key={el.id} className="flex items-center gap-2 px-2 py-1">
+                <img
+                  className="h-8 w-8 rounded-full object-cover"
+                  src={el?.photo || "/assets/person-placeholder.png"}
+                />
+                <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
+                  {el.name}
+                </p>
+              </div>
             ))}
           </div>
         </div>

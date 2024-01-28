@@ -4,7 +4,7 @@ interface Props {
   data: any[] | undefined;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
-  error: Error | null;
+  error?: Error | null;
 }
 
 function SearchResults({ data, selected, setSelected, error }: Props) {

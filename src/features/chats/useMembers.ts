@@ -3,7 +3,7 @@ import { getMembers } from "../../services/firebaseApi";
 
 function useMembers(roomId: string) {
   const { data: members, isLoading: isLoadingMembers } = useQuery({
-    queryKey: ["memebers", roomId],
+    queryKey: ["members", roomId],
     queryFn: () => getMembers(roomId),
   });
 

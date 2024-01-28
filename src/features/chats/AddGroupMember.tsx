@@ -1,0 +1,23 @@
+import { IoMdPersonAdd } from "react-icons/io";
+import Model from "../../ui/Model";
+import AddMemberForm from "./AddMemberForm";
+
+function AddGroupMember({ id }: any) {
+  return (
+    <Model>
+      <Model.Toggle name="addMember">
+        <div className="flex cursor-pointer items-center gap-2 px-2 py-1 hover:bg-gray-400/15 dark:hover:bg-gray-400/10">
+          <IoMdPersonAdd className="h-8 w-8 rounded-full bg-green-100 p-2 text-green-500 dark:bg-opacity-15" />
+          <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
+            Add Member
+          </p>
+        </div>
+      </Model.Toggle>
+      <Model.Window name="addMember">
+        <AddMemberForm id={id} />
+      </Model.Window>
+    </Model>
+  );
+}
+
+export default AddGroupMember;

@@ -86,17 +86,6 @@ export async function setUserStatus(id: string, status: string) {
 }
 //
 
-export async function addMember({
-  room,
-  member,
-}: {
-  room: string;
-  member: { name: string; id: string; photo: string };
-}) {
-  const ref = doc(db, "rooms", room, "members", member.id);
-  await setDoc(ref, member);
-}
-
 export async function getMembers(room: string = "RR1") {
   const ref = collection(db, "rooms", room, "members");
   const querySnapshot = await getDocs(ref);
@@ -144,15 +133,13 @@ export async function getUserDetails(id: string) {
 // messages
 export async function sendMessage({ roomId, data }: any) {
   const messagesRef = collection(db, "rooms", roomId, "messages");
-
   await addDoc(messagesRef, data);
-
   return null;
 }
 
 //
 
-export async function searchUsers(value: string, friends: string[]) {
+export async function searchUsers(value: string) {
   if (!value) return;
   const currUser = auth.currentUser;
 
@@ -168,8 +155,7 @@ export async function searchUsers(value: string, friends: string[]) {
   let data: any[] = [];
   querySnapshot.forEach((doc) => {
     const user = doc.data();
-    const isFriend = friends.includes(user.uid);
-    if (currUser?.uid != user.uid && !isFriend) data.push(user);
+    if (currUser?.uid != user.uid) data.push(user);
   });
 
   return data;
@@ -205,6 +191,29 @@ export async function addFriend({ friend, user }: any) {
   await batch.commit();
 }
 
+export async function addGroupMember({ room, member }: any) {
+  const batch = writeBatch(db);
+  // 1) add member to the group
+  const groupRef = doc(db, "rooms", room.id, "members", member.uid);
+  batch.set(groupRef, {
+    name: member.name,
+    id: member.uid,
+    photo: member.photo,
+  });
+
+  // 2) add group to the member
+  const memberRef = doc(db, "users", member.uid);
+  batch.update(memberRef, {
+    [`groups.${room.id}`]: {
+      name: room.name,
+      photo: room.photo,
+      room: room.id,
+    },
+  });
+
+  await batch.commit();
+}
+
 export async function createGroup({ details, user }: any) {
   // 1) upload photo
   const fileName = `${user.uid}-${crypto.randomUUID()}`;
@@ -225,7 +234,7 @@ export async function createGroup({ details, user }: any) {
   const batch = writeBatch(db);
 
   // 3) add member to a room
-  const membersRef = doc(collection(db, "rooms", roomRef.id, "members"));
+  const membersRef = doc(db, "rooms", roomRef.id, "members", user.uid);
   batch.set(membersRef, {
     id: user.uid,
     name: user.name,
@@ -263,7 +272,7 @@ export async function updateUserProperty(
   });
 }
 
-//update profile and cover image
+//update profile or cover image
 export async function updateImage(
   file: File,
   user: any,

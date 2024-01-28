@@ -15,6 +15,7 @@ function RoomHead() {
   const photo = room?.photo || "/assets/person-placeholder.png";
   const name = room?.name;
   const isFriend = room?.friend_id ? true : false;
+
   let status = "";
   if (isFriend) {
     status = queryClient.getQueryData(["status", room?.friend_id]) || "offline";
@@ -25,6 +26,7 @@ function RoomHead() {
       <button onClick={() => setRoom(null)} className="py-2 text-3xl">
         <MdKeyboardArrowLeft className="text-[var(--color-main)]" />
       </button>
+
       <div className="flex cursor-pointer items-center gap-3">
         <img className="h-12 w-12 rounded-full object-cover" src={photo} />
         <div>
@@ -34,6 +36,7 @@ function RoomHead() {
           {isFriend ? <Status status={status} className="text-xs" /> : null}
         </div>
       </div>
+
       <button
         onClick={() => setShowInfo((s) => !s)}
         className="ml-auto px-2 py-2 text-2xl"

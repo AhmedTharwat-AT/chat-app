@@ -1,48 +1,64 @@
 import { useState } from "react";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
+import useMembers from "./useMembers";
 
 import { FiSearch } from "react-icons/fi";
-import SmallSpinner from "./SmallSpinner";
-import SearchResults from "./SearchResults";
-import FormControls from "./FormControls";
-import useSearchUsers from "../features/chats/useSearchUsers";
-import FormWrapper from "./FormWrapper";
-import { addFriend } from "../services/firebaseApi";
+import useSearchUsers from "./useSearchUsers";
+import FormWrapper from "../../ui/FormWrapper";
+import SmallSpinner from "../../ui/SmallSpinner";
+import SearchResults from "../../ui/SearchResults";
+import FormControls from "../../ui/FormControls";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addGroupMember } from "../../services/firebaseApi";
 
 interface Props {
   onCloseModel?: () => void;
   innerRef?: React.LegacyRef<any> | undefined;
+  id: string;
 }
 
-function AddContactForm({ onCloseModel, innerRef }: Props) {
+function AddMemberForm({ onCloseModel, innerRef, id }: Props) {
   const [selected, setSelected] = useState("");
-  const { isLoading, refetch, error, query, setQuery, filteredUsers } =
-    useSearchUsers();
   const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({ mutationFn: addFriend });
+  const { isLoading, refetch, error, query, setQuery, users } =
+    useSearchUsers();
+  const { members } = useMembers(id);
+  const {
+    mutate,
+    isPending,
+    error: mutateError,
+  } = useMutation({ mutationFn: addGroupMember });
+
+  //remove memebers from search result
+  const memebersId = members?.map((el) => el.id);
+  const data = users?.filter((el) => !memebersId?.includes(el.id));
 
   function handleSearch() {
     if (!query) return;
     refetch();
   }
 
-  function handleAddFriends() {
+  function handleAddMember() {
     if (!selected) return;
-    const friend = filteredUsers?.find((el: any) => el.uid === selected);
-    const user = queryClient.getQueryData(["user"]);
-    if (!friend || !user) return;
+    const friend = data?.find((el: any) => el.uid === selected);
+    if (!friend) return;
     // add friend to the cache for later use (userInfo)
     queryClient.setQueryData(["friend", friend.uid], friend);
+    const room = queryClient.getQueryData(["room", id]) as Object;
     mutate(
-      { friend, user },
+      { room: { ...room, id }, member: friend },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
+          queryClient.invalidateQueries({
+            queryKey: ["members", id],
+            exact: true,
+          });
           onCloseModel?.();
         },
       },
     );
   }
+
+  console.log(mutateError, error);
 
   return (
     <FormWrapper
@@ -76,7 +92,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
             ) : (
               <SearchResults
                 error={error}
-                data={filteredUsers}
+                data={data}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -84,8 +100,8 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
           </div>
         </div>
         <FormControls
+          handler={handleAddMember}
           onCloseModel={onCloseModel}
-          handler={handleAddFriends}
           isPending={isPending}
         />
       </div>
@@ -93,4 +109,4 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
   );
 }
 
-export default AddContactForm;
+export default AddMemberForm;

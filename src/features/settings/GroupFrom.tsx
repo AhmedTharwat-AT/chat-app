@@ -101,7 +101,7 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
             {...register("photo", { required: "this field is required !" })}
             type="file"
             accept="image/*"
-            className="w-full rounded px-2 py-1 text-sm focus:ring focus:ring-[var(--color-main)] dark:bg-[var(--dark-bg)] dark:text-gray-400"
+            className="w-full rounded px-2 py-1 text-sm dark:bg-[var(--dark-bg)] dark:text-gray-400"
           />
           {errors?.photo && (
             <p className="text-xs text-red-500">
