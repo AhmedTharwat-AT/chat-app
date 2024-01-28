@@ -98,6 +98,10 @@ function SignupForm() {
                 value: 3,
                 message: "min length is 3 chars !",
               },
+              pattern: {
+                value: /^[A-Za-z0-9]+$/,
+                message: "Enter chars or numbers only",
+              },
             })}
             disabled={loading}
             id="username"

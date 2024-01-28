@@ -5,7 +5,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -24,6 +23,8 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+
+const storage = getStorage();
 
 export async function getUser() {
   try {
@@ -181,7 +182,6 @@ export async function addFriend({ friend, user }: any) {
   //create new room
   const roomRef = await addDoc(collection(db, "rooms"), {
     createdAt: +new Date() + "",
-    messages: [],
     type: "private",
   });
 
@@ -205,8 +205,46 @@ export async function addFriend({ friend, user }: any) {
   await batch.commit();
 }
 
+export async function createGroup({ details, user }: any) {
+  // 1) upload photo
+  const fileName = `${user.uid}-${crypto.randomUUID()}`;
+  const reference = storageRef(storage, "images/" + fileName);
+  await uploadBytes(reference, details.photo["0"], {
+    contentType: "image/jpeg",
+  });
+  const photoUrl = await getDownloadURL(reference);
+
+  // 2) create new room
+  const roomRef = await addDoc(collection(db, "rooms"), {
+    ...details, //description , name , photo
+    photo: photoUrl,
+    createdAt: +new Date() + "",
+    type: "group",
+  });
+
+  const batch = writeBatch(db);
+
+  // 3) add member to a room
+  const membersRef = doc(collection(db, "rooms", roomRef.id, "members"));
+  batch.set(membersRef, {
+    id: user.uid,
+    name: user.name,
+    photo: user.photo,
+  });
+
+  // 4) add room to the user
+  batch.update(doc(db, "users", user.uid), {
+    [`groups.${roomRef.id}`]: {
+      name: details.name,
+      photo: photoUrl,
+      room: roomRef.id,
+    },
+  });
+
+  await batch.commit();
+}
+
 //edit user data
-const storage = getStorage();
 
 async function deleteImage(name: string) {
   if (name.includes("firebasestorage.googleapis.com")) {
@@ -223,28 +261,6 @@ export async function updateUserProperty(
   await updateDoc(doc(db, "users", id), {
     [property]: value,
   });
-}
-
-export async function updatePhoto(file: File, user: any) {
-  const url = await updateImage(file, user, "photo");
-  // 4) update photo in each friend's friends list
-  const friends = Object.keys(user.friends);
-  if (friends.length > 0) {
-    for (let i = 0; i < friends.length; i++) {
-      await updateUserProperty(friends[i], `friends.${user.uid}.photo`, url);
-    }
-  }
-  // 5) update in each room members sub collection
-  const friendsRooms = Object.values(user.friends).map((el: any) => el.room);
-  const groups = Object.keys(user.groups);
-  const rooms = [...groups, ...friendsRooms];
-  if (rooms.length > 0) {
-    for (let i = 0; i < rooms.length; i++) {
-      await updateDoc(doc(db, "rooms", rooms[i], "members", user.uid), {
-        photo: url,
-      });
-    }
-  }
 }
 
 //update profile and cover image
@@ -268,6 +284,28 @@ export async function updateImage(
     [type]: url,
   });
   return url;
+}
+
+export async function updatePhoto(file: File, user: any) {
+  const url = await updateImage(file, user, "photo");
+  // 4) update photo in each friend's friends list
+  const friends = Object.keys(user.friends);
+  if (friends.length > 0) {
+    for (let i = 0; i < friends.length; i++) {
+      await updateUserProperty(friends[i], `friends.${user.uid}.photo`, url);
+    }
+  }
+  // 5) update in each room members sub collection
+  const friendsRooms = Object.values(user.friends).map((el: any) => el.room);
+  const groups = Object.keys(user.groups);
+  const rooms = [...groups, ...friendsRooms];
+  if (rooms.length > 0) {
+    for (let i = 0; i < rooms.length; i++) {
+      await updateDoc(doc(db, "rooms", rooms[i], "members", user.uid), {
+        photo: url,
+      });
+    }
+  }
 }
 
 // seeding

@@ -1,8 +1,11 @@
 import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import GroupItem from "./GroupItem";
-import { useState } from "react";
+import { MdAdd } from "react-icons/md";
+import Model from "../../ui/Model";
+import GroupFrom from "../settings/GroupFrom";
 
 export interface GroupsType {
   [key: string]: {
@@ -43,16 +46,31 @@ function Groups({ type, groups }: Props) {
         <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-400">
           {type}
         </h3>
-        <button onClick={() => setShowList((s) => !s)}>
-          {showList ? (
-            <IoIosArrowUp className=" text-xl text-gray-700 dark:text-gray-200" />
-          ) : (
-            <IoIosArrowDown className=" text-xl text-gray-700 dark:text-gray-200" />
+
+        <div className="gap- flex items-center gap-3">
+          {type == "groups" && (
+            <Model>
+              <Model.Toggle name="group">
+                <MdAdd className="w-5 cursor-pointer text-lg dark:text-gray-300" />
+              </Model.Toggle>
+              <Model.Window name="group">
+                <GroupFrom />
+              </Model.Window>
+            </Model>
           )}
-        </button>
+
+          <button onClick={() => setShowList((s) => !s)}>
+            {showList ? (
+              <IoIosArrowUp className="w-8 text-xl text-gray-700 dark:text-gray-200" />
+            ) : (
+              <IoIosArrowDown className="w-8 text-xl text-gray-700 dark:text-gray-200" />
+            )}
+          </button>
+        </div>
       </div>
+
       {items?.length <= 0 ? (
-        <h1 className="text-center text-xs uppercase text-gray-500">
+        <h1 className="py-1 text-center text-xs uppercase text-gray-500">
           {type} list is empty
         </h1>
       ) : showList ? (

@@ -3,7 +3,7 @@ import { useRoom } from "../../context/RoomContext";
 import StatusDot from "../../ui/StatusDot";
 import useUserStatus from "./useUserStatus";
 
-function MsgItem({ item }: { item: [string, any] }) {
+function GroupItem({ item }: { item: [string, any] }) {
   const { room, setRoom } = useRoom();
   const { isOnline, isFriend } = useUserStatus(item);
   const info = item[1];
@@ -34,4 +34,4 @@ function MsgItem({ item }: { item: [string, any] }) {
   );
 }
 
-export default MsgItem;
+export default GroupItem;

@@ -2,6 +2,7 @@ import { updateUserProperty } from "../../services/firebaseApi";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import SmallSpinner from "../../ui/SmallSpinner";
+import FormWrapper from "../../ui/FormWrapper";
 
 interface Props {
   user: any;
@@ -25,20 +26,17 @@ function EditForm({ onCloseModel, type, heading, innerRef, user }: Props) {
       onCloseModel?.();
     } catch (err: any) {
       console.log("error editing bio/about :" + err?.message);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div
-      ref={innerRef}
-      className="w-full max-w-[450px]  animate-slideDown overflow-hidden overscroll-y-contain rounded bg-white shadow-md dark:bg-[var(--darker-bg)]"
+    <FormWrapper
+      onCloseModel={onCloseModel}
+      heading={heading}
+      innerRef={innerRef}
     >
-      <div className="flex items-center justify-between bg-[var(--color-main)] p-3">
-        <h2 className="font-semibold capitalize text-white">{heading}</h2>
-        <button onClick={onCloseModel} className="text-xl text-gray-800">
-          &times;
-        </button>
-      </div>
       <div className="space-y-4 p-3">
         <div className="space-y-2">
           <label className="text-gray-700 dark:text-gray-300">
@@ -67,7 +65,7 @@ function EditForm({ onCloseModel, type, heading, innerRef, user }: Props) {
           </button>
         </div>
       </div>
-    </div>
+    </FormWrapper>
   );
 }
 
