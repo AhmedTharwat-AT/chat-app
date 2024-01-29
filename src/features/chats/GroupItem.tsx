@@ -5,7 +5,7 @@ import useUserStatus from "./useUserStatus";
 
 function GroupItem({ item }: { item: [string, any] }) {
   const { room, setRoom } = useRoom();
-  const { isOnline, isFriend } = useUserStatus(item);
+  const { isOnline, isFriend } = useUserStatus(item[1]);
   const info = item[1];
   const isSelected = room ? (room.room == info.room ? true : false) : false;
 
@@ -19,9 +19,7 @@ function GroupItem({ item }: { item: [string, any] }) {
           className="aspect-square h-9 w-9 rounded-full object-cover"
           src={info.photo || "/assets/person-placeholder.png"}
         />
-        {isFriend ? (
-          <StatusDot status={isOnline} className="text-[0.5rem]" />
-        ) : null}
+        {isFriend ? <StatusDot status={isOnline} className="text-sm" /> : null}
       </div>
       <div>
         <h2

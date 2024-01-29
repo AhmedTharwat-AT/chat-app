@@ -44,9 +44,9 @@ function ProfileMenu({ user }: any) {
         {showMenu && (
           <ul
             ref={ref}
-            className="absolute right-3 top-full z-10 w-32 animate-slideTop select-none divide-y rounded-md bg-white py-2 text-xs text-gray-700"
+            className="absolute right-3 top-full z-10 w-32 animate-slideTop select-none divide-y rounded-md bg-white py-2 text-xs text-gray-700 shadow"
           >
-            <li className="relative cursor-pointer px-3 py-1 hover:bg-gray-200">
+            <li className="relative cursor-pointer px-3 py-2 hover:bg-gray-200">
               <input
                 type="file"
                 onChange={handleCover}
@@ -56,12 +56,12 @@ function ProfileMenu({ user }: any) {
               Change Cover
             </li>
             <Model.Toggle name="bio">
-              <li className="cursor-pointer px-3 py-1 hover:bg-gray-200">
+              <li className="cursor-pointer px-3 py-2 hover:bg-gray-200">
                 Edit Bio
               </li>
             </Model.Toggle>
             <Model.Toggle name="about">
-              <li className="cursor-pointer px-3 py-1 hover:bg-gray-200">
+              <li className="cursor-pointer px-3 py-2 hover:bg-gray-200">
                 Edit About
               </li>
             </Model.Toggle>

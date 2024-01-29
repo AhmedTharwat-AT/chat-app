@@ -1,23 +1,15 @@
 import { createPortal } from "react-dom";
-import { useQueryClient } from "@tanstack/react-query";
 
 import Status from "../../ui/Status";
 import GroupInfo from "./GroupInfo";
 import UserInfo from "./UserInfo";
 
-function RoomDetails({ room, setShowInfo }: any) {
-  const queryClient = useQueryClient();
-  const isGroup = room.friend_id ? false : true;
-  const id = isGroup ? room.room : room.friend_id;
+function RoomDetails({ room, setShowInfo, isOnline, isFriend }: any) {
+  const id = isFriend ? room.friend_id : room.room;
   const photo = room?.photo || "/assets/person-placeholder.png";
 
-  let status = "";
-  if (!isGroup) {
-    status = queryClient.getQueryData(["status", room.friend_id]) || "";
-  }
-
   return createPortal(
-    <div className="fixed right-0 top-0 z-50 h-full min-h-screen w-full overflow-y-auto bg-white p-5 shadow-lg sm:w-96 dark:bg-[var(--darker-bg)]">
+    <div className="fixed right-0 top-0 z-50 h-full min-h-screen w-full overflow-y-auto bg-white p-5 shadow-lg dark:bg-[var(--darker-bg)] sm:w-96">
       <div className="shadow-y-1 relative flex h-44 flex-col items-start overflow-hidden rounded-md p-4">
         <img
           src={photo}
@@ -33,15 +25,15 @@ function RoomDetails({ room, setShowInfo }: any) {
           <h2 className="font-outline-2 font-semibold capitalize text-white  drop-shadow-md">
             {room.name}
           </h2>
-          {!isGroup ? (
+          {isFriend ? (
             <Status
-              status={status}
+              status={isOnline}
               className="text-sm capitalize tracking-wide"
             />
           ) : null}
         </div>
       </div>
-      {isGroup ? <GroupInfo id={id} /> : <UserInfo id={id} />}
+      {isFriend ? <UserInfo id={id} /> : <GroupInfo id={id} />}
     </div>,
     document.querySelector("body") as HTMLBodyElement,
   );

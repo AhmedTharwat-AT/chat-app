@@ -4,14 +4,13 @@ import { rtdb } from "../../services/firebase";
 
 function useUserStatus(item: any) {
   const [isOnline, setIsOnline] = useState("offline");
-  const isFriend = item[1].friend_id ? true : false;
-
+  const isFriend = item.friend_id ? true : false;
   //get users status from realtime database
   useEffect(() => {
     //if its a group return
     if (!isFriend) return;
 
-    const statusRef = ref(rtdb, "users/" + item[0]);
+    const statusRef = ref(rtdb, "users/" + item.friend_id);
     const unsub = onValue(statusRef, (snapshot) => {
       const data = snapshot.val();
       if (!data || data.status == "offline") {

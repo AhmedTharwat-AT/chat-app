@@ -11,8 +11,6 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import users from "../data/users.json";
-import rooms from "../data/rooms.json";
 import { onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
 import { SignData } from "../features/authentication/SignupForm";
@@ -314,24 +312,5 @@ export async function updatePhoto(file: File, user: any) {
         photo: url,
       });
     }
-  }
-}
-
-// seeding
-export async function initUsers() {
-  const data = Object.entries(users);
-  console.log(data);
-
-  for (let i = 0; i < data.length; i++) {
-    await setDoc(doc(db, "users", data[i][0]), data[i][1]);
-  }
-}
-
-export async function initRooms() {
-  const data = Object.entries(rooms);
-  console.log(data);
-
-  for (let i = 0; i < data.length; i++) {
-    await setDoc(doc(db, "rooms", data[i][0]), data[i][1]);
   }
 }

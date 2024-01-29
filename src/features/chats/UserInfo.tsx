@@ -16,7 +16,7 @@ function UserInfo({ id }: Props) {
     <div className="mt-5 space-y-4 divide-y dark:divide-gray-300/10">
       <div>
         <h2 className="mb-3 text-xs font-semibold uppercase text-gray-700 dark:text-gray-300">
-          status :
+          about :
         </h2>
         <p className="break-all text-sm text-gray-800 dark:text-gray-400">
           {data.about || "This user have no info"}
