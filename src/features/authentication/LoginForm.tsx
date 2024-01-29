@@ -24,7 +24,7 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [signInWithEmailAndPassword, _, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
   function onSubmit(data: Data | null) {

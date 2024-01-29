@@ -38,4 +38,4 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const analytics = getAnalytics(app);
 
-export { app, db, auth, rtdb, provider };
+export { app, db, auth, rtdb, provider, analytics };

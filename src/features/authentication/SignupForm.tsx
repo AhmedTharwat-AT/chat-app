@@ -26,7 +26,7 @@ function SignupForm() {
     formState: { errors },
   } = useForm<SignData>();
 
-  const [createUserWithEmailAndPassword, user, loading, error] =
+  const [createUserWithEmailAndPassword, _, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
   async function onSubmit(data: SignData) {

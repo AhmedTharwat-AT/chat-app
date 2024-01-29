@@ -1,5 +1,4 @@
 import useUser from "../features/authentication/useUser";
-import { initRooms, initUsers } from "../services/firebaseApi";
 
 import { CiUser } from "react-icons/ci";
 import { AiOutlineMessage } from "react-icons/ai";
@@ -11,17 +10,11 @@ function Profile() {
 
   const about = data?.about || `there is nothing about ${data?.name}`;
 
-  function addusers() {
-    initUsers();
-    // initRooms();
-  }
-
   if (isLoading) return <Spinner />;
 
   return (
     <div className="h-full divide-y dark:divide-gray-500/20 ">
       <UserMainInfo user={data} />
-      {/* <button onClick={addusers}>add users</button> */}
       <div className=" overflow-y-auto px-5 py-5 ">
         <div>
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-300">

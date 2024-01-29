@@ -46,19 +46,21 @@ function GroupInfo({ id }: Props) {
               members
             </h2>
 
-            <AddGroupMember id={id} />
+            <div className="max-h-96 overflow-y-auto ">
+              <AddGroupMember id={id} />
 
-            {members?.map((el) => (
-              <div key={el.id} className="flex items-center gap-2 px-2 py-1">
-                <img
-                  className="h-8 w-8 rounded-full object-cover"
-                  src={el?.photo || "/assets/person-placeholder.png"}
-                />
-                <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
-                  {el.name}
-                </p>
-              </div>
-            ))}
+              {members?.map((el) => (
+                <div key={el.id} className="flex items-center gap-2 px-2 py-1">
+                  <img
+                    className="h-8 w-8 rounded-full object-cover"
+                    src={el?.photo || "/assets/person-placeholder.png"}
+                  />
+                  <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
+                    {el.name}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

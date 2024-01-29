@@ -58,13 +58,13 @@ function AddMemberForm({ onCloseModel, innerRef, id }: Props) {
     );
   }
 
-  console.log(mutateError, error);
+  if (mutateError || error) console.log(mutateError, error);
 
   return (
     <FormWrapper
       innerRef={innerRef}
       onCloseModel={onCloseModel}
-      heading="Add Contact"
+      heading="Add Member"
     >
       <div className="space-y-4 px-3 py-4">
         <div>

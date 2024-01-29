@@ -20,7 +20,7 @@ function ProfileMenu({ user }: any) {
       const maxSizeInBytes = 500 * 1024;
       if (fileSizeInBytes > maxSizeInBytes) return;
 
-      updateImage(selectedFile, user, "cover").then((res) => {
+      updateImage(selectedFile, user, "cover").then(() => {
         queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
         setShowMenu(false);
       });
