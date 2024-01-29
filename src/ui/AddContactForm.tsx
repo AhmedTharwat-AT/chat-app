@@ -61,7 +61,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => setQuery(e.target.value.toLowerCase())}
               className="w-full rounded-md bg-gray-100 px-3 py-1 pr-8 text-gray-700 focus:outline-none focus:ring focus:ring-[var(--color-main)] dark:bg-[var(--dark-bg)] dark:text-gray-400"
             />
             <FiSearch
