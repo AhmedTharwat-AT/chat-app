@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../../services/firebase";
-import { signUp } from "../../services/firebaseApi";
+import { googleSignIn, signUp } from "../../services/firebaseApi";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -33,11 +33,14 @@ function SignupForm() {
     if (!data.email || !data.password || !data.username) return;
     await createUserWithEmailAndPassword(data.email, data.password);
 
-    if (error) return;
+    if (error) {
+      console.log(error.message);
+      return;
+    }
 
     // add user to users documents in firestore
+    queryClient.removeQueries({ queryKey: ["user"], exact: true });
     await signUp(data);
-    queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
   }
 
   function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {
@@ -191,7 +194,13 @@ function SignupForm() {
             </h3>
             <span className="absolute top-1/2 z-10 h-[1px] w-full bg-gray-300"></span>
           </div>
-          <div className="my-5 flex cursor-pointer items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-2xl hover:bg-gray-200">
+          <div
+            onClick={() => {
+              queryClient.removeQueries({ queryKey: ["user"], exact: true });
+              googleSignIn();
+            }}
+            className="my-5 flex cursor-pointer items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-2xl hover:bg-gray-200"
+          >
             <FcGoogle />
           </div>
         </div>
