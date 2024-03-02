@@ -1,14 +1,15 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { lazy } from "react";
 
-import AppLayout from "./ui/AppLayout";
-import Profile from "./pages/Profile";
-import Chats from "./pages/Chats";
-import Contacts from "./pages/Contacts";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import PageNotFound from "./pages/PageNotFound";
+import AppLayout from "@ui/AppLayout";
+import Chats from "@pages/Chats";
+const Profile = lazy(() => import("@pages/Profile"));
+const Contacts = lazy(() => import("@pages/Contacts"));
+const Login = lazy(() => import("@pages/Login"));
+const Signup = lazy(() => import("@pages/Signup"));
+const PageNotFound = lazy(() => import("@pages/PageNotFound"));
+
 import RoomProvider from "./context/RoomContext";
 import ProtectedRoute from "./features/authentication/ProtectedRoute";
 
@@ -45,7 +46,6 @@ function App() {
           </Routes>
         </ProtectedRoute>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

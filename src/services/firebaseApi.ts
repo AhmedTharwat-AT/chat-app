@@ -102,30 +102,27 @@ interface RoomType {
 export async function getRoom(roomId: string) {
   const docRef = doc(db, "rooms", roomId);
   const docSnap = await getDoc(docRef);
-  let room: RoomType | undefined;
 
   if (docSnap.exists()) {
-    room = docSnap.data();
+    let room: RoomType | undefined = docSnap.data();
+    return room;
   } else {
     console.log("No such document!");
     throw new Error("Failed to load room data!");
   }
-
-  return room;
 }
 
 export async function getUserDetails(id: string) {
   const docRef = doc(db, "users", id);
   const docSnap = await getDoc(docRef);
-  let details: any;
 
   if (docSnap.exists()) {
-    details = docSnap.data();
+    let details: any = docSnap.data();
+    return details;
   } else {
     console.log("No such document!");
+    throw new Error("No such document!");
   }
-
-  return details;
 }
 
 // messages
@@ -172,6 +169,7 @@ export async function addFriend({ friend, user }: any) {
   data.forEach((el, i, arr) => {
     //add a memeber to the room
     const membersRef = doc(collection(db, "rooms", roomRef.id, "members"));
+
     batch.set(membersRef, { id: el.uid, name: el.name, photo: el.photo });
 
     //add users to each other friend list
