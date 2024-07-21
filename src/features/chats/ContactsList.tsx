@@ -3,7 +3,7 @@ import Spinner from "../../ui/Spinner";
 import { divideArrayToSections, sortArrayByNames } from "../../utils/helpers";
 import useUser from "../authentication/useUser";
 import ContactItem from "./ContactItem";
-import { FriendsType, IFriend } from "@/types/data.types";
+import { IFriend } from "@/types/data.types";
 
 function ContactsList() {
   const { data: user, isLoading } = useUser();

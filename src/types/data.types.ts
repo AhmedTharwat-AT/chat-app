@@ -26,8 +26,8 @@ export interface IUser {
   bio: string;
   photo: string;
   cover: string;
-  friends: [key: string, value: IFriend];
-  groups: [key: string, value: IGroup];
+  friends: FriendsType;
+  groups: GroupsType;
 }
 
 export type Message = {
