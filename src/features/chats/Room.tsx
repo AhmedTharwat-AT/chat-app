@@ -1,9 +1,10 @@
+import { IRoomType } from "@/types/data.types";
 import ChatInput from "./ChatInput";
 import Messages from "./Messages";
 import RoomHead from "./RoomHead";
 
 interface Props {
-  info: any;
+  info: IRoomType;
 }
 
 function Room({ info }: Props) {

@@ -1,11 +1,12 @@
+import { IFriend, IGroup } from "@/types/data.types";
 import { useRoom } from "../../context/RoomContext";
 
 import StatusDot from "../../ui/StatusDot";
 import useUserStatus from "./useUserStatus";
 
-function GroupItem({ item }: { item: [string, any] }) {
+function GroupItem({ item }: { item: [string, IGroup | IFriend] }) {
   const { room, setRoom } = useRoom();
-  const { isOnline, isFriend } = useUserStatus(item[1]);
+  const { status, isFriend } = useUserStatus(item[1]);
   const info = item[1];
   const isSelected = room ? (room.room == info.room ? true : false) : false;
 
@@ -19,7 +20,7 @@ function GroupItem({ item }: { item: [string, any] }) {
           className="aspect-square h-9 w-9 rounded-full object-cover"
           src={info.photo || "/assets/person-placeholder.png"}
         />
-        {isFriend ? <StatusDot status={isOnline} className="text-sm" /> : null}
+        {isFriend ? <StatusDot status={status} className="text-sm" /> : null}
       </div>
       <div>
         <h2

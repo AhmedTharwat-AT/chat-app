@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../../services/firebase";
+import { IMessag, IRoomType } from "@/types/data.types";
 
-function useMessages(info: any) {
-  const [messages, setMessages] = useState<[] | any[]>([]);
+function useMessages(info: IRoomType) {
+  const [messages, setMessages] = useState<[] | IMessag[]>([]);
 
   useEffect(() => {
     const unsub = onSnapshot(
       collection(db, "rooms", info.room, "messages"),
       (querySnapshot) => {
-        const msgsData: any[] = [];
+        const msgsData: IMessag[] = [];
         querySnapshot.forEach((doc) => {
-          msgsData.push(doc.data());
+          msgsData.push(doc.data() as IMessag);
         });
-        msgsData.sort((a, b) => a.sentAt - b.sentAt);
+        msgsData.sort((a, b) => Number(a.sentAt) - Number(b.sentAt));
         setMessages(msgsData);
       },
     );

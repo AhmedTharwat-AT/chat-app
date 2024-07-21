@@ -6,23 +6,7 @@ import GroupItem from "./GroupItem";
 import { MdAdd } from "react-icons/md";
 import Model from "../../ui/Model";
 import GroupFrom from "../settings/GroupFrom";
-
-export interface GroupsType {
-  [key: string]: {
-    name: string;
-    photo: string;
-    room: string;
-  };
-}
-
-export interface FriendsType {
-  [key: string]: {
-    friend_id: string;
-    name: string;
-    photo: string;
-    room: string;
-  };
-}
+import { FriendsType, GroupsType } from "@/types/data.types";
 
 interface Props {
   groups: GroupsType | FriendsType;

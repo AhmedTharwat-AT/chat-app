@@ -2,7 +2,7 @@ import { IoMdPersonAdd } from "react-icons/io";
 import Model from "../../ui/Model";
 import AddMemberForm from "./AddMemberForm";
 
-function AddGroupMember({ id }: any) {
+function AddGroupMember({ id }: { id: string }) {
   return (
     <Model>
       <Model.Toggle name="addMember">

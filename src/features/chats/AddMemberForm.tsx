@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import useMembers from "./useMembers";
 
 import { FiSearch } from "react-icons/fi";
@@ -9,10 +9,11 @@ import SearchResults from "../../ui/SearchResults";
 import FormControls from "../../ui/FormControls";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addGroupMember } from "../../services/firebaseApi";
+import { IGroupType, IUser } from "@/types/data.types";
 
 interface Props {
   onCloseModel?: () => void;
-  innerRef?: React.LegacyRef<any> | undefined;
+  innerRef?: React.LegacyRef<ReactNode> | undefined;
   id: string;
 }
 
@@ -30,7 +31,7 @@ function AddMemberForm({ onCloseModel, innerRef, id }: Props) {
 
   //remove memebers from search result
   const memebersId = members?.map((el) => el.id);
-  const data = users?.filter((el) => !memebersId?.includes(el.id));
+  const data = users?.filter((el) => !memebersId?.includes(el.uid));
 
   function handleSearch() {
     if (!query) return;
@@ -39,13 +40,20 @@ function AddMemberForm({ onCloseModel, innerRef, id }: Props) {
 
   function handleAddMember() {
     if (!selected) return;
-    const friend = data?.find((el: any) => el.uid === selected);
+    const friend = data?.find((el: IUser) => el.uid === selected);
     if (!friend) return;
     // add friend to the cache for later use (userInfo)
     queryClient.setQueryData(["friend", friend.uid], friend);
-    const room = queryClient.getQueryData(["room", id]) as Object;
+    const group = queryClient.getQueryData(["group", id]) as IGroupType;
+
     mutate(
-      { room: { ...room, id }, member: friend },
+      {
+        group: {
+          ...group,
+          id,
+        },
+        member: friend,
+      },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({

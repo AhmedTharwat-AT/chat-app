@@ -1,17 +1,9 @@
 import { IoMdPersonAdd } from "react-icons/io";
 import MsgItem from "./GroupItem";
-
-export interface FriendsType {
-  [key: string]: {
-    friend_id: string;
-    name: string;
-    photo: string;
-    room: string;
-  };
-}
+import { FriendsType } from "@/types/data.types";
 
 interface Props {
-  friends: FriendsType | object;
+  friends: FriendsType;
 }
 
 function Friends({ friends }: Props) {

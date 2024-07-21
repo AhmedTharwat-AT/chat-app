@@ -8,7 +8,7 @@ interface Props {
 }
 function GroupInfo({ id }: Props) {
   const { data, isLoading } = useQuery({
-    queryKey: ["room", id],
+    queryKey: ["group", id],
     queryFn: () => getRoom(id),
   });
   const { members, isLoadingMembers } = useMembers(id);

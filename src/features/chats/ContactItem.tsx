@@ -1,7 +1,8 @@
-import { RoomType, useRoom } from "../../context/RoomContext";
+import { IRoomType } from "@/types/data.types";
+import { useRoom } from "../../context/RoomContext";
 
 interface Props {
-  friend: RoomType;
+  friend: IRoomType;
 }
 
 function ContactItem({ friend }: Props) {

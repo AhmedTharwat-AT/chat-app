@@ -1,17 +1,10 @@
+import { IMember, IMessag, IUser } from "@/types/data.types";
 import { formatTime } from "../../utils/helpers";
 
-export interface Msg {
-  content: string;
-  id: string;
-  photo: string;
-  sender: string;
-  sentAt: string;
-}
-
 interface Props {
-  msg: Msg;
-  currUser: any;
-  members: any[];
+  msg: IMessag;
+  currUser: IUser;
+  members: IMember[];
 }
 
 function Message({ msg, currUser, members }: Props) {

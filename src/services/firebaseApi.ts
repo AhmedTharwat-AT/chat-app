@@ -21,6 +21,13 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
+import {
+  IMember,
+  IUser,
+  Message,
+  IGroupType,
+  IFriend,
+} from "@/types/data.types";
 
 const storage = getStorage();
 
@@ -36,7 +43,7 @@ export async function getUser() {
 
     setUserStatus(currUser.uid, "online");
 
-    return { ...data };
+    return { ...data } as IUser;
   } catch (err) {
     console.log(err);
   }
@@ -87,16 +94,12 @@ export async function setUserStatus(id: string, status: string) {
 export async function getMembers(room: string = "RR1") {
   const ref = collection(db, "rooms", room, "members");
   const querySnapshot = await getDocs(ref);
-  let data: any[] = [];
+  const data: IMember[] = [];
   querySnapshot.forEach((doc) => {
-    data.push(doc.data());
+    data.push(doc.data() as IMember);
   });
 
   return data;
-}
-
-interface RoomType {
-  [key: string]: string;
 }
 
 export async function getRoom(roomId: string) {
@@ -104,7 +107,8 @@ export async function getRoom(roomId: string) {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    let room: RoomType | undefined = docSnap.data();
+    // IRoomType
+    const room = docSnap.data();
     return room;
   } else {
     console.log("No such document!");
@@ -117,7 +121,7 @@ export async function getUserDetails(id: string) {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    let details: any = docSnap.data();
+    const details = docSnap.data();
     return details;
   } else {
     console.log("No such document!");
@@ -126,13 +130,15 @@ export async function getUserDetails(id: string) {
 }
 
 // messages
-export async function sendMessage({ roomId, data }: any) {
+export async function sendMessage({ roomId, data }: Message) {
   const messagesRef = collection(db, "rooms", roomId, "messages");
   await addDoc(messagesRef, data);
   return null;
 }
 
 //
+
+type ISearchedUsers = IUser[] | undefined;
 
 export async function searchUsers(value: string) {
   if (!value) return;
@@ -147,19 +153,25 @@ export async function searchUsers(value: string) {
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) throw new Error("no matching users with this name.");
 
-  let data: any[] = [];
+  const data: ISearchedUsers = [];
   querySnapshot.forEach((doc) => {
     const user = doc.data();
-    if (currUser?.uid != user.uid) data.push(user);
+    if (currUser?.uid != user.uid) data.push(user as IUser);
   });
 
   return data;
 }
 
-export async function addFriend({ friend, user }: any) {
+export async function addFriend({
+  friend,
+  user,
+}: {
+  friend: IUser;
+  user: IUser;
+}) {
   const batch = writeBatch(db);
 
-  let data = [friend, user];
+  const data = [friend, user];
   //create new room
   const roomRef = await addDoc(collection(db, "rooms"), {
     createdAt: +new Date() + "",
@@ -187,10 +199,18 @@ export async function addFriend({ friend, user }: any) {
   await batch.commit();
 }
 
-export async function addGroupMember({ room, member }: any) {
+export async function addGroupMember({
+  group,
+  member,
+}: {
+  group: IGroupType;
+  member: IUser;
+}) {
+  if (!group.id) return;
+
   const batch = writeBatch(db);
   // 1) add member to the group
-  const groupRef = doc(db, "rooms", room.id, "members", member.uid);
+  const groupRef = doc(db, "rooms", group.id, "members", member.uid);
   batch.set(groupRef, {
     name: member.name,
     id: member.uid,
@@ -200,17 +220,23 @@ export async function addGroupMember({ room, member }: any) {
   // 2) add group to the member
   const memberRef = doc(db, "users", member.uid);
   batch.update(memberRef, {
-    [`groups.${room.id}`]: {
-      name: room.name,
-      photo: room.photo,
-      room: room.id,
+    [`groups.${group.id}`]: {
+      name: group.name,
+      photo: group.photo,
+      room: group.id,
     },
   });
 
   await batch.commit();
 }
 
-export async function createGroup({ details, user }: any) {
+export async function createGroup({
+  details,
+  user,
+}: {
+  details: { name: string; photo: FileList; description: string };
+  user: IUser;
+}) {
   // 1) upload photo
   const fileName = `${user.uid}-${crypto.randomUUID()}`;
   const reference = storageRef(storage, "images/" + fileName);
@@ -271,7 +297,7 @@ export async function updateUserProperty(
 //update profile or cover image
 export async function updateImage(
   file: File,
-  user: any,
+  user: IUser,
   type: "photo" | "cover",
 ) {
   const fileName = `${user.uid}-${crypto.randomUUID()}`;
@@ -291,8 +317,9 @@ export async function updateImage(
   return url;
 }
 
-export async function updatePhoto(file: File, user: any) {
+export async function updatePhoto(file: File, user: IUser) {
   const url = await updateImage(file, user, "photo");
+
   // 4) update photo in each friend's friends list
   const friends = Object.keys(user.friends);
   if (friends.length > 0) {
@@ -301,7 +328,9 @@ export async function updatePhoto(file: File, user: any) {
     }
   }
   // 5) update in each room members sub collection
-  const friendsRooms = Object.values(user.friends).map((el: any) => el.room);
+  const friendsRooms = Object.values(user.friends).map(
+    (el: string | IFriend) => (typeof el === "string" ? el : el.room),
+  );
   const groups = Object.keys(user.groups);
   const rooms = [...groups, ...friendsRooms];
   if (rooms.length > 0) {

@@ -1,21 +1,22 @@
 import { useQueryClient } from "@tanstack/react-query";
 
-import Message, { Msg } from "./Message";
+import Message from "./Message";
 import useMessages from "./useMessages";
 import useMembers from "./useMembers";
+import { IMessag, IRoomType, IUser } from "@/types/data.types";
 
-function Messages({ info }: any) {
+function Messages({ info }: { info: IRoomType }) {
   const { messages } = useMessages(info);
   const { members, isLoadingMembers } = useMembers(info.room);
 
   const queryClient = useQueryClient();
-  const user: any = queryClient.getQueryData(["user"]);
+  const user = queryClient.getQueryData(["user"]) as IUser;
 
   if (!messages || isLoadingMembers || !members) return null;
 
   return (
     <div className="h-[calc(100vh-156px)]  space-y-4 overflow-y-auto p-4">
-      {messages?.map((msg: Msg, i: number) => (
+      {messages?.map((msg: IMessag, i: number) => (
         <Message key={i} msg={msg} currUser={user} members={members} />
       ))}
       <div

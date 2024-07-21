@@ -1,12 +1,14 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { searchUsers } from "../../services/firebaseApi";
+import { IUser } from "@/types/data.types";
 
 function useSearchUsers() {
   const [query, setQuery] = useState("");
   const queryClient = useQueryClient();
-  const user: any = queryClient.getQueryData(["user"]);
+  const user = queryClient.getQueryData(["user"]) as IUser;
   const friends = Object.keys(user?.friends);
+
   const {
     data: users,
     isLoading,
@@ -18,9 +20,9 @@ function useSearchUsers() {
     enabled: false,
     retry: 0,
   });
-
+  console.log(users);
   const filteredUsers =
-    users?.filter((el: any) => !friends.includes(el.uid)) || [];
+    users?.filter((el: IUser) => !friends.includes(el.uid)) || [];
 
   return { users, isLoading, refetch, error, query, setQuery, filteredUsers };
 }

@@ -6,6 +6,7 @@ import { RiInformationFill } from "react-icons/ri";
 import RoomDetails from "./RoomDetails";
 import Status from "../../ui/Status";
 import useUserStatus from "./useUserStatus";
+import { IRoomType } from "@/types/data.types";
 
 function RoomHead() {
   const { room, setRoom } = useRoom();
@@ -14,7 +15,7 @@ function RoomHead() {
   const photo = room?.photo || "/assets/person-placeholder.png";
   const name = room?.name;
 
-  const { isOnline, isFriend } = useUserStatus(room);
+  const { status, isFriend } = useUserStatus(room as IRoomType);
 
   return (
     <div className="flex items-center gap-3 bg-white bg-opacity-50 px-4 py-4 shadow backdrop-blur-sm dark:bg-[var(--dark-head-bg)]">
@@ -28,7 +29,7 @@ function RoomHead() {
           <h2 className="max-w-[200px] truncate text-lg font-semibold capitalize text-gray-800 dark:text-gray-300">
             {name}
           </h2>
-          {isFriend ? <Status status={isOnline} className="text-xs" /> : null}
+          {isFriend ? <Status status={status} className="text-xs" /> : null}
         </div>
       </div>
 
@@ -40,9 +41,9 @@ function RoomHead() {
       </button>
       {showInfo && (
         <RoomDetails
-          isOnline={isOnline}
+          status={status}
           isFriend={isFriend}
-          room={room}
+          room={room as IRoomType}
           setShowInfo={setShowInfo}
         />
       )}

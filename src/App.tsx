@@ -12,6 +12,7 @@ const PageNotFound = lazy(() => import("@pages/PageNotFound"));
 
 import RoomProvider from "./context/RoomContext";
 import ProtectedRoute from "./features/authentication/ProtectedRoute";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +46,7 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </ProtectedRoute>
+        <ReactQueryDevtools />
       </BrowserRouter>
     </QueryClientProvider>
   );

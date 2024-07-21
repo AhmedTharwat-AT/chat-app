@@ -4,10 +4,12 @@ import { createGroup } from "../../services/firebaseApi";
 import SmallSpinner from "../../ui/SmallSpinner";
 import FormWrapper from "../../ui/FormWrapper";
 import { FieldValues, useForm } from "react-hook-form";
+import { IUser } from "@/types/data.types";
+import { ReactNode } from "react";
 
 interface Props {
   onCloseModel?: () => void;
-  innerRef?: React.LegacyRef<any> | undefined;
+  innerRef?: React.LegacyRef<ReactNode> | undefined;
 }
 
 function GroupFrom({ onCloseModel, innerRef }: Props) {
@@ -17,9 +19,13 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
     formState: { errors },
     setError,
   } = useForm();
-  const { mutate, isPending, error } = useMutation({ mutationFn: createGroup });
+  const {
+    mutate: createGroupFn,
+    isPending,
+    error,
+  } = useMutation({ mutationFn: createGroup });
   const queryClient = useQueryClient();
-  const user = queryClient.getQueryData(["user"]);
+  const user = queryClient.getQueryData(["user"]) as IUser;
 
   function onSubmit(data: FieldValues) {
     try {
@@ -30,8 +36,15 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
         setError("photo", { message: "max photo size is 300 kb!" });
         return;
       }
-      mutate(
-        { details: data, user },
+      createGroupFn(
+        {
+          details: data as {
+            name: string;
+            photo: FileList;
+            description: string;
+          },
+          user,
+        },
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
@@ -39,8 +52,10 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
           },
         },
       );
-    } catch (err: any) {
-      console.log("error changing profile picture :", err?.message);
+    } catch (err: unknown) {
+      err instanceof Error
+        ? console.log("error creating a group :", err?.message)
+        : console.log("Something went wrong");
     }
   }
 

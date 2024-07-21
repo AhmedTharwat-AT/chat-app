@@ -3,9 +3,17 @@ import { createPortal } from "react-dom";
 import Status from "../../ui/Status";
 import GroupInfo from "./GroupInfo";
 import UserInfo from "./UserInfo";
+import { IRoomType } from "@/types/data.types";
 
-function RoomDetails({ room, setShowInfo, isOnline, isFriend }: any) {
-  const id = isFriend ? room.friend_id : room.room;
+interface Props {
+  room: IRoomType;
+  setShowInfo: React.Dispatch<React.SetStateAction<boolean>>;
+  status: string;
+  isFriend: boolean;
+}
+
+function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
+  const id = isFriend ? (room.friend_id as string) : room.room;
   const photo = room?.photo || "/assets/person-placeholder.png";
 
   return createPortal(
@@ -27,7 +35,7 @@ function RoomDetails({ room, setShowInfo, isOnline, isFriend }: any) {
           </h2>
           {isFriend ? (
             <Status
-              status={isOnline}
+              status={status}
               className="text-sm capitalize tracking-wide"
             />
           ) : null}

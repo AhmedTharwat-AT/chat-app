@@ -10,7 +10,7 @@ function UserInfo({ id }: Props) {
     queryFn: () => getUserDetails(id),
   });
 
-  if (isLoading) return null;
+  if (isLoading || !data) return null;
 
   return (
     <div className="mt-5 space-y-4 divide-y dark:divide-gray-300/10">

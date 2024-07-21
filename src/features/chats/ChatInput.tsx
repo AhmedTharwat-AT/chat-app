@@ -6,6 +6,7 @@ import { IoMdSend } from "react-icons/io";
 import { CiTimer } from "react-icons/ci";
 
 import EmojiWrapper from "../../ui/EmojiWrapper";
+import { IUser } from "@/types/data.types";
 
 interface Porps {
   roomId: string;
@@ -15,7 +16,7 @@ function ChatInput({ roomId }: Porps) {
   const [content, setContent] = useState("");
   const [slowDown, setSlowDown] = useState(0);
   const queryClient = useQueryClient();
-  const user: any = queryClient.getQueryData(["user"]);
+  const user = queryClient.getQueryData(["user"]) as IUser;
   const { mutate, isPending } = useMutation({ mutationFn: sendMessage });
 
   const sender = {

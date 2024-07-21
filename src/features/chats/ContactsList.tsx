@@ -3,15 +3,16 @@ import Spinner from "../../ui/Spinner";
 import { divideArrayToSections, sortArrayByNames } from "../../utils/helpers";
 import useUser from "../authentication/useUser";
 import ContactItem from "./ContactItem";
+import { FriendsType, IFriend } from "@/types/data.types";
 
 function ContactsList() {
   const { data: user, isLoading } = useUser();
   const [searchParams] = useSearchParams();
   const filter = searchParams.get("contacts") || "";
-  let friends: any[] = [];
+  let friends: IFriend[] = [];
 
   if (user && user.friends) {
-    friends = Object.values(user?.friends);
+    friends = Object.values(user.friends) as IFriend[];
   }
 
   //filter

@@ -1,10 +1,16 @@
 import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
 import { rtdb } from "../../services/firebase";
+import { IRoomType } from "@/types/data.types";
 
-function useUserStatus(item: any) {
-  const [isOnline, setIsOnline] = useState("offline");
-  const isFriend = item.friend_id ? true : false;
+function isFriendFn(item: IRoomType) {
+  return item.friend_id !== undefined;
+}
+
+function useUserStatus(item: IRoomType) {
+  const [status, setStatus] = useState("offline");
+  const isFriend = isFriendFn(item);
+
   //get users status from realtime database
   useEffect(() => {
     //if its a group return
@@ -14,16 +20,16 @@ function useUserStatus(item: any) {
     const unsub = onValue(statusRef, (snapshot) => {
       const data = snapshot.val();
       if (!data || data.status == "offline") {
-        setIsOnline("offline");
+        setStatus("offline");
       } else {
-        setIsOnline("online");
+        setStatus("online");
       }
     });
 
     return () => unsub();
   }, [isFriend, item]);
 
-  return { isOnline, isFriend };
+  return { status, isFriend };
 }
 
 export default useUserStatus;

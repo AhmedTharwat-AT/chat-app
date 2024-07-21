@@ -1,21 +1,15 @@
+import { IRoomType } from "@/types/data.types";
 import { createContext, useState, useContext } from "react";
 
-export interface RoomType {
-  friend_id?: string;
-  name: string;
-  photo: string;
-  room: string;
-}
-
 interface Context {
-  room: RoomType | null;
-  setRoom: React.Dispatch<React.SetStateAction<RoomType | null>>;
+  room: IRoomType | null;
+  setRoom: React.Dispatch<React.SetStateAction<IRoomType | null>>;
 }
 
 const WindowContext = createContext<Context | null>(null);
 
 function RoomProvider({ children }: { children: React.ReactNode }) {
-  const [room, setRoom] = useState<RoomType | null>(null);
+  const [room, setRoom] = useState<IRoomType | null>(null);
 
   return (
     <WindowContext.Provider value={{ room, setRoom }}>
@@ -24,6 +18,7 @@ function RoomProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useRoom() {
   const context = useContext(WindowContext);
   if (!context) throw new Error("use useRoom inside the provider");

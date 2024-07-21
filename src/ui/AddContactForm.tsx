@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 import { FiSearch } from "react-icons/fi";
@@ -8,10 +8,11 @@ import FormControls from "./FormControls";
 import useSearchUsers from "../features/chats/useSearchUsers";
 import FormWrapper from "./FormWrapper";
 import { addFriend } from "../services/firebaseApi";
+import { IUser } from "@/types/data.types";
 
 interface Props {
   onCloseModel?: () => void;
-  innerRef?: React.LegacyRef<any> | undefined;
+  innerRef?: React.LegacyRef<ReactNode> | undefined;
 }
 
 function AddContactForm({ onCloseModel, innerRef }: Props) {
@@ -28,11 +29,12 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
 
   function handleAddFriends() {
     if (!selected) return;
-    const friend = filteredUsers?.find((el: any) => el.uid === selected);
-    const user = queryClient.getQueryData(["user"]);
+    const friend = filteredUsers?.find((el: IUser) => el.uid === selected);
+    const user = queryClient.getQueryData(["user"]) as IUser;
     if (!friend || !user) return;
     // add friend to the cache for later use (userInfo)
     queryClient.setQueryData(["friend", friend.uid], friend);
+    // add friend to the database
     mutate(
       { friend, user },
       {
