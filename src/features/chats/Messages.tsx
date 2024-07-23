@@ -1,13 +1,13 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { IMessag, IRoomType, IUser } from "@/types/data.types";
+import useMessages from "./hooks/useMessages";
+import useMembers from "./hooks/useMembers";
 
 import Message from "./Message";
-import useMessages from "./useMessages";
-import useMembers from "./useMembers";
-import { IMessag, IRoomType, IUser } from "@/types/data.types";
 
-function Messages({ info }: { info: IRoomType }) {
-  const { messages } = useMessages(info);
-  const { members, isLoadingMembers } = useMembers(info.room);
+function Messages({ roomInfo }: { roomInfo: IRoomType }) {
+  const { messages } = useMessages(roomInfo);
+  const { members, isLoadingMembers } = useMembers(roomInfo.room);
 
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData(["user"]) as IUser;

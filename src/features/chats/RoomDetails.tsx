@@ -41,7 +41,7 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
           ) : null}
         </div>
       </div>
-      {isFriend ? <UserInfo id={id} /> : <GroupInfo id={id} />}
+      {isFriend ? <UserInfo friendId={id} /> : <GroupInfo groupId={id} />}
     </div>,
     document.querySelector("body") as HTMLBodyElement,
   );

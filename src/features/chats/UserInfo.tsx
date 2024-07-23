@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getUserDetails } from "../../services/firebaseApi";
+import Model from "@/ui/Model";
+import DeleteFriendModal from "./DeleteFriendModal";
 
 interface Props {
-  id: string;
+  friendId: string;
 }
-function UserInfo({ id }: Props) {
+function UserInfo({ friendId }: Props) {
   const { data, isLoading } = useQuery({
-    queryKey: ["friend", id],
-    queryFn: () => getUserDetails(id),
+    queryKey: ["friend", friendId],
+    queryFn: () => getUserDetails(friendId),
   });
 
   if (isLoading || !data) return null;
@@ -50,6 +52,18 @@ function UserInfo({ id }: Props) {
             <p className="text-sm capitalize tracking-wider text-gray-900 dark:text-gray-400">
               {data.bio}
             </p>
+          </div>
+          <div className="flex w-full justify-center pt-4">
+            <Model>
+              <Model.Toggle name="addMember">
+                <button className="rounded-md bg-red-500 px-2 py-1 capitalize text-white hover:bg-red-400">
+                  remove friend
+                </button>
+              </Model.Toggle>
+              <Model.Window name="addMember">
+                <DeleteFriendModal friendId={friendId} />
+              </Model.Window>
+            </Model>
           </div>
         </div>
       </div>

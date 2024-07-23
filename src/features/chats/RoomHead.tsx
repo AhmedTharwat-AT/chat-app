@@ -1,12 +1,12 @@
 import { useRoom } from "../../context/RoomContext";
 import { useState } from "react";
+import useUserStatus from "./hooks/useUserStatus";
+import { IRoomType } from "@/types/data.types";
 
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { RiInformationFill } from "react-icons/ri";
 import RoomDetails from "./RoomDetails";
 import Status from "../../ui/Status";
-import useUserStatus from "./useUserStatus";
-import { IRoomType } from "@/types/data.types";
 
 function RoomHead() {
   const { room, setRoom } = useRoom();

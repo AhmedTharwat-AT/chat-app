@@ -1,17 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { getRoom } from "../../services/firebaseApi";
-import useMembers from "./useMembers";
+
 import AddGroupMember from "./AddGroupMember";
+import useMembers from "./hooks/useMembers";
 
 interface Props {
-  id: string;
+  groupId: string;
 }
-function GroupInfo({ id }: Props) {
+function GroupInfo({ groupId }: Props) {
   const { data, isLoading } = useQuery({
-    queryKey: ["group", id],
-    queryFn: () => getRoom(id),
+    queryKey: ["group", groupId],
+    queryFn: () => getRoom(groupId),
   });
-  const { members, isLoadingMembers } = useMembers(id);
+  const { members, isLoadingMembers } = useMembers(groupId);
 
   if (isLoading || isLoadingMembers) return null;
 
@@ -47,7 +48,7 @@ function GroupInfo({ id }: Props) {
             </h2>
 
             <div className="max-h-96 overflow-y-auto ">
-              <AddGroupMember id={id} />
+              <AddGroupMember groupId={groupId} />
 
               {members?.map((el) => (
                 <div key={el.id} className="flex items-center gap-2 px-2 py-1">

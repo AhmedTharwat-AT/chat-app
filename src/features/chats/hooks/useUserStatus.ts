@@ -1,7 +1,8 @@
 import { onValue, ref } from "firebase/database";
 import { useEffect, useState } from "react";
-import { rtdb } from "../../services/firebase";
+
 import { IRoomType } from "@/types/data.types";
+import { rtdb } from "@/services/firebase";
 
 function isFriendFn(item: IRoomType) {
   return item.friend_id !== undefined;

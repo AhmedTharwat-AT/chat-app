@@ -4,15 +4,15 @@ import Messages from "./Messages";
 import RoomHead from "./RoomHead";
 
 interface Props {
-  info: IRoomType;
+  roomInfo: IRoomType;
 }
 
-function Room({ info }: Props) {
+function Room({ roomInfo }: Props) {
   return (
     <div className="relative h-full">
       <RoomHead />
-      <Messages info={info} />
-      <ChatInput roomId={info.room} />
+      <Messages roomInfo={roomInfo} />
+      <ChatInput roomId={roomInfo.room} />
     </div>
   );
 }

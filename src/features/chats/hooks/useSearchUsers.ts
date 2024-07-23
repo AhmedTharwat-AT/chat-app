@@ -1,7 +1,8 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { searchUsers } from "../../services/firebaseApi";
+
 import { IUser } from "@/types/data.types";
+import { searchUsers } from "@/services/firebaseApi";
 
 function useSearchUsers() {
   const [query, setQuery] = useState("");

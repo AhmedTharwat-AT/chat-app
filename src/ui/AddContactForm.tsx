@@ -1,14 +1,14 @@
 import { ReactNode, useState } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { addFriend } from "../services/firebaseApi";
+import { IUser } from "@/types/data.types";
+import useSearchUsers from "@/features/chats/hooks/useSearchUsers";
 
 import { FiSearch } from "react-icons/fi";
 import SmallSpinner from "./SmallSpinner";
 import SearchResults from "./SearchResults";
 import FormControls from "./FormControls";
-import useSearchUsers from "../features/chats/useSearchUsers";
 import FormWrapper from "./FormWrapper";
-import { addFriend } from "../services/firebaseApi";
-import { IUser } from "@/types/data.types";
 
 interface Props {
   onCloseModel?: () => void;

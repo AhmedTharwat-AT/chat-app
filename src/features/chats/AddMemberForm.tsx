@@ -1,28 +1,28 @@
 import { ReactNode, useState } from "react";
-import useMembers from "./useMembers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addGroupMember } from "../../services/firebaseApi";
+import { IGroupType, IUser } from "@/types/data.types";
+import useSearchUsers from "./hooks/useSearchUsers";
+import useMembers from "./hooks/useMembers";
 
 import { FiSearch } from "react-icons/fi";
-import useSearchUsers from "./useSearchUsers";
 import FormWrapper from "../../ui/FormWrapper";
 import SmallSpinner from "../../ui/SmallSpinner";
 import SearchResults from "../../ui/SearchResults";
 import FormControls from "../../ui/FormControls";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addGroupMember } from "../../services/firebaseApi";
-import { IGroupType, IUser } from "@/types/data.types";
 
 interface Props {
   onCloseModel?: () => void;
   innerRef?: React.LegacyRef<ReactNode> | undefined;
-  id: string;
+  groupId: string;
 }
 
-function AddMemberForm({ onCloseModel, innerRef, id }: Props) {
+function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
   const [selected, setSelected] = useState("");
   const queryClient = useQueryClient();
   const { isLoading, refetch, error, query, setQuery, users } =
     useSearchUsers();
-  const { members } = useMembers(id);
+  const { members } = useMembers(groupId);
   const {
     mutate,
     isPending,
@@ -44,20 +44,20 @@ function AddMemberForm({ onCloseModel, innerRef, id }: Props) {
     if (!friend) return;
     // add friend to the cache for later use (userInfo)
     queryClient.setQueryData(["friend", friend.uid], friend);
-    const group = queryClient.getQueryData(["group", id]) as IGroupType;
+    const group = queryClient.getQueryData(["group", groupId]) as IGroupType;
 
     mutate(
       {
         group: {
           ...group,
-          id,
+          id: groupId,
         },
         member: friend,
       },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: ["members", id],
+            queryKey: ["members", groupId],
             exact: true,
           });
           onCloseModel?.();

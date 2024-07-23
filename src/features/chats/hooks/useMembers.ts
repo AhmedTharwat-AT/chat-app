@@ -1,5 +1,5 @@
+import { getMembers } from "@/services/firebaseApi";
 import { useQuery } from "@tanstack/react-query";
-import { getMembers } from "../../services/firebaseApi";
 
 function useMembers(roomId: string) {
   const { data: members, isLoading: isLoadingMembers } = useQuery({

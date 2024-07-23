@@ -1,7 +1,10 @@
 import { auth, db, provider, rtdb } from "../services/firebase";
 import {
+  WriteBatch,
   addDoc,
   collection,
+  deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -11,7 +14,7 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { onDisconnect, ref, set } from "firebase/database";
+import { get, onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
 import { SignData } from "../features/authentication/SignupForm";
 import {
@@ -28,6 +31,7 @@ import {
   IGroupType,
   IFriend,
 } from "@/types/data.types";
+import firebase from "firebase/compat/app";
 
 const storage = getStorage();
 
@@ -196,6 +200,43 @@ export async function addFriend({
       },
     });
   });
+  await batch.commit();
+}
+
+export async function deleteCollection(path: string, batch?: WriteBatch) {
+  const roomRef = collection(db, path);
+  const snapshot = await getDocs(roomRef);
+
+  snapshot.forEach((doc) => {
+    batch ? batch?.delete(doc.ref) : deleteDoc(doc.ref);
+  });
+}
+
+export async function deleteFriend(friendId: string, roomId: string) {
+  const currUser = auth.currentUser;
+  if (!currUser) throw new Error("User is logged out!");
+
+  const batch = writeBatch(db);
+
+  //remove friend from each other friend list
+  const friendRef = doc(db, "users", currUser.uid);
+  batch.update(friendRef, {
+    [`friends.${friendId}`]: deleteField(),
+  });
+
+  const friendAccountRef = doc(db, "users", friendId);
+  batch.update(friendAccountRef, {
+    [`friends.${currUser.uid}`]: deleteField(),
+  });
+
+  await Promise.all([
+    deleteCollection(`rooms/${roomId}/members`, batch),
+    deleteCollection(`rooms/${roomId}/messages`, batch),
+  ]);
+
+  const roomRef = doc(db, "rooms", roomId);
+  batch.delete(roomRef);
+
   await batch.commit();
 }
 

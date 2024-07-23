@@ -1,9 +1,10 @@
 import { useSearchParams } from "react-router-dom";
-import Spinner from "../../ui/Spinner";
-import { divideArrayToSections, sortArrayByNames } from "../../utils/helpers";
 import useUser from "../authentication/useUser";
-import ContactItem from "./ContactItem";
 import { IFriend } from "@/types/data.types";
+import { divideArrayToSections, sortArrayByNames } from "../../utils/helpers";
+
+import Spinner from "../../ui/Spinner";
+import ContactItem from "./ContactItem";
 
 function ContactsList() {
   const { data: user, isLoading } = useUser();
@@ -19,10 +20,7 @@ function ContactsList() {
   friends = friends.filter((el) => el.name.includes(filter));
 
   //order
-  const sections = divideArrayToSections(sortArrayByNames([...friends])) as [
-    string,
-    any[],
-  ][];
+  const sections = divideArrayToSections(sortArrayByNames(friends));
 
   if (isLoading) return <Spinner />;
 
@@ -37,7 +35,7 @@ function ContactsList() {
 
   return (
     <div className="bp:h-[calc(100vh-152px) my-3 h-[calc(100vh-208px)] space-y-6 overflow-y-auto pt-5">
-      {sections.map(([section, values]) => {
+      {sections.map(([section, values]: [string, IFriend[]]) => {
         return (
           <div key={section}>
             <div className="relative">

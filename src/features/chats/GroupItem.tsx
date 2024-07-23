@@ -2,7 +2,7 @@ import { IFriend, IGroup } from "@/types/data.types";
 import { useRoom } from "../../context/RoomContext";
 
 import StatusDot from "../../ui/StatusDot";
-import useUserStatus from "./useUserStatus";
+import useUserStatus from "./hooks/useUserStatus";
 
 function GroupItem({ item }: { item: [string, IGroup | IFriend] }) {
   const { room, setRoom } = useRoom();

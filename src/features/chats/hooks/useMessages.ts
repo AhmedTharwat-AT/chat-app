@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../../services/firebase";
+
 import { IMessag, IRoomType } from "@/types/data.types";
+import { db } from "@/services/firebase";
 
 function useMessages(info: IRoomType) {
   const [messages, setMessages] = useState<[] | IMessag[]>([]);
