@@ -4,8 +4,9 @@ import { FaCamera } from "react-icons/fa";
 import { updatePhoto } from "../../services/firebaseApi";
 import { useQueryClient } from "@tanstack/react-query";
 import ProfileMenu from "./ProfileMenu";
+import { IUser } from "@/types/data.types";
 
-function UserMainInfo({ user }: any) {
+function UserMainInfo({ user }: { user: IUser }) {
   const [photoError, setPhotoError] = useState(false);
   const queryClient = useQueryClient();
   const cover = `${user?.cover}` || "/assets/person-placeholder.png";
@@ -23,8 +24,11 @@ function UserMainInfo({ user }: any) {
       }
       await updatePhoto(selectedFile, user);
       queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
-    } catch (err: any) {
-      console.log("error changing profile picture :", err?.message);
+    } catch (err: unknown) {
+      console.log(
+        "error changing profile picture :",
+        err instanceof Error ? err?.message : "Something went wrong",
+      );
     }
   }
 

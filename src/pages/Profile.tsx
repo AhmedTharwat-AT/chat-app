@@ -4,6 +4,7 @@ import { CiUser } from "react-icons/ci";
 import { AiOutlineMessage } from "react-icons/ai";
 import Spinner from "../ui/Spinner";
 import UserMainInfo from "../features/settings/UserMainInfo";
+import { IUser } from "@/types/data.types";
 
 function Profile() {
   const { data, isLoading } = useUser();
@@ -14,7 +15,7 @@ function Profile() {
 
   return (
     <div className="h-full divide-y dark:divide-gray-500/20 ">
-      <UserMainInfo user={data} />
+      <UserMainInfo user={data as IUser} />
       <div className=" overflow-y-auto px-5 py-5 ">
         <div>
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-300">

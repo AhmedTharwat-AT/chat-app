@@ -14,7 +14,7 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { get, onDisconnect, ref, set } from "firebase/database";
+import { onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
 import { SignData } from "../features/authentication/SignupForm";
 import {
@@ -31,7 +31,6 @@ import {
   IGroupType,
   IFriend,
 } from "@/types/data.types";
-import firebase from "firebase/compat/app";
 
 const storage = getStorage();
 
@@ -240,6 +239,42 @@ export async function deleteFriend(friendId: string, roomId: string) {
   await batch.commit();
 }
 
+export async function leaveGroup(groupId: string) {
+  const currUser = auth.currentUser;
+  if (!currUser) throw new Error("User is logged out!");
+
+  const batch = writeBatch(db);
+
+  //remove group from user groups
+  const userRef = doc(db, "users", currUser.uid);
+  batch.update(userRef, {
+    [`groups.${groupId}`]: deleteField(),
+  });
+
+  //remove user from group members
+  const userInGroupRef = doc(db, "rooms", groupId, "members", currUser.uid);
+  batch.delete(userInGroupRef);
+
+  //remove group if no members are left
+  const membersRef = collection(db, "rooms", groupId, "members");
+  const membersSnapshot = await getDocs(membersRef);
+
+  if (membersSnapshot.size <= 1) {
+    // delete messages
+    await deleteCollection(`rooms/${groupId}/messages`, batch);
+    // delete room image
+    const groupRef = doc(db, "rooms", groupId);
+    const photoUrl = (await getDoc(groupRef)).data()?.photo;
+    if (photoUrl) {
+      await deleteImage(photoUrl);
+    }
+  }
+
+  batch.delete(doc(db, "rooms", groupId));
+
+  await batch.commit();
+}
+
 export async function addGroupMember({
   group,
   member,
@@ -318,9 +353,15 @@ export async function createGroup({
 
 //edit user data
 
-async function deleteImage(name: string) {
-  if (name.includes("firebasestorage.googleapis.com")) {
-    const deleteRef = storageRef(storage, `${name}`);
+async function deleteImage(url: string) {
+  if (url.includes("firebasestorage.googleapis.com")) {
+    const deleteRef = storageRef(
+      storage,
+      `images/${url.split("images%2F")[1].split("?")[0]}`,
+    );
+    await deleteObject(deleteRef);
+  } else {
+    const deleteRef = storageRef(storage, `images/${url}`);
     await deleteObject(deleteRef);
   }
 }
@@ -370,15 +411,19 @@ export async function updatePhoto(file: File, user: IUser) {
   }
   // 5) update in each room members sub collection
   const friendsRooms = Object.values(user.friends).map(
-    (el: string | IFriend) => (typeof el === "string" ? el : el.room),
+    (el: IFriend) => el.room,
   );
   const groups = Object.keys(user.groups);
   const rooms = [...groups, ...friendsRooms];
   if (rooms.length > 0) {
     for (let i = 0; i < rooms.length; i++) {
-      await updateDoc(doc(db, "rooms", rooms[i], "members", user.uid), {
-        photo: url,
-      });
+      const docRef = doc(db, "rooms", rooms[i], "members", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        await updateDoc(docRef, {
+          photo: url,
+        });
+      }
     }
   }
 }

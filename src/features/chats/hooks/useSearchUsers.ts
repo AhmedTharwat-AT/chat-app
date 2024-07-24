@@ -21,7 +21,7 @@ function useSearchUsers() {
     enabled: false,
     retry: 0,
   });
-  console.log(users);
+
   const filteredUsers =
     users?.filter((el: IUser) => !friends.includes(el.uid)) || [];
 

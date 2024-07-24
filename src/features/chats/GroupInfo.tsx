@@ -3,6 +3,8 @@ import { getRoom } from "../../services/firebaseApi";
 
 import AddGroupMember from "./AddGroupMember";
 import useMembers from "./hooks/useMembers";
+import Model from "@/ui/Model";
+import LeaveGroupModal from "./LeaveGroupModal";
 
 interface Props {
   groupId: string;
@@ -61,6 +63,17 @@ function GroupInfo({ groupId }: Props) {
                   </p>
                 </div>
               ))}
+
+              <Model>
+                <Model.Toggle name="addMember">
+                  <button className="mt-4 rounded-md bg-red-500 px-2 py-1 capitalize text-white hover:bg-red-400">
+                    Leave group
+                  </button>
+                </Model.Toggle>
+                <Model.Window name="addMember">
+                  <LeaveGroupModal />
+                </Model.Window>
+              </Model>
             </div>
           </div>
         </div>

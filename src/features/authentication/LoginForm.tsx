@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { auth } from "../../services/firebase";
+import { useQueryClient } from "@tanstack/react-query";
+import { googleSignIn } from "../../services/firebaseApi";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
-import { useQueryClient } from "@tanstack/react-query";
-import { googleSignIn } from "../../services/firebaseApi";
 
 interface Data {
   email?: string;
@@ -29,7 +29,8 @@ function LoginForm() {
 
   function onSubmit(data: Data | null) {
     if (!data?.email || !data?.password) return;
-    signInWithEmailAndPassword(data.email, data.password).then(() => {
+    signInWithEmailAndPassword(data.email, data.password).then((e) => {
+      console.log(e);
       queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
     });
   }
@@ -49,7 +50,7 @@ function LoginForm() {
         className="w-full max-w-96 space-y-4 sm:w-2/3 "
       >
         {error?.message && (
-          <p className="py-2 text-sm capitalize text-red-600">
+          <p className="py-2 text-sm  text-red-600">
             incorrect email or password !
           </p>
         )}
@@ -111,13 +112,13 @@ function LoginForm() {
             </p>
           )}
         </div>
-        <div className="text-end">
+        {/* <div className="text-end">
           <button className="text-sm capitalize text-gray-700 hover:text-green-800 hover:underline">
             forgot password ?
           </button>
-        </div>
+        </div> */}
 
-        <div>
+        <div className="pt-4">
           <button
             disabled={loading}
             className="w-full rounded-md bg-[var(--color-main)] px-4 py-2 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)]"
