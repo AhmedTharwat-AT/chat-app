@@ -31,7 +31,7 @@ function ChatInput({ roomId }: Porps) {
       {
         onSuccess: () => {
           setContent("");
-          setSlowDown(10);
+          setSlowDown(5);
         },
       },
     );
@@ -59,7 +59,7 @@ function ChatInput({ roomId }: Porps) {
         </div>
       )}
 
-      <div className="flex w-full items-center  justify-between  gap-8 py-5">
+      <div className="flex w-full  items-center justify-between gap-4 py-5 sm:gap-8">
         <EmojiWrapper setContent={setContent} />
         <div className="grow">
           <input

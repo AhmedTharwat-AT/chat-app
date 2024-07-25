@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { updateImage } from "../../services/firebaseApi";
 import useOutsideClicks from "../../hooks/useOutsideClicks";
+import { IUser } from "@/types/data.types";
 
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Model from "../../ui/Model";
 import EditForm from "./EditForm";
 
-function ProfileMenu({ user }: any) {
+function ProfileMenu({ user }: { user: IUser }) {
   const [showMenu, setShowMenu] = useState(false);
   const ref = useOutsideClicks(() => setShowMenu(false), false);
   const queryClient = useQueryClient();

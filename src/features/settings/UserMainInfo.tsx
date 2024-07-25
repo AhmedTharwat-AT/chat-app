@@ -40,6 +40,7 @@ function UserMainInfo({ user }: { user: IUser }) {
       >
         <div className="flex items-center justify-between">
           <h1 className="text-xl text-white drop-shadow-xl ">My Profile</h1>
+
           <ProfileMenu user={user} />
         </div>
       </div>

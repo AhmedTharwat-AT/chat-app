@@ -112,9 +112,8 @@ export async function getRoom(roomId: string) {
   if (docSnap.exists()) {
     // IRoomType
     const room = docSnap.data();
-    return room;
+    return { ...room, room: roomId } as IGroupType;
   } else {
-    console.log("No such document!");
     throw new Error("Failed to load room data!");
   }
 }
@@ -351,6 +350,53 @@ export async function createGroup({
   await batch.commit();
 }
 
+export async function editGroup(
+  groupInfo: IGroupType,
+  details: { name?: string; description?: string; photo?: File | null },
+) {
+  const batch = writeBatch(db);
+  const groupRef = doc(db, "rooms", groupInfo.room);
+  let photoUrl = groupInfo.photo;
+
+  if (details.photo) {
+    // delete old image
+    deleteImage(groupInfo.photo);
+    // upload new image
+    const fileName = `${groupInfo.id}-${crypto.randomUUID()}`;
+    const reference = storageRef(storage, "images/" + fileName);
+    await uploadBytes(reference, details.photo, {
+      contentType: "image/jpeg",
+    });
+    photoUrl = await getDownloadURL(reference);
+  }
+
+  console.log({
+    ...details,
+    photo: photoUrl,
+  });
+
+  // update group
+  batch.update(groupRef, {
+    ...details,
+    photo: photoUrl,
+  });
+
+  // update members group refference
+  const membersRef = collection(db, "rooms", groupInfo.room, "members");
+  const membersSnapshot = await getDocs(membersRef);
+  membersSnapshot.forEach((member) => {
+    batch.update(doc(db, "users", member.id), {
+      [`groups.${groupInfo.room}`]: {
+        name: details.name || groupInfo.name,
+        photo: photoUrl,
+        room: groupInfo.room,
+      },
+    });
+  });
+
+  await batch.commit();
+}
+
 //edit user data
 
 async function deleteImage(url: string) {
@@ -362,6 +408,7 @@ async function deleteImage(url: string) {
     await deleteObject(deleteRef);
   } else {
     const deleteRef = storageRef(storage, `images/${url}`);
+    if (!deleteRef) return;
     await deleteObject(deleteRef);
   }
 }

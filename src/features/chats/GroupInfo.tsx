@@ -16,7 +16,7 @@ function GroupInfo({ groupId }: Props) {
   });
   const { members, isLoadingMembers } = useMembers(groupId);
 
-  if (isLoading || isLoadingMembers) return null;
+  if (isLoading) return null;
 
   return (
     <div className="mt-5 space-y-4 divide-y dark:divide-gray-300/10">
@@ -51,18 +51,29 @@ function GroupInfo({ groupId }: Props) {
 
             <div className="max-h-96 overflow-y-auto ">
               <AddGroupMember groupId={groupId} />
-
-              {members?.map((el) => (
-                <div key={el.id} className="flex items-center gap-2 px-2 py-1">
-                  <img
-                    className="h-8 w-8 rounded-full object-cover"
-                    src={el?.photo || "/assets/person-placeholder.png"}
-                  />
-                  <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
-                    {el.name}
-                  </p>
-                </div>
-              ))}
+              {isLoadingMembers
+                ? Array(5)
+                    .fill(0)
+                    .map((_, i) => (
+                      <div
+                        key={i}
+                        className=" mb-2 h-8 animate-pulse items-center rounded-md bg-gray-300 px-2 py-1"
+                      ></div>
+                    ))
+                : members?.map((el) => (
+                    <div
+                      key={el.id}
+                      className="flex items-center gap-2 px-2 py-1"
+                    >
+                      <img
+                        className="h-8 w-8 rounded-full object-cover"
+                        src={el?.photo || "/assets/person-placeholder.png"}
+                      />
+                      <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
+                        {el.name}
+                      </p>
+                    </div>
+                  ))}
 
               <Model>
                 <Model.Toggle name="addMember">

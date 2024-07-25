@@ -1,9 +1,13 @@
 import { createPortal } from "react-dom";
+import { IRoomType } from "@/types/data.types";
 
 import Status from "../../ui/Status";
-import GroupInfo from "./GroupInfo";
-import UserInfo from "./UserInfo";
-import { IRoomType } from "@/types/data.types";
+import { Suspense, lazy } from "react";
+import Spinner from "@/ui/Spinner";
+
+const GroupInfo = lazy(() => import("./GroupInfo"));
+const UserInfo = lazy(() => import("./UserInfo"));
+const EditGroupInfo = lazy(() => import("./EditGroupInfo"));
 
 interface Props {
   room: IRoomType;
@@ -23,16 +27,27 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
           src={photo}
           className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
-        <button
-          onClick={() => setShowInfo(false)}
-          className="font-outline-2 text-3xl text-white drop-shadow-md"
-        >
-          &times;
-        </button>
+
+        <div className="flex w-full items-center justify-between">
+          <button
+            onClick={() => setShowInfo(false)}
+            className="font-outline-2 text-3xl text-white drop-shadow-md"
+          >
+            &times;
+          </button>
+
+          {!isFriend && (
+            <Suspense fallback={null}>
+              <EditGroupInfo groupId={id} />
+            </Suspense>
+          )}
+        </div>
+
         <div className="mt-auto">
           <h2 className="font-outline-2 font-semibold capitalize text-white  drop-shadow-md">
             {room.name}
           </h2>
+
           {isFriend ? (
             <Status
               status={status}
@@ -41,7 +56,10 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
           ) : null}
         </div>
       </div>
-      {isFriend ? <UserInfo friendId={id} /> : <GroupInfo groupId={id} />}
+
+      <Suspense fallback={<Spinner />}>
+        {isFriend ? <UserInfo friendId={id} /> : <GroupInfo groupId={id} />}
+      </Suspense>
     </div>,
     document.querySelector("body") as HTMLBodyElement,
   );

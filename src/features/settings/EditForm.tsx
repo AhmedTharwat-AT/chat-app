@@ -1,15 +1,16 @@
 import { updateUserProperty } from "../../services/firebaseApi";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import SmallSpinner from "../../ui/SmallSpinner";
 import FormWrapper from "../../ui/FormWrapper";
+import { IUser } from "@/types/data.types";
 
 interface Props {
-  user: any;
+  user: IUser;
   type: "about" | "bio";
   heading: string;
   onCloseModel?: () => void;
-  innerRef?: React.LegacyRef<any> | undefined;
+  innerRef?: React.LegacyRef<ReactNode> | undefined;
 }
 
 function EditForm({ onCloseModel, type, heading, innerRef, user }: Props) {
