@@ -16,10 +16,11 @@ interface Props {
 function EditGroupModal({ groupId, onCloseModel, innerRef }: Props) {
   const queryClient = useQueryClient();
   const groupInfo = queryClient.getQueryData(["group", groupId]) as IGroupType;
+  const { setRoom } = useRoom();
+
   const [selectedImage, setSelectedImage] = useState<File>();
   const [name, setName] = useState(groupInfo?.name);
   const [description, setDescription] = useState(groupInfo?.description);
-  const { setRoom } = useRoom();
 
   const { mutate, isPending, error } = useEditGroup();
 
@@ -84,7 +85,6 @@ function EditGroupModal({ groupId, onCloseModel, innerRef }: Props) {
             accept="image/*"
             className="w-full p-2"
             onChange={(e) => setSelectedImage(e.target.files?.[0])}
-            defaultValue={groupInfo?.description}
           />
           <img
             className="h-40"

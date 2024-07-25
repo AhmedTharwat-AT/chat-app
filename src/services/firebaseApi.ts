@@ -354,6 +354,13 @@ export async function editGroup(
   groupInfo: IGroupType,
   details: { name?: string; description?: string; photo?: File | null },
 ) {
+  if (
+    groupInfo.name === details.name &&
+    groupInfo.description === details.description &&
+    !details.photo
+  )
+    throw new Error("nothing to update");
+
   const batch = writeBatch(db);
   const groupRef = doc(db, "rooms", groupInfo.room);
   let photoUrl = groupInfo.photo;
@@ -362,7 +369,7 @@ export async function editGroup(
     // delete old image
     deleteImage(groupInfo.photo);
     // upload new image
-    const fileName = `${groupInfo.id}-${crypto.randomUUID()}`;
+    const fileName = `${groupInfo.room}-${crypto.randomUUID()}`;
     const reference = storageRef(storage, "images/" + fileName);
     await uploadBytes(reference, details.photo, {
       contentType: "image/jpeg",
@@ -406,11 +413,12 @@ async function deleteImage(url: string) {
       `images/${url.split("images%2F")[1].split("?")[0]}`,
     );
     await deleteObject(deleteRef);
-  } else {
-    const deleteRef = storageRef(storage, `images/${url}`);
-    if (!deleteRef) return;
-    await deleteObject(deleteRef);
   }
+  // else {
+  //   const deleteRef = storageRef(storage, `images/${url}`);
+  //   if (!deleteRef) return;
+  //   await deleteObject(deleteRef);
+  // }
 }
 
 export async function updateUserProperty(

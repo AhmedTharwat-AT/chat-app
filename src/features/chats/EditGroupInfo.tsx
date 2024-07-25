@@ -11,7 +11,7 @@ function EditGroupInfo({ groupId }: Props) {
     <div className="relative">
       <Model>
         <Model.Toggle name="group-info">
-          <p className="cursor-pointer text-xl text-white drop-shadow-xl">
+          <p className="cursor-pointer rounded-full bg-white p-1 text-xl text-gray-900 drop-shadow-xl">
             <HiOutlineDotsVertical />
           </p>
         </Model.Toggle>

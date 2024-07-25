@@ -25,8 +25,10 @@ function ProfileMenu({ user }: { user: IUser }) {
         queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
         setShowMenu(false);
       });
-    } catch (err: any) {
-      console.log("error changing cover picture :", err?.message);
+    } catch (err: unknown) {
+      err instanceof Error
+        ? console.log("error changing cover picture :", err.message)
+        : console.log("error changing cover picture ");
     }
   }
 
@@ -37,7 +39,7 @@ function ProfileMenu({ user }: { user: IUser }) {
           setShowMenu((s) => !s);
           e.stopPropagation();
         }}
-        className="cursor-pointer text-xl text-white drop-shadow-xl"
+        className="cursor-pointer rounded-full bg-white p-1 text-xl text-gray-900 drop-shadow-xl"
       >
         <HiOutlineDotsVertical />
       </p>
