@@ -11,11 +11,7 @@ Chatly is a responsive web application with the main chat app features using fir
 * you can view the app in dark or light mode .
 
 #### Upcoming features .
--delete member from the group if youre the admin .
-</br>
 -send images as messages in chat .
-</br>
--unfriend someone in your friend list .
 </br>
 -show "typing" status when someone is typing .
 </br>
@@ -23,9 +19,9 @@ Chatly is a responsive web application with the main chat app features using fir
 </br>
 
 ## Tools 
-Frontend : reactjs - typescript - tailwindcss - react query - react hook form - react query
+Frontend : reactjs - typescript - tailwindcss - react query - react hook form 
 </br>
-Backend : firestore for users and rooms data - realtime db for users status storage - firebase storage for users profile and cover images 
+Backend : firestore for users and rooms data - realtime db for users online status - firebase storage for users profile and cover images 
 
 > [Live Preview](https://chatly-web-app.vercel.app/login)
 
