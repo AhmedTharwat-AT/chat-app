@@ -46,7 +46,6 @@
 }
 ::-webkit-scrollbar-thumb {
   background-color: var(--color-main);
-  border: 1px solid white;
   border-radius: 20px;
 }
 

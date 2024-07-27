@@ -9,7 +9,6 @@ import {
   getDoc,
   getDocs,
   query,
-  setDoc,
   updateDoc,
   where,
   writeBatch,
@@ -33,6 +32,7 @@ import {
 } from "@/types/data.types";
 
 const storage = getStorage();
+const PUBLIC_ROOM = "public_room_id";
 
 export async function getUser() {
   try {
@@ -73,7 +73,25 @@ export async function signUp(data: SignData) {
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) return;
 
-  await setDoc(docRef, {
+  //add user to public room
+  const batch = writeBatch(db);
+  const publicRoomRef = doc(db, "rooms", PUBLIC_ROOM);
+  batch.update(publicRoomRef, {
+    members: {
+      [currUser.uid]: {
+        id: currUser.uid,
+        name: data.username,
+        photo: "",
+      },
+    },
+  });
+
+  // get public group
+  const publicGroupRef = doc(db, "rooms", PUBLIC_ROOM);
+  const publicGroupSnap = await getDoc(publicGroupRef);
+
+  //add user to firestore with public group
+  batch.set(docRef, {
     uid: currUser.uid,
     name: data.username,
     email: data.email,
@@ -82,8 +100,16 @@ export async function signUp(data: SignData) {
     photo: "",
     cover: "",
     friends: {},
-    groups: {},
+    groups: {
+      [PUBLIC_ROOM]: {
+        name: publicGroupSnap.data()?.name || "Public Group",
+        photo: publicGroupSnap.data()?.photo || "",
+        room: PUBLIC_ROOM,
+      },
+    },
   });
+
+  batch.commit();
 }
 
 // realtime db

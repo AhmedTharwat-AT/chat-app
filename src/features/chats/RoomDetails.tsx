@@ -1,8 +1,10 @@
 import { createPortal } from "react-dom";
 import { IRoomType } from "@/types/data.types";
+import { Suspense, lazy } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getRoom } from "@/services/firebaseApi";
 
 import Status from "../../ui/Status";
-import { Suspense, lazy } from "react";
 import Spinner from "@/ui/Spinner";
 
 const GroupInfo = lazy(() => import("./GroupInfo"));
@@ -17,8 +19,17 @@ interface Props {
 }
 
 function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
+  const { data: group, isLoading } = useQuery({
+    queryKey: ["group", room.room],
+    queryFn: () => getRoom(room.room),
+  });
   const id = isFriend ? (room.friend_id as string) : room.room;
   const photo = room?.photo || "/assets/person-placeholder.png";
+  const isPublicGroup = group?.type === "public";
+
+  if (isLoading) return <Spinner />;
+
+  if (!group) return null;
 
   return createPortal(
     <div className="fixed right-0 top-0 z-50 h-full min-h-screen w-full overflow-y-auto bg-white p-5 shadow-lg dark:bg-[var(--darker-bg)] sm:w-96">
@@ -36,7 +47,7 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
             &times;
           </button>
 
-          {!isFriend && (
+          {!isFriend && !isPublicGroup && (
             <Suspense fallback={null}>
               <EditGroupInfo groupId={id} />
             </Suspense>
@@ -58,7 +69,11 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
       </div>
 
       <Suspense fallback={<Spinner />}>
-        {isFriend ? <UserInfo friendId={id} /> : <GroupInfo groupId={id} />}
+        {isFriend ? (
+          <UserInfo friendId={id} />
+        ) : (
+          <GroupInfo group={group} isPublicGroup={isPublicGroup} />
+        )}
       </Suspense>
     </div>,
     document.querySelector("body") as HTMLBodyElement,

@@ -1,6 +1,21 @@
 export function formatTime(timestamp: number | string) {
   const time = new Date(+timestamp);
+  const isToday = time.toDateString() == new Date().toDateString();
+
+  if (isToday) {
+    return (
+      "Today " +
+      time.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+    );
+  }
+
   return time.toLocaleString("en-US", {
+    day: "numeric",
+    month: "short",
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,

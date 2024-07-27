@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserDetails } from "../../services/firebaseApi";
 import Model from "@/ui/Model";
 import DeleteFriendModal from "./DeleteFriendModal";
+import Spinner from "@/ui/Spinner";
 
 interface Props {
   friendId: string;
@@ -12,7 +13,9 @@ function UserInfo({ friendId }: Props) {
     queryFn: () => getUserDetails(friendId),
   });
 
-  if (isLoading || !data) return null;
+  if (isLoading) return <Spinner />;
+
+  if (!data) return null;
 
   return (
     <div className="mt-5 space-y-4 divide-y dark:divide-gray-300/10">

@@ -1,22 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
-import { getRoom } from "../../services/firebaseApi";
+import { IGroupType } from "@/types/data.types";
+import useMembers from "./hooks/useMembers";
 
 import AddGroupMember from "./AddGroupMember";
-import useMembers from "./hooks/useMembers";
 import Model from "@/ui/Model";
 import LeaveGroupModal from "./LeaveGroupModal";
 
 interface Props {
-  groupId: string;
+  group: IGroupType;
+  isPublicGroup?: boolean;
 }
-function GroupInfo({ groupId }: Props) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["group", groupId],
-    queryFn: () => getRoom(groupId),
-  });
-  const { members, isLoadingMembers } = useMembers(groupId);
-
-  if (isLoading) return null;
+function GroupInfo({ group, isPublicGroup }: Props) {
+  const { members, isLoadingMembers } = useMembers(group.room);
 
   return (
     <div className="mt-5 space-y-4 divide-y dark:divide-gray-300/10">
@@ -25,7 +19,7 @@ function GroupInfo({ groupId }: Props) {
           description :
         </h2>
         <p className="break-all text-sm dark:text-gray-400">
-          {data?.description || "This group have no info"}
+          {group?.description || "This group have no info"}
         </p>
       </div>
 
@@ -40,7 +34,7 @@ function GroupInfo({ groupId }: Props) {
               name
             </h2>
             <p className="break-all text-sm capitalize tracking-wider text-gray-900 dark:text-gray-400">
-              {data?.name}
+              {group?.name}
             </p>
           </div>
 
@@ -50,7 +44,8 @@ function GroupInfo({ groupId }: Props) {
             </h2>
 
             <div className="max-h-96 overflow-y-auto ">
-              <AddGroupMember groupId={groupId} />
+              {!isPublicGroup && <AddGroupMember groupId={group.room} />}
+
               {isLoadingMembers
                 ? Array(5)
                     .fill(0)
@@ -75,16 +70,18 @@ function GroupInfo({ groupId }: Props) {
                     </div>
                   ))}
 
-              <Model>
-                <Model.Toggle name="addMember">
-                  <button className="mt-4 rounded-md bg-red-500 px-2 py-1 capitalize text-white hover:bg-red-400">
-                    Leave group
-                  </button>
-                </Model.Toggle>
-                <Model.Window name="addMember">
-                  <LeaveGroupModal />
-                </Model.Window>
-              </Model>
+              {!isPublicGroup && (
+                <Model>
+                  <Model.Toggle name="addMember">
+                    <button className="mt-4 rounded-md bg-red-500 px-2 py-1 capitalize text-white hover:bg-red-400">
+                      Leave group
+                    </button>
+                  </Model.Toggle>
+                  <Model.Window name="addMember">
+                    <LeaveGroupModal />
+                  </Model.Window>
+                </Model>
+              )}
             </div>
           </div>
         </div>
