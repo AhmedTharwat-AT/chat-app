@@ -37,7 +37,7 @@ const PUBLIC_ROOM = "public_room_id";
 export async function getUser() {
   try {
     const currUser = auth.currentUser;
-    if (!currUser) throw new Error("User is logged out!");
+    if (!currUser) return null;
 
     const docRef = doc(db, "users", currUser.uid);
     const userData = await getDoc(docRef);
@@ -80,7 +80,7 @@ export async function signUp(data: SignData) {
     members: {
       [currUser.uid]: {
         id: currUser.uid,
-        name: data.username,
+        name: data.username?.toLocaleLowerCase(),
         photo: "",
       },
     },
@@ -93,7 +93,7 @@ export async function signUp(data: SignData) {
   //add user to firestore with public group
   batch.set(docRef, {
     uid: currUser.uid,
-    name: data.username,
+    name: data.username?.toLocaleLowerCase(),
     email: data.email,
     bio: "",
     about: "",
@@ -111,6 +111,21 @@ export async function signUp(data: SignData) {
 
   batch.commit();
 }
+
+// export async function seedPublicGroupMembers() {
+//   const batch = writeBatch(db);
+//   const usersData = await getDocs(collection(db, "users"));
+//   usersData.forEach((user) => {
+//     const publicRoomRef = doc(db, "rooms", PUBLIC_ROOM, "members", user.id);
+//     // console.log(user.id);
+//     batch.set(publicRoomRef, {
+//       id: user.id,
+//       name: user.data().name?.toLocaleLowerCase(),
+//       photo: user.data().photo || "",
+//     });
+//   });
+//   batch.commit();
+// }
 
 // realtime db
 export async function setUserStatus(id: string, status: string) {
@@ -160,6 +175,7 @@ export async function getUserDetails(id: string) {
 // messages
 export async function sendMessage({ roomId, data }: Message) {
   const messagesRef = collection(db, "rooms", roomId, "messages");
+  console.log("msg");
   await addDoc(messagesRef, data);
   return null;
 }
@@ -180,10 +196,12 @@ export async function searchUsers(value: string) {
 
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) throw new Error("no matching users with this name.");
+  console.log(value);
 
   const data: ISearchedUsers = [];
   querySnapshot.forEach((doc) => {
     const user = doc.data();
+    console.log(user);
     if (currUser?.uid != user.uid) data.push(user as IUser);
   });
 
@@ -208,7 +226,9 @@ export async function addFriend({
 
   data.forEach((el, i, arr) => {
     //add a memeber to the room
-    const membersRef = doc(collection(db, "rooms", roomRef.id, "members"));
+    const membersRef = doc(
+      collection(db, "rooms", roomRef.id, "members", el.uid),
+    );
 
     batch.set(membersRef, { id: el.uid, name: el.name, photo: el.photo });
 
@@ -267,6 +287,7 @@ export async function deleteFriend(friendId: string, roomId: string) {
 export async function leaveGroup(groupId: string) {
   const currUser = auth.currentUser;
   if (!currUser) throw new Error("User is logged out!");
+  if (groupId == PUBLIC_ROOM) return;
 
   const batch = writeBatch(db);
 
