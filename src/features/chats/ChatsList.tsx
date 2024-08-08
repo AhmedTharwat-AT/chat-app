@@ -1,8 +1,9 @@
 import { FriendsType, GroupsType } from "@/types/data.types";
-import Spinner from "../../ui/Spinner";
-import useUser from "../authentication/useUser";
-import Groups from "./Groups";
 import { useNavigate } from "react-router-dom";
+import useUser from "../authentication/hooks/useUser";
+
+import Spinner from "../../ui/Spinner";
+import Groups from "./Groups";
 
 function ChatsList() {
   const { data: user, isLoading, error } = useUser();

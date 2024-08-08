@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
+import useUser from "@/features/authentication/hooks/useUser";
 
 import { BsChatSquareTextFill } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
@@ -9,7 +10,6 @@ import { IoMoonOutline } from "react-icons/io5";
 import { LuSun } from "react-icons/lu";
 
 import NavDropMenu from "../features/authentication/NavDropMenu";
-import useUser from "../features/authentication/useUser";
 
 function Navbar() {
   const [showMenu, setShowMenu] = useState(false);

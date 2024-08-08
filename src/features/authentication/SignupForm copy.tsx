@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "../../services/firebase";
+import { googleSignIn, signUp } from "../../services/firebaseApi";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
-import useSignUp from "./hooks/useSignUp";
-import useGoogleSignIn from "./hooks/useGoogleSignIn";
-import GoogleButton from "./GoogleButton";
 
 export interface SignData {
   email?: string;
@@ -18,18 +19,23 @@ export interface SignData {
 
 function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignData>();
 
-  const { mutate: signUp, loading, firebaseError } = useSignUp();
-  const { mutate: googleSignIn, isPending } = useGoogleSignIn();
+  const [createUserWithEmailAndPassword, _, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
 
   async function onSubmit(data: SignData) {
     if (!data.email || !data.password || !data.username) return;
-    signUp(data);
+    await createUserWithEmailAndPassword(data.email, data.password);
+    console.log("done 1");
+    await signUp(data);
+    console.log("done 2");
+    queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
   }
 
   function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {
@@ -46,10 +52,10 @@ function SignupForm() {
         }}
         className="w-full max-w-96 space-y-4 sm:w-2/3 "
       >
-        {firebaseError?.code == "auth/email-already-in-use" ? (
+        {error?.code == "auth/email-already-in-use" ? (
           <p className="py-2 text-sm  text-red-600">Email already in use</p>
         ) : (
-          firebaseError?.message && (
+          error?.message && (
             <p className="py-2 text-sm  text-red-600">Error signing up!</p>
           )
         )}
@@ -183,11 +189,22 @@ function SignupForm() {
           </button>
         </div>
 
-        <GoogleButton
-          googleSignIn={googleSignIn}
-          isPending={loading || isPending}
-          text=" sign up using"
-        />
+        <div>
+          <div className="relative mt-7 w-full">
+            <h3 className="relative z-20 mx-auto w-fit bg-white px-2 text-sm capitalize text-gray-800">
+              sign up using
+            </h3>
+            <span className="absolute top-1/2 z-10 h-[1px] w-full bg-gray-300"></span>
+          </div>
+          <div
+            onClick={() => {
+              googleSignIn();
+            }}
+            className="my-5 flex cursor-pointer items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-2xl hover:bg-gray-200"
+          >
+            <FcGoogle />
+          </div>
+        </div>
       </form>
       <div className="mt-8  max-sm:text-sm">
         <h1 className="text-gray-600">

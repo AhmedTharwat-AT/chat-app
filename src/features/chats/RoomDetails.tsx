@@ -45,7 +45,7 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
 
   return createPortal(
     <div className="fixed right-0 top-0 z-50 flex h-full min-h-screen w-full flex-col overflow-y-auto bg-white p-5 shadow-lg dark:bg-[var(--darker-bg)] sm:w-96">
-      <div className="shadow-y-1 relative flex h-44 flex-col items-start overflow-hidden rounded-md p-4">
+      <div className="shadow-y-1 relative flex h-44 shrink-0 flex-col items-start overflow-hidden rounded-md p-4">
         <img
           src={photo}
           className="absolute inset-0 -z-10 h-full w-full object-cover"

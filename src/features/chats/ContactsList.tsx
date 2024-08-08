@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import useUser from "../authentication/useUser";
+import useUser from "../authentication/hooks/useUser";
 import { IFriend } from "@/types/data.types";
 import { divideArrayToSections, sortArrayByNames } from "../../utils/helpers";
 

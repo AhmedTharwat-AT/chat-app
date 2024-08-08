@@ -83,15 +83,11 @@ export async function signUp(data: {
 
   //add user to public room
   const batch = writeBatch(db);
-  const publicRoomRef = doc(db, "rooms", PUBLIC_ROOM);
-  batch.update(publicRoomRef, {
-    members: {
-      [currUser.uid]: {
-        id: currUser.uid,
-        name: data.username?.toLocaleLowerCase(),
-        photo: data.photo || "",
-      },
-    },
+  const publicRoomRef = doc(db, "rooms", PUBLIC_ROOM, "members", currUser.uid);
+  batch.set(publicRoomRef, {
+    id: currUser.uid,
+    name: data.username?.toLocaleLowerCase(),
+    photo: data.photo || "",
   });
 
   // get public group
@@ -204,12 +200,10 @@ export async function searchUsers(value: string) {
 
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) throw new Error("no matching users with this name.");
-  console.log(value);
 
   const data: ISearchedUsers = [];
   querySnapshot.forEach((doc) => {
     const user = doc.data();
-    console.log(user);
     if (currUser?.uid != user.uid) data.push(user as IUser);
   });
 
@@ -224,20 +218,18 @@ export async function addFriend({
   user: IUser;
 }) {
   const batch = writeBatch(db);
-
   const data = [friend, user];
+
   //create new room
-  const roomRef = await addDoc(collection(db, "rooms"), {
+  const roomRef = doc(collection(db, "rooms"));
+  batch.set(roomRef, {
     createdAt: +new Date() + "",
     type: "private",
   });
 
   data.forEach((el, i, arr) => {
     //add a memeber to the room
-    const membersRef = doc(
-      collection(db, "rooms", roomRef.id, "members", el.uid),
-    );
-
+    const membersRef = doc(db, "rooms", roomRef.id, "members", el.uid);
     batch.set(membersRef, { id: el.uid, name: el.name, photo: el.photo });
 
     //add users to each other friend list
@@ -252,6 +244,7 @@ export async function addFriend({
       },
     });
   });
+
   await batch.commit();
 }
 

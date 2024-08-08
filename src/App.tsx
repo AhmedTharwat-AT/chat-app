@@ -7,7 +7,7 @@ import { Profile, Contacts, Login, Signup, PageNotFound } from "@/routes";
 import RoomProvider from "./context/RoomContext";
 import ProtectedRoute from "./features/authentication/ProtectedRoute";
 import SuspendWrapper from "./ui/SuspendWrapper";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,7 +43,7 @@ function App() {
             </Route>
           </Routes>
         </ProtectedRoute>
-        {/* <ReactQueryDevtools /> */}
+        <ReactQueryDevtools />
       </BrowserRouter>
     </QueryClientProvider>
   );

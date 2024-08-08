@@ -1,4 +1,4 @@
-import useUser from "../features/authentication/useUser";
+import useUser from "@/features/authentication/hooks/useUser";
 
 import { CiUser } from "react-icons/ci";
 import { AiOutlineMessage } from "react-icons/ai";

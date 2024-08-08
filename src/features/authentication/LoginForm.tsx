@@ -4,11 +4,11 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { auth } from "../../services/firebase";
 import { useQueryClient } from "@tanstack/react-query";
-import { googleSignIn } from "../../services/firebaseApi";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
+import useGoogleSignIn from "./hooks/useGoogleSignIn";
+import GoogleButton from "./GoogleButton";
 
 interface Data {
   email?: string;
@@ -24,13 +24,14 @@ function LoginForm() {
     formState: { errors },
   } = useForm();
 
+  const { mutate: googleSignIn, isPending } = useGoogleSignIn();
+
   const [signInWithEmailAndPassword, _, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
   function onSubmit(data: Data | null) {
     if (!data?.email || !data?.password) return;
-    signInWithEmailAndPassword(data.email, data.password).then((e) => {
-      console.log(e);
+    signInWithEmailAndPassword(data.email, data.password).then(() => {
       queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
     });
   }
@@ -112,11 +113,6 @@ function LoginForm() {
             </p>
           )}
         </div>
-        {/* <div className="text-end">
-          <button className="text-sm capitalize text-gray-700 hover:text-green-800 hover:underline">
-            forgot password ?
-          </button>
-        </div> */}
 
         <div className="pt-4">
           <button
@@ -127,23 +123,11 @@ function LoginForm() {
           </button>
         </div>
 
-        <div>
-          <div className="relative mt-7 w-full">
-            <h3 className="relative z-20 mx-auto w-fit bg-white px-2 text-sm capitalize text-gray-800">
-              sign in with
-            </h3>
-            <span className="absolute top-1/2 z-10 h-[1px] w-full bg-gray-300"></span>
-          </div>
-          <div
-            onClick={() => {
-              queryClient.removeQueries({ queryKey: ["user"], exact: true });
-              googleSignIn();
-            }}
-            className="my-5 flex cursor-pointer items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-2xl hover:bg-gray-200"
-          >
-            <FcGoogle />
-          </div>
-        </div>
+        <GoogleButton
+          googleSignIn={googleSignIn}
+          isPending={isPending}
+          text="sign in with"
+        />
       </form>
       <div className="mt-8  max-sm:text-sm">
         <h1 className="text-gray-600">

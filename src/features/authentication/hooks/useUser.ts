@@ -1,5 +1,5 @@
+import { getUser } from "@/services/firebaseApi";
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "../../services/firebaseApi";
 
 function useUser() {
   const { data, isLoading, error } = useQuery({

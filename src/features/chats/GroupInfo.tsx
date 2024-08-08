@@ -44,7 +44,7 @@ function GroupInfo({ group, isPublicGroup }: Props) {
               members
             </h2>
 
-            <div className="max-h-96 overflow-y-auto ">
+            <div className="max-h-60 overflow-y-auto  ">
               {!isPublicGroup && <AddGroupMember groupId={group.room} />}
 
               {isLoadingMembers ? (
