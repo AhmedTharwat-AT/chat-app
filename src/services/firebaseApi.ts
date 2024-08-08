@@ -15,7 +15,7 @@ import {
 } from "firebase/firestore";
 import { onDisconnect, ref, set } from "firebase/database";
 import { signInWithPopup } from "firebase/auth";
-import { SignData } from "../features/authentication/SignupForm";
+
 import {
   getStorage,
   uploadBytes,
@@ -58,9 +58,9 @@ export async function googleSignIn() {
       const user = result.user;
       //add the user to firestore if its first time signing in
       signUp({
-        username: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
+        username: user.displayName || "",
+        email: user.email || "",
+        photo: user.photoURL || "",
       });
     })
     .catch((error) => {
@@ -69,9 +69,9 @@ export async function googleSignIn() {
 }
 
 export async function signUp(data: {
-  username: string | null;
-  email: string | null;
-  photo?: string | null;
+  username?: string;
+  email?: string;
+  photo?: string;
 }) {
   const currUser = auth.currentUser;
   if (!currUser) throw new Error("User is logged out!");

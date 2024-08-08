@@ -11,8 +11,8 @@ import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
 
 export interface SignData {
-  email?: string | null;
-  username?: string | null;
+  email?: string;
+  username?: string;
   password?: string;
   confirm?: string;
 }
