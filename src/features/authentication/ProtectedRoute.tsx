@@ -17,7 +17,7 @@ function ProtectedRoute({ children }: Props) {
 
   useEffect(() => {
     if (loading) return;
-    if (!user && !pathname.includes("login") && !pathname.includes("signup"))
+    if (!user && (!pathname.includes("login") || !pathname.includes("signup")))
       navigate("/login");
     if (user && (pathname.includes("/login") || pathname.includes("signup")))
       navigate("/chats");
