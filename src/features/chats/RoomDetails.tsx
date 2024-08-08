@@ -27,12 +27,24 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
   const photo = room?.photo || "/assets/person-placeholder.png";
   const isPublicGroup = group?.type === "public";
 
-  if (isLoading) return <Spinner />;
+  if (isLoading)
+    return createPortal(
+      <div className="fixed bottom-0 right-0 top-0  z-50 flex h-full min-h-screen w-full  bg-white p-5 shadow-lg dark:bg-[var(--darker-bg)] sm:w-96">
+        <button
+          onClick={() => setShowInfo(false)}
+          className="font-outline-2 absolute left-5 top-5 text-3xl text-black drop-shadow-md dark:text-white"
+        >
+          &times;
+        </button>
+        <Spinner />
+      </div>,
+      document.querySelector("body") as HTMLBodyElement,
+    );
 
   if (!group) return null;
 
   return createPortal(
-    <div className="fixed right-0 top-0 z-50 h-full min-h-screen w-full overflow-y-auto bg-white p-5 shadow-lg dark:bg-[var(--darker-bg)] sm:w-96">
+    <div className="fixed right-0 top-0 z-50 flex h-full min-h-screen w-full flex-col overflow-y-auto bg-white p-5 shadow-lg dark:bg-[var(--darker-bg)] sm:w-96">
       <div className="shadow-y-1 relative flex h-44 flex-col items-start overflow-hidden rounded-md p-4">
         <img
           src={photo}
@@ -68,7 +80,7 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
         </div>
       </div>
 
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner className=" grow" />}>
         {isFriend ? (
           <UserInfo friendId={id} />
         ) : (

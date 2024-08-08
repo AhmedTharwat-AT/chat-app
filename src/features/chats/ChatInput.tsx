@@ -49,7 +49,7 @@ function ChatInput({ roomId }: Porps) {
   }, [slowDown]);
 
   return (
-    <div className="absolute bottom-0 left-0 w-full bg-gray-100 px-5 shadow-2xl backdrop-blur-md dark:bg-[var(--dark-bg)]">
+    <div className="absolute bottom-0 left-0 z-40 w-full bg-gray-100 px-5 shadow-2xl backdrop-blur-md dark:bg-[var(--dark-bg)]">
       {slowDown > 0 && (
         <div className="ml-auto flex w-fit items-center gap-2 px-1 pt-1">
           <p className="text-xs capitalize tracking-wider text-gray-700 dark:text-gray-400">

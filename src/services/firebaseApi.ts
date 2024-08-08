@@ -57,14 +57,22 @@ export async function googleSignIn() {
     .then((result) => {
       const user = result.user;
       //add the user to firestore if its first time signing in
-      signUp({ username: user.displayName, email: user.email });
+      signUp({
+        username: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      });
     })
     .catch((error) => {
       console.log("Error signing in :", error);
     });
 }
 
-export async function signUp(data: SignData) {
+export async function signUp(data: {
+  username: string | null;
+  email: string | null;
+  photo?: string | null;
+}) {
   const currUser = auth.currentUser;
   if (!currUser) throw new Error("User is logged out!");
 
@@ -81,7 +89,7 @@ export async function signUp(data: SignData) {
       [currUser.uid]: {
         id: currUser.uid,
         name: data.username?.toLocaleLowerCase(),
-        photo: "",
+        photo: data.photo || "",
       },
     },
   });
@@ -97,7 +105,7 @@ export async function signUp(data: SignData) {
     email: data.email,
     bio: "",
     about: "",
-    photo: "",
+    photo: data.photo || "",
     cover: "",
     friends: {},
     groups: {

@@ -4,6 +4,7 @@ import useMembers from "./hooks/useMembers";
 import AddGroupMember from "./AddGroupMember";
 import Model from "@/ui/Model";
 import LeaveGroupModal from "./LeaveGroupModal";
+import MembersSkeleton from "@/ui/MembersSkeleton";
 
 interface Props {
   group: IGroupType;
@@ -46,29 +47,24 @@ function GroupInfo({ group, isPublicGroup }: Props) {
             <div className="max-h-96 overflow-y-auto ">
               {!isPublicGroup && <AddGroupMember groupId={group.room} />}
 
-              {isLoadingMembers
-                ? Array(5)
-                    .fill(0)
-                    .map((_, i) => (
-                      <div
-                        key={i}
-                        className=" mb-2 h-8 animate-pulse items-center rounded-md bg-gray-300 px-2 py-1"
-                      ></div>
-                    ))
-                : members?.map((el) => (
-                    <div
-                      key={el.id}
-                      className="flex items-center gap-2 px-2 py-1"
-                    >
-                      <img
-                        className="h-8 w-8 rounded-full object-cover"
-                        src={el?.photo || "/assets/person-placeholder.png"}
-                      />
-                      <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
-                        {el.name}
-                      </p>
-                    </div>
-                  ))}
+              {isLoadingMembers ? (
+                <MembersSkeleton />
+              ) : (
+                members?.map((el) => (
+                  <div
+                    key={el.id}
+                    className="flex items-center gap-2 px-2 py-1"
+                  >
+                    <img
+                      className="h-8 w-8 rounded-full object-cover"
+                      src={el?.photo || "/assets/person-placeholder.png"}
+                    />
+                    <p className="break-all text-xs capitalize tracking-wider text-gray-900 dark:text-gray-400">
+                      {el.name}
+                    </p>
+                  </div>
+                ))
+              )}
 
               {!isPublicGroup && (
                 <Model>

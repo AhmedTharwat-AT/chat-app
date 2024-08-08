@@ -15,7 +15,7 @@ function Messages({ roomInfo }: { roomInfo: IRoomType }) {
   if (!messages || isLoadingMembers || !members) return null;
 
   return (
-    <div className="h-[calc(100vh-156px)]  space-y-4 overflow-y-auto p-4">
+    <div className=" h-[calc(100vh-156px)] space-y-4 overflow-y-auto p-4">
       {messages?.map((msg: IMessag, i: number) => (
         <Message key={i} msg={msg} currUser={user} members={members} />
       ))}
