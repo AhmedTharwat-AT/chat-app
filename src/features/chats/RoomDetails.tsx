@@ -59,6 +59,7 @@ function RoomDetails({ room, setShowInfo, status, isFriend }: Props) {
             &times;
           </button>
 
+          {/* hide group edit button if group is public */}
           {!isFriend && !isPublicGroup && (
             <Suspense fallback={null}>
               <EditGroupInfo groupId={id} />

@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import useGoogleSignIn from "./hooks/useGoogleSignIn";
+import useSignUp from "./hooks/useSignUp";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import SmallSpinner from "../../ui/SmallSpinner";
-import useSignUp from "./hooks/useSignUp";
-import useGoogleSignIn from "./hooks/useGoogleSignIn";
 import GoogleButton from "./GoogleButton";
 
 export interface SignData {

@@ -55,7 +55,7 @@ function DeleteFriendModal({ onCloseModel, innerRef, friendId }: Props) {
           <button
             onClick={handleDeleteFriend}
             disabled={isPending}
-            className="rounded-md bg-red-500 px-2 py-1 capitalize text-white hover:bg-red-400"
+            className="w-[75px] rounded-md bg-red-500 px-2 py-1 capitalize text-white hover:bg-red-400"
           >
             {isPending ? <SmallSpinner color="text-white" /> : "remove"}
           </button>

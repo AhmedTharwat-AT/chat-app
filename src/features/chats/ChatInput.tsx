@@ -1,10 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendMessage } from "../../services/firebaseApi";
 
 import { IoMdSend } from "react-icons/io";
-import { CiTimer } from "react-icons/ci";
-
 import EmojiWrapper from "../../ui/EmojiWrapper";
 import { IUser } from "@/types/data.types";
 
@@ -14,7 +12,7 @@ interface Porps {
 
 function ChatInput({ roomId }: Porps) {
   const [content, setContent] = useState("");
-  const [slowDown, setSlowDown] = useState(0);
+  // const [slowDown, setSlowDown] = useState(0);
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData(["user"]) as IUser;
   const { mutate, isPending } = useMutation({ mutationFn: sendMessage });
@@ -25,39 +23,39 @@ function ChatInput({ roomId }: Porps) {
   };
 
   async function handleMessageSend() {
-    if (content.length > 150 || !content || slowDown > 0) return;
+    if (content.length > 150 || !content) return;
+
     mutate(
       { roomId, data: { ...sender, content, sentAt: +new Date() } },
       {
-        onSuccess: () => {
+        onSettled: () => {
           setContent("");
-          setSlowDown(5);
         },
       },
     );
   }
 
-  //slowdown timer
-  useEffect(() => {
-    if (slowDown == 0) return;
+  // //slowdown timer
+  // useEffect(() => {
+  //   if (slowDown == 0) return;
 
-    const timer = setInterval(() => {
-      setSlowDown((c) => c - 1);
-    }, 1000);
+  //   const timer = setInterval(() => {
+  //     setSlowDown((c) => c - 1);
+  //   }, 1000);
 
-    return () => clearInterval(timer);
-  }, [slowDown]);
+  //   return () => clearInterval(timer);
+  // }, [slowDown]);
 
   return (
     <div className="absolute bottom-0 left-0 z-40 w-full bg-gray-100 px-5 shadow-2xl backdrop-blur-md dark:bg-[var(--dark-bg)]">
-      {slowDown > 0 && (
+      {/* {slowDown > 0 && (
         <div className="ml-auto flex w-fit items-center gap-2 px-1 pt-1">
           <p className="text-xs capitalize tracking-wider text-gray-700 dark:text-gray-400">
             slowdown : {slowDown}s
           </p>
           <CiTimer className="dark:[&_path]:text-gray-400" />
         </div>
-      )}
+      )} */}
 
       <div className="flex w-full  items-center justify-between gap-4 py-5 sm:gap-8">
         <EmojiWrapper setContent={setContent} />
@@ -75,7 +73,7 @@ function ChatInput({ roomId }: Porps) {
           />
         </div>
         <button
-          disabled={isPending || slowDown > 0}
+          disabled={isPending}
           onClick={handleMessageSend}
           className="rounded-md bg-[var(--color-main)] p-2 hover:bg-[var(--color-main-dark)]"
         >

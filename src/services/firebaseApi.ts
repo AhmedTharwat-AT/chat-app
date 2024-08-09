@@ -179,7 +179,6 @@ export async function getUserDetails(id: string) {
 // messages
 export async function sendMessage({ roomId, data }: Message) {
   const messagesRef = collection(db, "rooms", roomId, "messages");
-  console.log("msg");
   await addDoc(messagesRef, data);
   return null;
 }

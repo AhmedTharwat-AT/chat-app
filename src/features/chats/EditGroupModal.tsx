@@ -52,7 +52,7 @@ function EditGroupModal({ groupId, onCloseModel, innerRef }: Props) {
       onCloseModel={onCloseModel}
       heading="Edit Group info"
     >
-      <div className="space-y-4 px-3 py-4">
+      <div className=" -auto space-y-4 px-3 py-4">
         {error && <p className="text-red-500">{error.message}</p>}
         <div>
           <label className="mb-2 text-sm capitalize text-gray-700 dark:text-gray-300">
