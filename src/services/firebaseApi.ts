@@ -314,9 +314,9 @@ export async function leaveGroup(groupId: string) {
     if (photoUrl) {
       await deleteImage(photoUrl);
     }
-  }
 
-  batch.delete(doc(db, "rooms", groupId));
+    batch.delete(doc(db, "rooms", groupId));
+  }
 
   await batch.commit();
 }

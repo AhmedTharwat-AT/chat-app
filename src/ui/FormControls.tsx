@@ -1,6 +1,12 @@
 import SmallSpinner from "./SmallSpinner";
 
-function FormControls({ onCloseModel, handler, isPending, text = "Add" }: any) {
+function FormControls({
+  onCloseModel,
+  handler,
+  isPending,
+  disabled = false,
+  text = "Add",
+}: any) {
   return (
     <div className="flex gap-6">
       <button
@@ -11,7 +17,7 @@ function FormControls({ onCloseModel, handler, isPending, text = "Add" }: any) {
       </button>
       <button
         onClick={handler}
-        disabled={isPending}
+        disabled={isPending || disabled}
         className="rounded-sm bg-[var(--color-main)] px-4 py-1 font-semibold capitalize text-white hover:bg-[var(--color-main-dark)] disabled:bg-gray-400"
       >
         {isPending ? <SmallSpinner color="text-white" /> : text}

@@ -10,7 +10,6 @@ import FormWrapper from "../../ui/FormWrapper";
 import SmallSpinner from "../../ui/SmallSpinner";
 import SearchResults from "../../ui/SearchResults";
 import FormControls from "../../ui/FormControls";
-import useUser from "../authentication/hooks/useUser";
 
 interface Props {
   onCloseModel?: () => void;
@@ -23,7 +22,6 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
   const queryClient = useQueryClient();
   const { isLoading, refetch, error, query, setQuery, users } =
     useSearchUsers();
-  const { data: user } = useUser();
   const { members } = useMembers(groupId);
   const {
     mutate,
@@ -31,30 +29,13 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
     error: mutateError,
   } = useMutation({ mutationFn: addGroupMember });
 
-  const userFriendsNames = Object.values(user?.friends || []).map(
-    (el) => el.name,
-  );
-  const userFriendsIds = Object.values(user?.friends || []).map(
-    (el) => el.friend_id,
-  );
-
-  //remove memebers from search result and display only users in friends list
+  //remove memebers from search result
   const memebersId = members?.map((el) => el.id);
-  const dataWithNoMemebers = users?.filter(
-    (el) => !memebersId?.includes(el.uid),
-  );
-  const data = dataWithNoMemebers?.filter((el) =>
-    userFriendsIds?.includes(el.uid),
-  );
+  const data = users?.filter((el) => !memebersId?.includes(el.uid));
 
   function handleSearch() {
-    if (!userFriendsNames || !query) return;
-    // check if query matchs with user friends
-    const checkIfQueryExistInFriends = userFriendsNames
-      .map((el) => el.startsWith(query.toLocaleLowerCase().trim()))
-      .includes(true);
-
-    if (checkIfQueryExistInFriends) refetch();
+    if (!query) return;
+    refetch();
   }
 
   function handleAddMember() {
@@ -119,7 +100,6 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
             ) : (
               <SearchResults
                 error={error}
-                noFriends={userFriendsNames.length == 0}
                 data={data}
                 selected={selected}
                 setSelected={setSelected}
@@ -131,7 +111,6 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
           handler={handleAddMember}
           onCloseModel={onCloseModel}
           isPending={isPending}
-          disabled={userFriendsNames.length == 0}
         />
       </div>
     </FormWrapper>

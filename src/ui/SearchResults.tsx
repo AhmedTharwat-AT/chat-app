@@ -5,11 +5,23 @@ interface Props {
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   error?: Error | null;
+  noFriends?: boolean;
 }
 
-function SearchResults({ data, selected, setSelected, error }: Props) {
+function SearchResults({
+  data,
+  selected,
+  setSelected,
+  error,
+  noFriends = false,
+}: Props) {
   if (error)
     return <p className="px-2 text-sm text-gray-500">{error.message}</p>;
+
+  if (noFriends)
+    return (
+      <p className="px-2 text-sm text-gray-500">please add friends first!</p>
+    );
 
   if (!data || data?.length == 0)
     return <p className="px-2 text-sm text-gray-500">no results !</p>;
