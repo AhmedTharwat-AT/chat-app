@@ -20,7 +20,8 @@ function useSearchUsers() {
     queryKey: ["search", query],
     queryFn: () => searchUsers(query),
     enabled: false,
-    retry: 0,
+    retry: 1,
+    staleTime: 0,
   });
 
   const usersOutsideFriends =

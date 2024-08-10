@@ -4,7 +4,7 @@ import { MdOutlineAddBox } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { useSearchParams } from "react-router-dom";
 import Model from "../../ui/Model";
-import AddContactForm from "../../ui/AddContactForm";
+import AddContactForm from "./AddContactForm";
 
 function ChatSearch({ title }: { title: string }) {
   const [searchParams, setSearchParams] = useSearchParams();

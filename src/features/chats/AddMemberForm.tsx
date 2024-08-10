@@ -20,7 +20,7 @@ interface Props {
 
 function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState<string>("");
   const { isLoading, refetch, error, query, setQuery, usersInsideFriends } =
     useSearchUsers();
   const { data: user } = useUser();
@@ -125,7 +125,7 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
           handler={handleAddMember}
           onCloseModel={onCloseModel}
           isPending={isPending}
-          disabled={userFriendsNames.length == 0}
+          disabled={userFriendsNames.length == 0 || !selected}
         />
       </div>
     </FormWrapper>

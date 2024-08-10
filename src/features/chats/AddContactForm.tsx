@@ -1,14 +1,14 @@
 import { ReactNode, useState } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { addFriend } from "../services/firebaseApi";
+import { addFriend } from "../../services/firebaseApi";
 import { IUser } from "@/types/data.types";
 import useSearchUsers from "@/features/chats/hooks/useSearchUsers";
 
 import { FiSearch } from "react-icons/fi";
-import SmallSpinner from "./SmallSpinner";
-import SearchResults from "./SearchResults";
-import FormControls from "./FormControls";
-import FormWrapper from "./FormWrapper";
+import SmallSpinner from "../../ui/SmallSpinner";
+import SearchResults from "../../ui/SearchResults";
+import FormControls from "../../ui/FormControls";
+import FormWrapper from "../../ui/FormWrapper";
 
 interface Props {
   onCloseModel?: () => void;
@@ -91,6 +91,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
           onCloseModel={onCloseModel}
           handler={handleAddFriends}
           isPending={isPending}
+          disabled={!selected}
         />
       </div>
     </FormWrapper>
