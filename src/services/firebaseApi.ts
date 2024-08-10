@@ -190,11 +190,12 @@ type ISearchedUsers = IUser[] | undefined;
 export async function searchUsers(value: string) {
   if (!value) return;
   const currUser = auth.currentUser;
+  const adjustQuery = value.toLowerCase().trim();
 
   const q = query(
     collection(db, "users"),
-    where("name", ">=", value),
-    where("name", "<=", value + "\uf8ff"),
+    where("name", ">=", adjustQuery),
+    where("name", "<=", adjustQuery + "\uf8ff"),
   );
 
   const querySnapshot = await getDocs(q);

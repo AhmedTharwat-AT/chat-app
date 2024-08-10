@@ -17,7 +17,7 @@ interface Props {
 
 function AddContactForm({ onCloseModel, innerRef }: Props) {
   const [selected, setSelected] = useState("");
-  const { isLoading, refetch, error, query, setQuery, filteredUsers } =
+  const { isLoading, refetch, error, query, setQuery, usersOutsideFriends } =
     useSearchUsers();
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({ mutationFn: addFriend });
@@ -29,7 +29,9 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
 
   function handleAddFriends() {
     if (!selected) return;
-    const friend = filteredUsers?.find((el: IUser) => el.uid === selected);
+    const friend = usersOutsideFriends?.find(
+      (el: IUser) => el.uid === selected,
+    );
     const user = queryClient.getQueryData(["user"]) as IUser;
     if (!friend || !user) return;
     // add friend to the cache for later use (userInfo)
@@ -78,7 +80,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
             ) : (
               <SearchResults
                 error={error}
-                data={filteredUsers}
+                data={usersOutsideFriends}
                 selected={selected}
                 setSelected={setSelected}
               />

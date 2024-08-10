@@ -4,13 +4,13 @@ import { addGroupMember } from "../../services/firebaseApi";
 import { IGroupType, IUser } from "@/types/data.types";
 import useSearchUsers from "./hooks/useSearchUsers";
 import useMembers from "./hooks/useMembers";
+import useUser from "../authentication/hooks/useUser";
 
 import { FiSearch } from "react-icons/fi";
 import FormWrapper from "../../ui/FormWrapper";
 import SmallSpinner from "../../ui/SmallSpinner";
 import SearchResults from "../../ui/SearchResults";
 import FormControls from "../../ui/FormControls";
-import useUser from "../authentication/hooks/useUser";
 
 interface Props {
   onCloseModel?: () => void;
@@ -19,9 +19,9 @@ interface Props {
 }
 
 function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
-  const [selected, setSelected] = useState("");
   const queryClient = useQueryClient();
-  const { isLoading, refetch, error, query, setQuery, users } =
+  const [selected, setSelected] = useState("");
+  const { isLoading, refetch, error, query, setQuery, usersInsideFriends } =
     useSearchUsers();
   const { data: user } = useUser();
   const { members } = useMembers(groupId);
@@ -34,17 +34,11 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
   const userFriendsNames = Object.values(user?.friends || []).map(
     (el) => el.name,
   );
-  const userFriendsIds = Object.values(user?.friends || []).map(
-    (el) => el.friend_id,
-  );
 
   //remove memebers from search result and display only users in friends list
   const memebersId = members?.map((el) => el.id);
-  const dataWithNoMemebers = users?.filter(
+  const dataWithNoMembers = usersInsideFriends?.filter(
     (el) => !memebersId?.includes(el.uid),
-  );
-  const data = dataWithNoMemebers?.filter((el) =>
-    userFriendsIds?.includes(el.uid),
   );
 
   function handleSearch() {
@@ -59,7 +53,7 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
 
   function handleAddMember() {
     if (!selected) return;
-    const friend = data?.find((el: IUser) => el.uid === selected);
+    const friend = dataWithNoMembers?.find((el: IUser) => el.uid === selected);
     if (!friend) return;
     // add friend to the cache for later use (userInfo)
     queryClient.setQueryData(["friend", friend.uid], friend);
@@ -120,7 +114,7 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
               <SearchResults
                 error={error}
                 noFriends={userFriendsNames.length == 0}
-                data={data}
+                data={dataWithNoMembers}
                 selected={selected}
                 setSelected={setSelected}
               />
