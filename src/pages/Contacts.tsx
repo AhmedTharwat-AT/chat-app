@@ -1,10 +1,10 @@
-import ChatSearch from "../features/chats/ChatSearch";
+import ChatHeader from "@/features/chats/ChatHeader";
 import ContactsList from "../features/chats/ContactsList";
 
 function Contacts() {
   return (
     <div className="flex h-full flex-col p-4">
-      <ChatSearch title="contacts" />
+      <ChatHeader title="contacts" />
       <ContactsList />
     </div>
   );

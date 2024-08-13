@@ -11,7 +11,7 @@ function ChatsList() {
 
   if (isLoading) return <Spinner />;
 
-  if (!isLoading && !user) return null;
+  if (!user) return null;
 
   if (error) {
     navigate("/login");

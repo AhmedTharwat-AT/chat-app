@@ -16,12 +16,17 @@ interface Props {
 function Groups({ type, groups }: Props) {
   const [searchParams] = useSearchParams();
   const [showList, setShowList] = useState(true);
-  const items = Object.entries(groups);
+  const friendsOrGroups = Object.values(groups);
   const filter = searchParams.get("chats") || "";
-  let filterItems = [...items];
+
+  console.log(friendsOrGroups);
+
+  let showFriendsOrGroups = true;
 
   if (filter) {
-    filterItems = filterItems.filter((item) => item[1].name.includes(filter));
+    showFriendsOrGroups = friendsOrGroups
+      .map((el) => el.name.startsWith(filter.toLocaleLowerCase().trim()))
+      .includes(true);
   }
 
   return (
@@ -32,6 +37,7 @@ function Groups({ type, groups }: Props) {
         </h3>
 
         <div className="flex items-center gap-3">
+          {/* create group modal */}
           {type == "groups" && (
             <Model>
               <Model.Toggle name="group">
@@ -53,17 +59,21 @@ function Groups({ type, groups }: Props) {
         </div>
       </div>
 
-      {items?.length <= 0 ? (
-        <h1 className="py-1 text-center text-xs uppercase text-gray-500">
-          {type} list is empty
-        </h1>
-      ) : showList ? (
-        <div className="space-y-1">
-          {filterItems.map((item) => (
-            <GroupItem key={item[0]} item={item} />
-          ))}
-        </div>
-      ) : null}
+      <h1
+        className={`py-1 text-center text-xs uppercase text-gray-500 ${showFriendsOrGroups ? "hidden" : ""}`}
+      >
+        {type} list is empty
+      </h1>
+
+      <div className={`space-y-1 ${showList ? "" : "hidden"}`}>
+        {friendsOrGroups.map((item, i) => {
+          const showFriendOrGroup = item.name.startsWith(
+            filter.toLocaleLowerCase().trim(),
+          );
+
+          return <GroupItem key={i} item={item} showItem={showFriendOrGroup} />;
+        })}
+      </div>
     </div>
   );
 }

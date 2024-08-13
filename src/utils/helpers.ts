@@ -55,7 +55,5 @@ export function divideArrayToSections(arr: any[]) {
     sectionsArray.push(othersSection);
   }
 
-  console.log(sectionsArray);
-
   return sectionsArray as [string, any[]][];
 }
