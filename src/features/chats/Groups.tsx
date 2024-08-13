@@ -19,8 +19,6 @@ function Groups({ type, groups }: Props) {
   const friendsOrGroups = Object.values(groups);
   const filter = searchParams.get("chats") || "";
 
-  console.log(friendsOrGroups);
-
   let showFriendsOrGroups = true;
 
   if (filter) {
