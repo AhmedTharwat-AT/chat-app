@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { auth, rtdb } from "../../services/firebase";
 import { ref as reff, set } from "firebase/database";
 import { useQueryClient } from "@tanstack/react-query";
-
 import useOutsideClicks from "../../hooks/useOutsideClicks";
 
 interface Props {
@@ -16,19 +15,21 @@ function NavDropMenu({ setShowMenu }: Props) {
   const queryClient = useQueryClient();
 
   async function handleSignout() {
+    const success = await signOut();
+    if (!success) return;
+
     const currUser = auth.currentUser;
     const statusRef = reff(rtdb, "users/" + currUser?.uid);
     set(statusRef, {
       status: "offline",
     });
     queryClient.removeQueries({ queryKey: ["user"], exact: true });
-    signOut();
   }
 
   return (
     <ul
       ref={ref}
-      className="absolute -left-32 bottom-full w-32 animate-slideTop divide-y-2 divide-gray-300 rounded-md border border-gray-300 bg-gray-100 py-2  text-sm capitalize bp:left-8"
+      className="absolute -left-32 bottom-full z-50 w-32 animate-slideTop divide-y-2 divide-gray-300 rounded-md border border-gray-300 bg-gray-100  py-2 text-sm capitalize bp:left-8"
     >
       <li className="px-3 py-1 text-gray-700 hover:bg-gray-200">
         <Link className="block w-full" to="/profile">
