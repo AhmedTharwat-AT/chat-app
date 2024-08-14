@@ -1,9 +1,9 @@
 import { useSignOut } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { auth, rtdb } from "../../services/firebase";
-import { ref as reff, set } from "firebase/database";
+import { auth } from "../../services/firebase";
 import { useQueryClient } from "@tanstack/react-query";
 import useOutsideClicks from "../../hooks/useOutsideClicks";
+import { setUserStatus } from "@/services/firebaseApi";
 
 interface Props {
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,15 +15,12 @@ function NavDropMenu({ setShowMenu }: Props) {
   const queryClient = useQueryClient();
 
   async function handleSignout() {
-    const success = await signOut();
-    if (!success) return;
-
     const currUser = auth.currentUser;
-    const statusRef = reff(rtdb, "users/" + currUser?.uid);
-    set(statusRef, {
-      status: "offline",
-    });
+
+    setUserStatus(currUser?.uid || "", "offline");
     queryClient.removeQueries({ queryKey: ["user"], exact: true });
+
+    signOut();
   }
 
   return (

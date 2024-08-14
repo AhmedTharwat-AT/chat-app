@@ -49,6 +49,7 @@ export async function getUser() {
     return { ...data } as IUser;
   } catch (err) {
     console.log(err);
+    return null;
   }
 }
 
@@ -135,7 +136,9 @@ export async function signUp(data: {
 export async function setUserStatus(id: string, status: string) {
   const statusRef = ref(rtdb, "users/" + id);
   set(statusRef, { status });
-  onDisconnect(statusRef).set({ status: "offline" });
+  if (status === "online") {
+    onDisconnect(statusRef).set({ status: "offline" });
+  }
 }
 //
 
