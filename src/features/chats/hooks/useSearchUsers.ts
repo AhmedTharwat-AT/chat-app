@@ -9,7 +9,7 @@ function useSearchUsers() {
   const [query, setQuery] = useState("");
   const { data: user } = useUser();
 
-  const friends = Object.keys(user?.friends || {});
+  const friendsIds = Object.keys(user?.friends || {});
 
   const {
     data: users,
@@ -25,9 +25,9 @@ function useSearchUsers() {
   });
 
   const usersOutsideFriends =
-    users?.filter((el: IUser) => !friends.includes(el.uid)) || [];
-  const usersInsideFriends = users?.filter((el: IUser) =>
-    friends.includes(el.uid),
+    users?.filter((el: IUser) => !friendsIds.includes(el.uid)) || [];
+  const resultsInsideFriends = users?.filter((el: IUser) =>
+    friendsIds.includes(el.uid),
   );
 
   return {
@@ -38,7 +38,7 @@ function useSearchUsers() {
     query,
     setQuery,
     usersOutsideFriends,
-    usersInsideFriends,
+    resultsInsideFriends,
   };
 }
 

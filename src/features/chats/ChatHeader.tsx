@@ -1,6 +1,6 @@
 import { MdOutlineAddBox } from "react-icons/md";
 import Model from "../../ui/Model";
-import AddContactForm from "./AddContactForm";
+import AddContactModal from "./AddContactModal";
 import ChatSearch from "./ChatSearch";
 
 function ChatHeader({ title }: { title: string }) {
@@ -14,7 +14,7 @@ function ChatHeader({ title }: { title: string }) {
           </Model.Toggle>
         </div>
         <Model.Window name="chats">
-          <AddContactForm />
+          <AddContactModal />
         </Model.Window>
       </Model>
       <ChatSearch title={title} />

@@ -18,10 +18,10 @@ interface Props {
   groupId: string;
 }
 
-function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
+function AddMemberModal({ onCloseModel, innerRef, groupId }: Props) {
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<string>("");
-  const { isLoading, refetch, error, query, setQuery, usersInsideFriends } =
+  const { isLoading, refetch, error, query, setQuery, resultsInsideFriends } =
     useSearchUsers();
   const { data: user } = useUser();
   const { members } = useMembers(groupId);
@@ -37,23 +37,23 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
 
   //remove memebers from search result and display only users in friends list
   const memebersId = members?.map((el) => el.id);
-  const dataWithNoMembers = usersInsideFriends?.filter(
+  const friendsNotMembers = resultsInsideFriends?.filter(
     (el) => !memebersId?.includes(el.uid),
   );
 
   function handleSearch() {
     if (!userFriendsNames || !query) return;
-    // check if query matchs with user friends
-    const checkIfQueryExistInFriends = userFriendsNames
-      .map((el) => el.startsWith(query.toLocaleLowerCase().trim()))
-      .includes(true);
+    // check if query matchs with any of user friends
+    const checkIfQueryExistInFriends = userFriendsNames.some((el) =>
+      el.startsWith(query.toLocaleLowerCase().trim()),
+    );
 
     if (checkIfQueryExistInFriends) refetch();
   }
 
   function handleAddMember() {
     if (!selected) return;
-    const friend = dataWithNoMembers?.find((el: IUser) => el.uid === selected);
+    const friend = friendsNotMembers?.find((el: IUser) => el.uid === selected);
     if (!friend) return;
     // add friend to the cache for later use (userInfo)
     queryClient.setQueryData(["friend", friend.uid], friend);
@@ -78,8 +78,6 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
       },
     );
   }
-
-  if (mutateError || error) console.log(mutateError, error);
 
   return (
     <FormWrapper
@@ -112,9 +110,9 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
               <SmallSpinner color="text-green-600" />
             ) : (
               <SearchResults
-                error={error}
+                error={error || mutateError}
                 noFriends={userFriendsNames.length == 0}
-                data={dataWithNoMembers}
+                users={friendsNotMembers}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -132,4 +130,4 @@ function AddMemberForm({ onCloseModel, innerRef, groupId }: Props) {
   );
 }
 
-export default AddMemberForm;
+export default AddMemberModal;

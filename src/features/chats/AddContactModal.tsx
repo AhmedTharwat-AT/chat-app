@@ -15,7 +15,7 @@ interface Props {
   innerRef?: React.LegacyRef<ReactNode> | undefined;
 }
 
-function AddContactForm({ onCloseModel, innerRef }: Props) {
+function AddContactModal({ onCloseModel, innerRef }: Props) {
   const [selected, setSelected] = useState("");
   const { isLoading, refetch, error, query, setQuery, usersOutsideFriends } =
     useSearchUsers();
@@ -80,7 +80,7 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
             ) : (
               <SearchResults
                 error={error}
-                data={usersOutsideFriends}
+                users={usersOutsideFriends}
                 selected={selected}
                 setSelected={setSelected}
               />
@@ -98,4 +98,4 @@ function AddContactForm({ onCloseModel, innerRef }: Props) {
   );
 }
 
-export default AddContactForm;
+export default AddContactModal;

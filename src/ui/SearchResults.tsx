@@ -1,7 +1,8 @@
+import { IUser } from "@/types/data.types";
 import { IoMdClose } from "react-icons/io";
 
 interface Props {
-  data: any[] | undefined;
+  users: IUser[] | undefined;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   error?: Error | null;
@@ -9,26 +10,26 @@ interface Props {
 }
 
 function SearchResults({
-  data,
+  users,
   selected,
   setSelected,
   error,
   noFriends = false,
 }: Props) {
   if (error)
-    return <p className="px-2 text-sm text-gray-500">{error.message}</p>;
+    return <p className="px-2 text-sm text-red-500">Something went wrong!</p>;
 
   if (noFriends)
     return (
-      <p className="px-2 text-sm text-gray-500">please add friends first!</p>
+      <p className="px-2 text-sm text-red-500">please add friends first!</p>
     );
 
-  if (!data || data?.length == 0)
+  if (!users || users?.length == 0)
     return <p className="px-2 text-sm text-gray-500">no results !</p>;
 
   return (
     <>
-      {data?.map((el) => {
+      {users?.map((el) => {
         const isSelected = selected == el.uid;
 
         return (
