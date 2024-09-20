@@ -80,9 +80,10 @@ function AddContactModal({ onCloseModel, innerRef }: Props) {
             ) : (
               <SearchResults
                 error={error}
-                users={usersOutsideFriends}
+                results={usersOutsideFriends}
                 selected={selected}
                 setSelected={setSelected}
+                isLoading={isLoading}
               />
             )}
           </div>

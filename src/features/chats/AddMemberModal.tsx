@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addGroupMember } from "../../services/firebaseApi";
 import { IGroupType, IUser } from "@/types/data.types";
@@ -36,10 +36,10 @@ function AddMemberModal({ onCloseModel, innerRef, groupId }: Props) {
   );
 
   //remove memebers from search result and display only users in friends list
-  const memebersId = members?.map((el) => el.id);
-  const friendsNotMembers = resultsInsideFriends?.filter(
-    (el) => !memebersId?.includes(el.uid),
-  );
+  const friendsNotMembers = useMemo(() => {
+    const memebersId = members?.map((el) => el.id);
+    return resultsInsideFriends?.filter((el) => !memebersId?.includes(el.uid));
+  }, [members, resultsInsideFriends]);
 
   function handleSearch() {
     if (!userFriendsNames || !query) return;
@@ -112,9 +112,10 @@ function AddMemberModal({ onCloseModel, innerRef, groupId }: Props) {
               <SearchResults
                 error={error || mutateError}
                 noFriends={userFriendsNames.length == 0}
-                users={friendsNotMembers}
+                results={friendsNotMembers}
                 selected={selected}
                 setSelected={setSelected}
+                isLoading={isLoading}
               />
             )}
           </div>

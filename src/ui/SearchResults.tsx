@@ -1,20 +1,23 @@
 import { IUser } from "@/types/data.types";
 import { IoMdClose } from "react-icons/io";
+import SmallSpinner from "./SmallSpinner";
 
 interface Props {
-  users: IUser[] | undefined;
+  results: IUser[] | undefined;
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   error?: Error | null;
   noFriends?: boolean;
+  isLoading?: boolean;
 }
 
 function SearchResults({
-  users,
+  results,
   selected,
   setSelected,
   error,
   noFriends = false,
+  isLoading = false,
 }: Props) {
   if (error)
     return <p className="px-2 text-sm text-red-500">Something went wrong!</p>;
@@ -24,12 +27,19 @@ function SearchResults({
       <p className="px-2 text-sm text-red-500">please add friends first!</p>
     );
 
-  if (!users || users?.length == 0)
+  if (isLoading)
+    return (
+      <div className="px-2 text-sm text-gray-500">
+        <SmallSpinner color="text-[var(--color-main)]" />
+      </div>
+    );
+
+  if (!results || results?.length == 0)
     return <p className="px-2 text-sm text-gray-500">no results !</p>;
 
   return (
     <>
-      {users?.map((el) => {
+      {results?.map((el) => {
         const isSelected = selected == el.uid;
 
         return (
