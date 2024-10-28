@@ -13,7 +13,13 @@ interface Props {
   innerRef?: React.LegacyRef<ReactNode> | undefined;
 }
 
-function EditForm({ onCloseModel, type, heading, innerRef, user }: Props) {
+function EditProfileModal({
+  onCloseModel,
+  type,
+  heading,
+  innerRef,
+  user,
+}: Props) {
   const [editValue, setEditValue] = useState(user[type] || "");
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
@@ -25,8 +31,11 @@ function EditForm({ onCloseModel, type, heading, innerRef, user }: Props) {
       await updateUserProperty(user.uid, type, editValue);
       queryClient.invalidateQueries({ queryKey: ["user"], exact: true });
       onCloseModel?.();
-    } catch (err: any) {
-      console.log("error editing bio/about :" + err?.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.log("error editing bio/about :" + err?.message);
+      }
+      console.log("error editing bio/about ");
     } finally {
       setLoading(false);
     }
@@ -70,4 +79,4 @@ function EditForm({ onCloseModel, type, heading, innerRef, user }: Props) {
   );
 }
 
-export default EditForm;
+export default EditProfileModal;

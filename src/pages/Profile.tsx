@@ -3,7 +3,7 @@ import useUser from "@/features/authentication/hooks/useUser";
 import { CiUser } from "react-icons/ci";
 import { AiOutlineMessage } from "react-icons/ai";
 import Spinner from "../ui/Spinner";
-import UserMainInfo from "../features/settings/UserMainInfo";
+import UserMainInfo from "../features/profile/UserMainInfo";
 import { IUser } from "@/types/data.types";
 
 function Profile() {

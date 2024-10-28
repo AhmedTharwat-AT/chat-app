@@ -5,7 +5,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import GroupItem from "./GroupItem";
 import { MdAdd } from "react-icons/md";
 import Model from "../../ui/Model";
-import GroupFrom from "../settings/GroupFrom";
+import CreateGroupModal from "./CreateGroupModal";
 import { FriendsType, GroupsType } from "@/types/data.types";
 
 interface Props {
@@ -42,7 +42,7 @@ function Groups({ type, groups }: Props) {
                 <MdAdd className="w-5 cursor-pointer text-lg text-gray-700 dark:text-gray-300" />
               </Model.Toggle>
               <Model.Window name="group">
-                <GroupFrom />
+                <CreateGroupModal />
               </Model.Window>
             </Model>
           )}

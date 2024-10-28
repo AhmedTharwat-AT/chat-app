@@ -12,7 +12,7 @@ interface Props {
   innerRef?: React.LegacyRef<ReactNode> | undefined;
 }
 
-function GroupFrom({ onCloseModel, innerRef }: Props) {
+function CreateGroupModal({ onCloseModel, innerRef }: Props) {
   const {
     register,
     handleSubmit,
@@ -29,12 +29,15 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
 
   function onSubmit(data: FieldValues) {
     try {
-      const selectedFile = data.photo?.[0] as File;
-      const fileSizeInBytes = selectedFile.size; //in bytes;
-      const maxSizeInBytes = 300 * 1024;
-      if (fileSizeInBytes > maxSizeInBytes) {
-        setError("photo", { message: "max photo size is 300 kb!" });
-        return;
+      if (data.photo.length) {
+        // check if the image is too large
+        const selectedFile = data.photo?.[0] as File;
+        const fileSizeInBytes = selectedFile.size; //in bytes;
+        const maxSizeInBytes = 300 * 1024;
+        if (fileSizeInBytes > maxSizeInBytes) {
+          setError("photo", { message: "max photo size is 300 kb!" });
+          return;
+        }
       }
       createGroupFn(
         {
@@ -76,7 +79,7 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
             {...register("name", {
               required: "this field is required !",
               pattern: {
-                value: /^[A-Za-z0-9]+$/,
+                value: /^[A-Za-z0-9_]+$/,
                 message: "Enter chars or numbers only",
               },
             })}
@@ -110,10 +113,10 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
         </div>
         <div className="">
           <label className="mb-1 block text-sm capitalize text-gray-700  dark:text-gray-300">
-            photo <span className="text-red-500">*</span>
+            photo
           </label>
           <input
-            {...register("photo", { required: "this field is required !" })}
+            {...register("photo")}
             type="file"
             accept="image/*"
             className="w-full rounded px-2 py-1 text-sm dark:bg-[var(--dark-bg)] dark:text-gray-400"
@@ -144,4 +147,4 @@ function GroupFrom({ onCloseModel, innerRef }: Props) {
   );
 }
 
-export default GroupFrom;
+export default CreateGroupModal;

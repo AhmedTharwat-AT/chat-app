@@ -364,12 +364,15 @@ export async function createGroup({
   user: IUser;
 }) {
   // 1) upload photo
-  const fileName = `${user.uid}-${crypto.randomUUID()}`;
-  const reference = storageRef(storage, "images/" + fileName);
-  await uploadBytes(reference, details.photo["0"], {
-    contentType: "image/jpeg",
-  });
-  const photoUrl = await getDownloadURL(reference);
+  let photoUrl = "";
+  if (details.photo.length) {
+    const fileName = `${user.uid}-${crypto.randomUUID()}`;
+    const reference = storageRef(storage, "images/" + fileName);
+    await uploadBytes(reference, details.photo["0"], {
+      contentType: "image/jpeg",
+    });
+    photoUrl = await getDownloadURL(reference);
+  }
 
   // 2) create new room
   const roomRef = await addDoc(collection(db, "rooms"), {

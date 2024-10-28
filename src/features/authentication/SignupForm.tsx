@@ -59,10 +59,6 @@ function SignupForm() {
           <input
             {...register("email", {
               required: "This field is required",
-              maxLength: {
-                value: 14,
-                message: "max length is 14 chars !",
-              },
               pattern: {
                 value: /\S+@\S+\.\S+/,
                 message: "Please provide valid email address",

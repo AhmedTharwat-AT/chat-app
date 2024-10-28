@@ -22,7 +22,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ProtectedRoute>
-          <Routes>
+          <Routes key={"route"}>
             <Route
               path="/"
               element={

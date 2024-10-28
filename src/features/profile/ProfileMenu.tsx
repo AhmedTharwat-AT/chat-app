@@ -6,7 +6,7 @@ import { IUser } from "@/types/data.types";
 
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import Model from "../../ui/Model";
-import EditForm from "./EditForm";
+import EditProfileModal from "./EditProfileModal";
 
 function ProfileMenu({ user }: { user: IUser }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -71,10 +71,10 @@ function ProfileMenu({ user }: { user: IUser }) {
           </ul>
         )}
         <Model.Window name="about">
-          <EditForm type="about" heading="Edit about" user={user} />
+          <EditProfileModal type="about" heading="Edit about" user={user} />
         </Model.Window>
         <Model.Window name="bio">
-          <EditForm type="bio" heading="Edit bio" user={user} />
+          <EditProfileModal type="bio" heading="Edit bio" user={user} />
         </Model.Window>
       </Model>
     </div>
